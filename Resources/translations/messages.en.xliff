@@ -22,6 +22,10 @@
 				<source>choose.program</source>
 				<target>Choose your program</target>
 			</trans-unit>
+			<trans-unit id="6">
+				<source>studypoints</source>
+				<target>ECTS</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
