@@ -19,9 +19,6 @@
 	<form method="POST">
 		<select name="faculty" id="faculties" size="1">
 			<option value="-1">{% trans %}choose.faculty{% endtrans %}</option>
-			{% for entry in faculties %}
-				<option value="{{ entry.id }}">{{ entry.title }}</option>
-			{% endfor %}
 		</select>
 	</form>
 {% endblock %}
