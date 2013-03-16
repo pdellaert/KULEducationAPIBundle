@@ -8,12 +8,16 @@
 			$('#studies').hide();
 			$('#programs').hide();
 			$.getJSON('{{ path('dellaert_kul_education_xml_list_faculties_by_id_title', {'_locale': app.request.locale}) }}', function(data){
-				var html = '';
 				var len = data.length;
+				if( len == 0 ) {
+					var html = '<option value="-1">{% trans %}no.faculty{% endtrans %}</option>'
+				} else {
+					var html = '<option value="-1">{% trans %}choose.faculty{% endtrans %}</option>';
+				}
 				for( var i=0; i < len; i++ ){
 					html += '<option value="' + data[i].id + '">' + data[i].title + '</option>';
 				}
-				$('#faculties').append(html);
+				$('#faculties').html(html);
 			});
 			$('#faculties').show();
 
@@ -27,8 +31,12 @@
 
 				if( $(this).val() != -1 ) {
 					$.getJSON('{{ path('dellaert_kul_education_xml_list_levels_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$(this).val(), function(data) {
-						var html = '<option value="-1">{% trans %}choose.level{% endtrans %}</option>';
 						var len = data.length;
+						if( len == 0 ) {
+							var html = '<option value="-1">{% trans %}no.level{% endtrans %}</option>'
+						} else {
+							var html = '<option value="-1">{% trans %}choose.level{% endtrans %}</option>';
+						}
 						for( var i=0; i < len; i++ ){
 							html += '<option value="' + data[i].id + '">' + data[i].title + '</option>';
 						}
@@ -49,8 +57,12 @@
 
 				if( $(this).val() != -1 ) {
 					$.getJSON('{{ path('dellaert_kul_education_xml_list_studies_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$('#faculties').val()+'/'+$(this).val(), function(data) {
-						var html = '<option value="-1">{% trans %}choose.study{% endtrans %}</option>';
 						var len = data.length;
+						if( len == 0 ) {
+							var html = '<option value="-1">{% trans %}no.study{% endtrans %}</option>'
+						} else {
+							var html = '<option value="-1">{% trans %}choose.study{% endtrans %}</option>';
+						}
 						for( var i=0; i < len; i++ ){
 							html += '<option value="' + data[i].id + '">' + data[i].title + '</option>';
 						}
@@ -67,8 +79,12 @@
 			$('#studies').change(function(){
 				if( $(this).val() != -1 ) {
 					$.getJSON('{{ path('dellaert_kul_education_xml_list_programs_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$(this).val(), function(data) {
-						var html = '<option value="-1">{% trans %}choose.program{% endtrans %}</option>';
 						var len = data.length;
+						if( len == 0 ) {
+							var html = '<option value="-1">{% trans %}no.program{% endtrans %}</option>'
+						} else {
+							var html = '<option value="-1">{% trans %}choose.program{% endtrans %}</option>';
+						}
 						for( var i=0; i < len; i++ ){
 							html += '<option value="' + data[i].id + '">' + data[i].title + ' (' + data[i].studypoints + ' {% trans %}studypoints{% endtrans %})'+ '</option>';
 						}

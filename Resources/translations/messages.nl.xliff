@@ -26,6 +26,22 @@
 				<source>studypoints</source>
 				<target>sp.</target>
 			</trans-unit>
+			<trans-unit id="7">
+				<source>no.faculty</source>
+				<target>Geen faculteit beschikbaar</target>
+			</trans-unit>
+			<trans-unit id="8">
+				<source>no.level</source>
+				<target>Geen graad beschikbaar</target>
+			</trans-unit>
+			<trans-unit id="9">
+				<source>no.study</source>
+				<target>Geen studie beschikbaar</target>
+			</trans-unit>
+			<trans-unit id="10">
+				<source>no.program</source>
+				<target>Geen programma beschikbaar</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
