@@ -66,3 +66,17 @@ dellaert_kul_education_xml_list_stages_by_id_title:
     requirements:
         sid: \d+
         _locale: nl|en
+
+dellaert_kul_education_xml_list_courses_by_id_title_noid:
+    pattern:   /{_locale}/courses
+    defaults: { _controller: DellaertKULEducationXMLBundle:Main:listCoursesByIdTitle, _locale: nl }
+    requirements:
+        _locale: nl|en
+
+dellaert_kul_education_xml_list_courses_by_id_title:
+    pattern:   /{_locale}/courses/{pid}/{phid}
+    defaults: { _controller: DellaertKULEducationXMLBundle:Main:listCoursesByIdTitle, _locale: nl }
+    requirements:
+        phid: \d+
+        sid: \d+
+        _locale: nl|en
