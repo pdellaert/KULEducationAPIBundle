@@ -47,7 +47,7 @@ class MainController extends Controller {
 		$language = substr($this->getRequest()->getLocale(),0,1);
 
 		// Return value
-		$$data = array();
+		$data = array();
 
 		// URL Setup
 		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
@@ -62,7 +62,7 @@ class MainController extends Controller {
 			if( !empty($faculty) ) {
 				foreach( $faculty[0]->xpath("classificaties/classificatie/graad/diplomas/diploma") as $fChild ){
 					if( ((string) $fChild->originele_titel['taal']) == $language ) {
-						$stud[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $fChild->originele_titel);
+						$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $fChild->originele_titel);
 					}
 				}
 			}
