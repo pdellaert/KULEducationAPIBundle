@@ -1,3 +1,9 @@
-Home:
-    pattern: /{name}
-    defaults: { _controller: DellaertKULEducationXMLBundle:Default:index, name:World }
+dellaert_kul_education_xml_base:
+    pattern: /
+    defaults: { _controller: DellaertKULEducationXMLBundle:Main:index, _locale: nl }
+
+dellaert_kul_education_xml_home:
+	pattern:   /{_locale}/
+    defaults: { _controller: DellaertKULEducationXMLBundle:Main:index, _locale: nl }
+    requirements:
+        _locale: nl|en
