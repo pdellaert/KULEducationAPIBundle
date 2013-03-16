@@ -11,6 +11,10 @@
 				<target>Kies je faculteit</target>
 			</trans-unit>
 			<trans-unit id="3">
+				<source>choose.level</source>
+				<target>Kies je graad</target>
+			</trans-unit>
+			<trans-unit id="4">
 				<source>choose.study</source>
 				<target>Kies je studie</target>
 			</trans-unit>

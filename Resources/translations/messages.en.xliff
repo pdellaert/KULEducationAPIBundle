@@ -11,6 +11,10 @@
 				<target>Choose your department</target>
 			</trans-unit>
 			<trans-unit id="3">
+				<source>choose.level</source>
+				<target>Choose your level</target>
+			</trans-unit>
+			<trans-unit id="4">
 				<source>choose.study</source>
 				<target>Choose your study</target>
 			</trans-unit>
