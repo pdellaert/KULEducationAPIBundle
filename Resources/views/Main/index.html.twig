@@ -26,6 +26,10 @@
 						$('#studies').html(html);
 					});
 					$('#studies').show();
+				} else {
+					var html = '<option value="-1">{% trans %}choose.study{% endtrans %}</option>';
+					$('#studies').html(html);
+					$('#studies').hide();
 				}
 			});
 		});
