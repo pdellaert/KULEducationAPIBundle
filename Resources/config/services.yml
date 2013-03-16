@@ -1,0 +1,7 @@
+parameters:
+#    dellaert_kul_education_xml.example.class: Dellaert\KULEducationXMLBundle\Example
+
+services:
+#    dellaert_kul_education_xml.example:
+#        class: %dellaert_kul_education_xml.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
