@@ -125,7 +125,7 @@ class MainController extends Controller {
 		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
 		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
 		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
-		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/CQ_'.$sid.'.xml';
+		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$sid.'.xml';
 
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
