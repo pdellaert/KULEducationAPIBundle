@@ -14,19 +14,20 @@
 				$('#faculties').append(html);
 			});
 			$('#faculties').show();
-		});
-		$('#faculties').change(function(){
-			if( $(this).val() > 0 ) {
-				$.getJSON('{{ path('dellaert_kul_education_xml_list_studies_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$(this).val(), function(data) {
-					var html = '';
-					var len = data.length;
-					for( var i=0; i < len; i++ ){
-						html += '<option value="' + data[i].id + '">' + data[i].title + '</option>';
-					}
-					$('#studies').append(html);
-				});
-				$('#studies').show();
-			}
+
+			$('#faculties').change(function(){
+				if( $(this).val() > 0 ) {
+					$.getJSON('{{ path('dellaert_kul_education_xml_list_studies_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$(this).val(), function(data) {
+						var html = '';
+						var len = data.length;
+						for( var i=0; i < len; i++ ){
+							html += '<option value="' + data[i].id + '">' + data[i].title + '</option>';
+						}
+						$('#studies').append(html);
+					});
+					$('#studies').show();
+				}
+			});
 		});
 	</script>
 
@@ -34,6 +35,7 @@
 		<select name="faculty" id="faculties" size="1">
 			<option value="-1">{% trans %}choose.faculty{% endtrans %}</option>
 		</select>
+		<br />
 		<select name="study" id="studies" size="1">
 			<option value="-1">{% trans %}choose.study{% endtrans %}</option>
 		</select>
