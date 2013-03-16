@@ -1,8 +1,23 @@
 {% extends "DellaertKULEducationXMLBundle::layout.html.twig" %}
 
 {% block content %}
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#faculties').hide();
+			$.getJSON('{{ path('dellaert_kul_education_xml_list_faculties_by_id_title') }}', function(data){
+				var html = '';
+				var len = data.length;
+				for( var i=0; i < len; i++ ){
+					html += '<option value="' + data[i].id + '">' + data[i].title + '</option>';
+				}
+				$('select.faculties').append(html);
+			});
+			$('#faculties').show();
+		});
+	</script>
+
 	<form method="POST">
-		<select name="faculty" size="1">
+		<select name="faculty" id="faculties" size="1">
 			<option value="-1">{% trans %}choose.faculty{% endtrans %}</option>
 			{% for entry in faculties %}
 				<option value="{{ entry.id }}">{{ entry.title }}</option>
