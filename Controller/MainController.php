@@ -96,7 +96,7 @@ class MainController extends Controller {
 			$faculty = $xml->xpath("data/instelling/departement[@objid='$fid']");
 
 			if( !empty($faculty) ) {
-				$level = $faculty[0]->xpath("classificaties/classificatie/graad[@id=='$lid']");
+				$level = $faculty[0]->xpath("classificaties/classificatie/graad[@id='$lid']");
 
 				if( !empty($level) ) {
 					foreach( $level[0]->xpath("diplomas/diploma") as $fChild ){
