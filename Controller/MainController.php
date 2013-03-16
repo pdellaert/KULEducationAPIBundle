@@ -10,7 +10,7 @@ class MainController extends Controller {
 		return $this->render('DellaertKULEducationXMLBundle:Main:index.html.twig');
 	}
 
-	public function listFacultiesIdTitleAction() {
+	public function listFacultiesByIdTitleAction() {
 		// Locale
 		$language = substr($this->getRequest()->getLocale(),0,1);
 
@@ -41,7 +41,7 @@ class MainController extends Controller {
     	$response->headers->set('Content-Type', 'application/json');
 	}
 
-	public function listStudiesIdTitleAction($fid) {
+	public function listStudiesByIdTitleAction($fid) {
 		// Locale
 		$language = substr($this->getRequest()->getLocale(),0,1);
 
