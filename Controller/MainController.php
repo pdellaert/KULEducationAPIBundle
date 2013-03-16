@@ -18,12 +18,21 @@ class MainController extends Controller {
 		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
 		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
 		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
-		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/index.xml'; 
+		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml'; 
 		
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			foreach( $xml->xpath('data/instelling/departement') as $fChild ) {
-				$fac[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $fChild->titels->titel);
+				$title = '';
+				$titel = '';
+
+				foreach( $fChild->xpath('titels/titel') as $sChild ) {
+					if( ((string) $sChild['taal']) == $language ) {
+						$titel = (string) $sChild;
+					}
+				}
+
+				$fac[] = array('id'=>(string) $fChild['objid'],'title'=>$title);
 			}
 		}
 
