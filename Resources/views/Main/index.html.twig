@@ -120,7 +120,7 @@
 							var html = '<option value="-1">{% trans %}choose.stage{% endtrans %}</option>';
 						}
 						for( var i=0; i < len; i++ ){
-							html += '<option value="' + data[i].id + '">' + data[i].id + ' {% trans %}stage{% endtrans %}</option>';
+							html += '<option value="' + data[i].id + '">{% trans %}stage{% endtrans %} ' + data[i].id + '</option>';
 						}
 						$('#stages').html(html);
 					});
