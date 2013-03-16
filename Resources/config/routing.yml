@@ -6,4 +6,4 @@ dellaert_kul_education_xml_home:
     pattern:   /{_locale}/
     defaults: { _controller: DellaertKULEducationXMLBundle:Main:index, _locale: nl }
     requirements:
-        _locale: nl|en
+        _locale: nl|en|fr|gb

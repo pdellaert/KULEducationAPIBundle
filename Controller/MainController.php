@@ -23,15 +23,13 @@ class MainController extends Controller {
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			foreach( $xml->xpath('data/instelling/departement') as $fChild ) {
-				$title = '';
+				$title = $fChild->xpath("titels/titel[@taal='$language']");
 
-				foreach( $fChild->xpath('titels/titel') as $sChild ) {
-					if( ((string) $sChild['taal']) == $language ) {
-						$title = (string) $sChild;
-					}
+				if( empty($title) ) {
+					$title = $fChild->xpath("titels/titel[@taal='".$this->container->getParameter('dellaert_kul_education_xml.fallback_locale')."']");
 				}
 
-				$fac[] = array('id'=>(string) $fChild['objid'],'title'=>$title);
+				$fac[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $title[0]);
 			}
 		}
 
