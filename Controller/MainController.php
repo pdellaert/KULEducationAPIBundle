@@ -9,7 +9,7 @@ class MainController extends Controller
 	public function indexAction()
 	{
 
-		$lang = substr($this->getRequest()->getSession()->get('_locale'),0,1);
+		$lang = substr($this->getRequest()->query->get('_locale'),0,1);
 		return $this->render('DellaertKULEducationXMLBundle:Main:index.html.twig',array('faculties'=>$this->getFaculties($lang)));
 	}
 
