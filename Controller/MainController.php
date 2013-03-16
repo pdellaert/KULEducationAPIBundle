@@ -4,12 +4,8 @@ namespace Dellaert\KULEducationXMLBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class MainController extends Controller
-{
-	public function indexAction()
-	{
-
-		$lang = substr($this->getRequest()->query->get('_locale'),0,1);
+class MainController extends Controller {
+	public function indexAction($lang) {
 		return $this->render('DellaertKULEducationXMLBundle:Main:index.html.twig',array('faculties'=>$this->getFaculties($lang)));
 	}
 
