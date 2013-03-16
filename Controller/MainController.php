@@ -185,7 +185,7 @@ class MainController extends Controller {
 
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("//opos/opo[fases/fase[countains(.,$phid)]]") as $fChild ) {
+			foreach( $xml->xpath("//opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
 				var_dump($fChild);
 				//$data[] = array('id'=> (int) $fChild['code']);
 			}
