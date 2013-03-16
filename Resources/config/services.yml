@@ -1,4 +1,4 @@
 parameters:
     dellaert_kul_education_xml.baseurl: http://onderwijsaanbod.kuleuven.be/
     dellaert_kul_education_xml.baseyear: 2012
-    dellaert_kul_education_xml.language: n
+    dellaert_kul_education_xml.method: xml
