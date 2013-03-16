@@ -11,36 +11,48 @@
 				<target>Kies je faculteit</target>
 			</trans-unit>
 			<trans-unit id="3">
-				<source>choose.level</source>
-				<target>Kies je graad</target>
-			</trans-unit>
-			<trans-unit id="4">
-				<source>choose.study</source>
-				<target>Kies je studie</target>
-			</trans-unit>
-			<trans-unit id="5">
-				<source>choose.program</source>
-				<target>Kies je programma</target>
-			</trans-unit>
-			<trans-unit id="6">
-				<source>studypoints</source>
-				<target>sp.</target>
-			</trans-unit>
-			<trans-unit id="7">
 				<source>no.faculty</source>
 				<target>Geen faculteit beschikbaar</target>
 			</trans-unit>
-			<trans-unit id="8">
+			<trans-unit id="4">
+				<source>choose.level</source>
+				<target>Kies je graad</target>
+			</trans-unit>
+			<trans-unit id="5">
 				<source>no.level</source>
 				<target>Geen graad beschikbaar</target>
 			</trans-unit>
-			<trans-unit id="9">
+			<trans-unit id="6">
+				<source>choose.study</source>
+				<target>Kies je studie</target>
+			</trans-unit>
+			<trans-unit id="7">
 				<source>no.study</source>
 				<target>Geen studie beschikbaar</target>
 			</trans-unit>
-			<trans-unit id="10">
+			<trans-unit id="8">
+				<source>choose.program</source>
+				<target>Kies je programma</target>
+			</trans-unit>
+			<trans-unit id="9">
 				<source>no.program</source>
 				<target>Geen programma beschikbaar</target>
+			</trans-unit>
+			<trans-unit id="10">
+				<source>studypoints</source>
+				<target>sp.</target>
+			</trans-unit>
+			<trans-unit id="11">
+				<source>choose.stage</source>
+				<target>Kies je fase</target>
+			</trans-unit>
+			<trans-unit id="12">
+				<source>no.stage</source>
+				<target>Geen fase beschikbaar</target>
+			</trans-unit>
+			<trans-unit id="13">
+				<source>stage</source>
+				<target>fase</target>
 			</trans-unit>
 		</body>
 	</file>

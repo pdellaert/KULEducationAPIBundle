@@ -11,36 +11,48 @@
 				<target>Choose your department</target>
 			</trans-unit>
 			<trans-unit id="3">
-				<source>choose.level</source>
-				<target>Choose your level</target>
-			</trans-unit>
-			<trans-unit id="4">
-				<source>choose.study</source>
-				<target>Choose your study</target>
-			</trans-unit>
-			<trans-unit id="5">
-				<source>choose.program</source>
-				<target>Choose your program</target>
-			</trans-unit>
-			<trans-unit id="6">
-				<source>studypoints</source>
-				<target>ECTS</target>
-			</trans-unit>
-			<trans-unit id="7">
 				<source>no.faculty</source>
 				<target>No faculty available</target>
 			</trans-unit>
-			<trans-unit id="8">
+			<trans-unit id="4">
+				<source>choose.level</source>
+				<target>Choose your level</target>
+			</trans-unit>
+			<trans-unit id="5">
 				<source>no.level</source>
 				<target>No level available</target>
 			</trans-unit>
-			<trans-unit id="9">
+			<trans-unit id="6">
+				<source>choose.study</source>
+				<target>Choose your study</target>
+			</trans-unit>
+			<trans-unit id="7">
 				<source>no.study</source>
 				<target>No study available</target>
 			</trans-unit>
-			<trans-unit id="10">
+			<trans-unit id="8">
+				<source>choose.program</source>
+				<target>Choose your program</target>
+			</trans-unit>
+			<trans-unit id="9">
 				<source>no.program</source>
 				<target>No program available</target>
+			</trans-unit>
+			<trans-unit id="10">
+				<source>studypoints</source>
+				<target>ECTS</target>
+			</trans-unit>
+			<trans-unit id="11">
+				<source>choose.stage</source>
+				<target>Choose your stage</target>
+			</trans-unit>
+			<trans-unit id="12">
+				<source>no.stage</source>
+				<target>No stage available</target>
+			</trans-unit>
+			<trans-unit id="13">
+				<source>stage</source>
+				<target>stage</target>
 			</trans-unit>
 		</body>
 	</file>

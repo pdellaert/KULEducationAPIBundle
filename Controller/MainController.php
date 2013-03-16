@@ -143,4 +143,30 @@ class MainController extends Controller {
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
 	}
+
+	public function listStagesByIdTitleAction($pid) {
+		// Locale
+		$language = substr($this->getRequest()->getLocale(),0,1);
+
+		// Return value
+		$data = array();
+
+		// URL Setup
+		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
+		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
+		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
+		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
+
+		// Getting XML
+		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+			foreach( $xml->xpath("data/opleiding/fases/fase") as $fChild ) {
+				$data[] = array('id'=> (int) $fChild['code']);
+			}
+		}
+
+		// Returning studies
+		$response = new Response(json_encode($data));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
+	}
 }

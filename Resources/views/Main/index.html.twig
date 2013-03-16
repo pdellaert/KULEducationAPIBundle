@@ -7,6 +7,8 @@
 			$('#levels').hide();
 			$('#studies').hide();
 			$('#programs').hide();
+			$('#stages').hide();
+
 			$.getJSON('{{ path('dellaert_kul_education_xml_list_faculties_by_id_title', {'_locale': app.request.locale}) }}', function(data){
 				var len = data.length;
 				if( len == 0 ) {
@@ -22,6 +24,9 @@
 			$('#faculties').show();
 
 			$('#faculties').change(function(){
+				$('#stages').hide();
+				var html = '<option value="-1">{% trans %}choose.stage{% endtrans %}</option>';
+				$('#stages').html(html);
 				$('#programs').hide();
 				var html = '<option value="-1">{% trans %}choose.program{% endtrans %}</option>';
 				$('#programs').html(html);
@@ -51,6 +56,9 @@
 			});
 
 			$('#levels').change(function(){
+				$('#stages').hide();
+				var html = '<option value="-1">{% trans %}choose.stage{% endtrans %}</option>';
+				$('#stages').html(html);
 				$('#programs').hide();
 				var html = '<option value="-1">{% trans %}choose.program{% endtrans %}</option>';
 				$('#programs').html(html);
@@ -77,6 +85,10 @@
 			});
 
 			$('#studies').change(function(){
+				$('#stages').hide();
+				var html = '<option value="-1">{% trans %}choose.stage{% endtrans %}</option>';
+				$('#stages').html(html);
+
 				if( $(this).val() != -1 ) {
 					$.getJSON('{{ path('dellaert_kul_education_xml_list_programs_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$(this).val(), function(data) {
 						var len = data.length;
@@ -86,7 +98,7 @@
 							var html = '<option value="-1">{% trans %}choose.program{% endtrans %}</option>';
 						}
 						for( var i=0; i < len; i++ ){
-							html += '<option value="' + data[i].id + '">' + data[i].title + ' (' + data[i].studypoints + ' {% trans %}studypoints{% endtrans %})'+ '</option>';
+							html += '<option value="' + data[i].id + '">' + data[i].title + ' (' + data[i].studypoints + ' {% trans %}studypoints{% endtrans %})</option>';
 						}
 						$('#programs').html(html);
 					});
@@ -95,6 +107,28 @@
 					$('#programs').hide();
 					var html = '<option value="-1">{% trans %}choose.program{% endtrans %}</option>';
 					$('#programs').html(html);
+				}
+			});
+
+			$('#programs').change(function(){				
+				if( $(this).val() != -1 ) {
+					$.getJSON('{{ path('dellaert_kul_education_xml_list_atages_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$(this).val(), function(data) {
+						var len = data.length;
+						if( len == 0 ) {
+							var html = '<option value="-1">{% trans %}no.stage{% endtrans %}</option>'
+						} else {
+							var html = '<option value="-1">{% trans %}choose.stage{% endtrans %}</option>';
+						}
+						for( var i=0; i < len; i++ ){
+							html += '<option value="' + data[i].id + '">' + data[i].id + ' {% trans %}stage{% endtrans %}</option>';
+						}
+						$('#stages').html(html);
+					});
+					$('#stages').show();
+				} else {
+					$('#stages').hide();
+					var html = '<option value="-1">{% trans %}choose.stage{% endtrans %}</option>';
+					$('#stages').html(html);
 				}
 			});
 		});
@@ -115,6 +149,10 @@
 		<br />
 		<select name="program" id="programs" size="1">
 			<option value="-1">{% trans %}choose.program{% endtrans %}</option>
+		</select>
+		<br />
+		<select name="stage" id="stages" size="1">
+			<option value="-1">{% trans %}choose.stage{% endtrans %}</option>
 		</select>
 	</form>
 {% endblock %}
