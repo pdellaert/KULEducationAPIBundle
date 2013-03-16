@@ -8,17 +8,18 @@ class MainController extends Controller
 {
 	public function indexAction()
 	{
-		return $this->render('DellaertKULEducationXMLBundle:Main:index.html.twig',array('faculties'=>$this->getFaculties()));
+
+		$lang = substr($this->getRequest()->getSession()->get('_locale'),0,1);
+		return $this->render('DellaertKULEducationXMLBundle:Main:index.html.twig',array('faculties'=>$this->getFaculties($lang)));
 	}
 
-	public function getFaculties() {
+	public function getFaculties($language="n") {
 		// Return value
 		$fac = array();
 
 		// URL Setup
 		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
 		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
-		$language = substr($this->getRequest()->query->get('_locale'),0,1);
 		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/index.xml'; 
 		
