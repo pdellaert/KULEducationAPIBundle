@@ -10,6 +10,10 @@
 				<source>choose.faculty</source>
 				<target>Kies je faculteit</target>
 			</trans-unit>
+			<trans-unit id="3">
+				<source>choose.study</source>
+				<target>Kies je studie</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

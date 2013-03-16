@@ -14,6 +14,12 @@ dellaert_kul_education_xml_list_faculties_by_id_title:
     requirements:
         _locale: nl|en|fr
 
+dellaert_kul_education_xml_list_studies_by_id_title_noid:
+    pattern:   /{_locale}/studies
+    defaults: { _controller: DellaertKULEducationXMLBundle:Main:listStudiesByIdTitle, _locale: nl }
+    requirements:
+        _locale: nl|en|fr
+
 dellaert_kul_education_xml_list_studies_by_id_title:
     pattern:   /{_locale}/studies/{fid}
     defaults: { _controller: DellaertKULEducationXMLBundle:Main:listStudiesByIdTitle, _locale: nl }
