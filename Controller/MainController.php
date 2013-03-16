@@ -18,7 +18,7 @@ class MainController extends Controller
 		// URL Setup
 		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
 		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
-		$language = substr($this->getRequest()->getSession()->get('_locale'),0,1);
+		$language = substr($this->getRequest()->getSession()->get('locale'),0,1);
 		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/index.xml'; 
 		
