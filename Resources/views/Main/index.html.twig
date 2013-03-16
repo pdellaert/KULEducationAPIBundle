@@ -3,22 +3,30 @@
 {% block content %}
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#faculties').hide();
+			$('#studyselect').hide();
+			$('#facultyselect').hide();
 			$.getJSON('{{ path('dellaert_kul_education_xml_list_faculties_by_id_title', {'_locale': app.request.locale}) }}', function(data){
 				var html = '';
 				var len = data.length;
 				for( var i=0; i < len; i++ ){
 					html += '<option value="' + data[i].id + '">' + data[i].title + '</option>';
 				}
-				$('select.faculties').append(html);
+				$('#faculties').append(html);
 			});
-			$('#faculties').show();
+			$('#facultyselect').show();
 		});
 	</script>
 
 	<form method="POST">
-		<select name="faculty" id="faculties" size="1">
-			<option value="-1">{% trans %}choose.faculty{% endtrans %}</option>
-		</select>
+		<div id="facultyselect">
+			<select name="faculty" id="faculties" size="1">
+				<option value="-1">{% trans %}choose.faculty{% endtrans %}</option>
+			</select>
+		</div>
+		<div id="studyselect">
+			<select name="study" id="studies" size="1">
+				<option value="-1">{% trans %}choose.study{% endtrans %}</option>
+			</select>
+		</div>
 	</form>
 {% endblock %}
