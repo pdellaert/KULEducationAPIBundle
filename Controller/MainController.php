@@ -67,7 +67,7 @@ class MainController extends Controller {
 						$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$this->container->getParameter('dellaert_kul_education_xml.fallback_locale')."']");
 					}
 
-					$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $title[0]);
+					$data[] = array('id'=>(string) $fChild['id'],'title'=>(string) $title[0]);
 				}
 			}
 		}
