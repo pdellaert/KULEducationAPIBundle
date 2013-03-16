@@ -38,7 +38,8 @@ class MainController extends Controller {
 
 		// Returning faculties
 		$response = new Response(json_encode($data));
-    	$response->headers->set('Content-Type', 'application/json');
+		$response->headers->set('Content-Type', 'application/json');
+    	return $response;
 	}
 
 	public function listStudiesByIdTitleAction($fid) {
@@ -69,6 +70,7 @@ class MainController extends Controller {
 
 		// Returning studies
 		$response = new Response(json_encode($data));
-    	$response->headers->set('Content-Type', 'application/json');
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
 	}
 }
