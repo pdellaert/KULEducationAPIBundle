@@ -24,11 +24,10 @@ class MainController extends Controller {
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			foreach( $xml->xpath('data/instelling/departement') as $fChild ) {
 				$title = '';
-				$titel = '';
 
 				foreach( $fChild->xpath('titels/titel') as $sChild ) {
 					if( ((string) $sChild['taal']) == $language ) {
-						$titel = (string) $sChild;
+						$title = (string) $sChild;
 					}
 				}
 
