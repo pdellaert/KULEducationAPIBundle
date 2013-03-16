@@ -40,3 +40,16 @@ dellaert_kul_education_xml_list_studies_by_id_title:
         fid: \d+
         lid: \d+
         _locale: nl|en|fr
+
+dellaert_kul_education_xml_list_programs_by_id_title_noid:
+    pattern:   /{_locale}/programs
+    defaults: { _controller: DellaertKULEducationXMLBundle:Main:listProgramsByIdTitle, _locale: nl }
+    requirements:
+        _locale: nl|en|fr
+
+dellaert_kul_education_xml_list_programs_by_id_title:
+    pattern:   /{_locale}/programs/{sid}
+    defaults: { _controller: DellaertKULEducationXMLBundle:Main:listProgramsByIdTitle, _locale: nl }
+    requirements:
+        sid: \d+
+        _locale: nl|en|fr

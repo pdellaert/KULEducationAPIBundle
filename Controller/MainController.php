@@ -72,7 +72,7 @@ class MainController extends Controller {
 			}
 		}
 
-		// Returning studies
+		// Returning levels
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
@@ -104,6 +104,36 @@ class MainController extends Controller {
 							$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $fChild->originele_titel);
 						}
 					}
+				}
+			}
+		}
+
+		// Returning studies
+		$response = new Response(json_encode($data));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
+	}
+
+	public function listProgramsByIdTitleAction($sid) {
+		// Locale
+		$language = substr($this->getRequest()->getLocale(),0,1);
+
+		// Return value
+		$data = array();
+
+		// URL Setup
+		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
+		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
+		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
+		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/CQ_'.$sid.'.xml';
+
+		// Getting XML
+		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+			foreach( $xml->xpath("data/diploma/opleidingen/opleiding") as $fChild ){
+				$title = $fChild->titel;
+
+				if( !empty($title) ) {
+					$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $title,'studypoints'=>(string) $fChild->studiepunten);
 				}
 			}
 		}

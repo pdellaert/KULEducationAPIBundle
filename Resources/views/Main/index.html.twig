@@ -17,6 +17,9 @@
 			$('#faculties').show();
 
 			$('#faculties').change(function(){
+				$('#programs').hide();
+				var html = '<option value="-1">{% trans %}choose.program{% endtrans %}</option>';
+				$('#programs').html(html);
 				$('#studies').hide();
 				var html = '<option value="-1">{% trans %}choose.study{% endtrans %}</option>';
 				$('#studies').html(html);
@@ -39,6 +42,10 @@
 			});
 
 			$('#levels').change(function(){
+				$('#programs').hide();
+				var html = '<option value="-1">{% trans %}choose.program{% endtrans %}</option>';
+				$('#programs').html(html);
+
 				if( $(this).val() != -1 ) {
 					$.getJSON('{{ path('dellaert_kul_education_xml_list_studies_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$('#faculties').val()+'/'+$(this).val(), function(data) {
 						var html = '<option value="-1">{% trans %}choose.study{% endtrans %}</option>';
@@ -55,6 +62,24 @@
 					$('#studies').html(html);
 				}
 			});
+
+			$('#studies').change(function(){
+				if( $(this).val() != -1 ) {
+					$.getJSON('{{ path('dellaert_kul_education_xml_list_programs_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$(this).val(), function(data) {
+						var html = '<option value="-1">{% trans %}choose.program{% endtrans %}</option>';
+						var len = data.length;
+						for( var i=0; i < len; i++ ){
+							html += '<option value="' + data[i].id + '">' + data[i].title + '(' + data[i].points + ' {% trans %}studypoints{% endtrans %})'+ '</option>';
+						}
+						$('#programs').html(html);
+					});
+					$('#programs').show();
+				} else {
+					$('#programs').hide();
+					var html = '<option value="-1">{% trans %}choose.program{% endtrans %}</option>';
+					$('#programs').html(html);
+				}
+			});
 		});
 	</script>
 
@@ -69,6 +94,10 @@
 		<br />
 		<select name="study" id="studies" size="1">
 			<option value="-1">{% trans %}choose.study{% endtrans %}</option>
+		</select>
+		<br />
+		<select name="program" id="programs" size="1">
+			<option value="-1">{% trans %}choose.program{% endtrans %}</option>
 		</select>
 	</form>
 {% endblock %}

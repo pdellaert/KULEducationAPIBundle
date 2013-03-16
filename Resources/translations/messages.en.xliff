@@ -18,6 +18,10 @@
 				<source>choose.study</source>
 				<target>Choose your study</target>
 			</trans-unit>
+			<trans-unit id="5">
+				<source>choose.program</source>
+				<target>Choose your program</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
