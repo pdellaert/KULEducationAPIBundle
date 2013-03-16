@@ -5,8 +5,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 class MainController extends Controller {
-	public function indexAction($_locale) {
-		$lang = substr($_locale,0,1);
+	public function indexAction() {
+		$lang = substr($this->getRequest()->getLocale(),0,1);
 		return $this->render('DellaertKULEducationXMLBundle:Main:index.html.twig',array('faculties'=>$this->getFaculties($lang)));
 	}
 
