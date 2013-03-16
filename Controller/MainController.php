@@ -7,8 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 class MainController extends Controller {
 
 	public function indexAction() {
-		$lang = substr($this->getRequest()->getLocale(),0,1);
-		return $this->render('DellaertKULEducationXMLBundle:Main:index.html.twig',array('faculties'=>$this->getFaculties($lang)));
+		return $this->render('DellaertKULEducationXMLBundle:Main:index.html.twig');
 	}
 
 	public function listFacultiesIdTitleAction() {

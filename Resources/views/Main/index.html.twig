@@ -4,7 +4,7 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('#faculties').hide();
-			$.getJSON('{{ path('dellaert_kul_education_xml_list_faculties_by_id_title') }}', function(data){
+			$.getJSON('{{ path('dellaert_kul_education_xml_list_faculties_by_id_title', {'_locale': app.request.locale}) }}', function(data){
 				var html = '';
 				var len = data.length;
 				for( var i=0; i < len; i++ ){
