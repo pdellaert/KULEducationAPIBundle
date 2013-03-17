@@ -6,10 +6,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class APIController extends Controller {
 
-	public function indexAction() {
-		return $this->render('DellaertKULEducationAPIBundle:API:index.html.twig');
-	}
-
 	public function listFacultiesByIdTitleAction() {
 		// Locale
 		$language = substr($this->getRequest()->getLocale(),0,1);

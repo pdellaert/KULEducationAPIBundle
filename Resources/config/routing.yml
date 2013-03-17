@@ -1,13 +1,3 @@
-dellaert_kul_education_api_base:
-    pattern: /
-    defaults: { _controller: DellaertKULEducationAPIBundle:API:index, _locale: nl }
-
-dellaert_kul_education_api_home:
-    pattern:   /{_locale}/
-    defaults: { _controller: DellaertKULEducationAPIBundle:API:index, _locale: nl }
-    requirements:
-        _locale: nl|en
-
 dellaert_kul_education_api_list_faculties_by_id_title:
     pattern:   /{_locale}/faculties
     defaults: { _controller: DellaertKULEducationAPIBundle:API:listFacultiesByIdTitle, _locale: nl }
