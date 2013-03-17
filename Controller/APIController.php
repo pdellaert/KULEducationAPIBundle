@@ -63,7 +63,10 @@ class APIController extends Controller {
 						$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$this->container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
 					}
 
-					$data[] = array('id'=>(string) $fChild['id'],'title'=>(string) $title[0]);
+					$studiesInLang = $fChild->xpath("diplomas/diploma[originele_titel[@taal='$language']]");
+					if( !empty($studiesInLang) ) {
+						$data[] = array('id'=>(string) $fChild['id'],'title'=>(string) $title[0]);
+					}
 				}
 			}
 		}
