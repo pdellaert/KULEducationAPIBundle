@@ -185,29 +185,26 @@ class APIController extends Controller {
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			foreach( $xml->xpath("//opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
-				$teachers = array();
-				foreach( $fChild->xpath("docenten/docent") as $sChild ) {
-					$teachers[] = array(
-						'personel_id' => (string) $sChild['persno'],
-						'firstname' => (string) $sChild->voornaam,
-						'lastname' => (string) $sChild->familienaam
-						);
-				}
-				switch((string) $fChild['verplicht']) {
-					case 'J':
-						$base = 'mandatory';
-						break;
-					default:
-						$base = 'optional';
-				}
-				$data[$base][] = array(
-					'id' => (string) $fChild['objid'],
-					'course_id' => (string) $fChild['short'],
-					'title' => (string) $fChild->titel,
-					'period' => (string) $fChild->periode,
-					'studypoints' => (string) $fChild->pts,
-					'teachers' => $teachers
+			$teachers = array();
+			foreach( $fChild->xpath("docenten/docent") as $sChild ) {
+				$teachers[] = array(
+					'function' => (string) $sChild['functie'],
+					'personel_id' => (string) $sChild['persno'],
+					'name' => (string) $sChild->naam,
+					'firstname' => (string) $sChild->voornaam,
+					'lastname' => (string) $sChild->familienaam
 					);
+			}
+
+			$data[] = array(
+				'id' => (string) $fChild['objid'],
+				'course_id' => (string) $fChild['short'],
+				'title' => (string) $fChild->titel,
+				'period' => (string) $fChild->periode,
+				'studypoints' => (string) $fChild->pts,
+				'mandatory' => (string) $fChild['verplicht'],
+				'teachers' => $teachers
+				);
 			}
 		}
 
@@ -249,8 +246,9 @@ class APIController extends Controller {
 			$teachers = array();
 			foreach( $fChild->xpath("docenten/docent") as $sChild ) {
 				$teachers[] = array(
+					'function' => (string) $sChild['functie'],
 					'personel_id' => (string) $sChild['persno'],
-					'naam' => (string) $sChild->naam,
+					'name' => (string) $sChild->naam,
 					'firstname' => (string) $sChild->voornaam,
 					'lastname' => (string) $sChild->familienaam
 					);
