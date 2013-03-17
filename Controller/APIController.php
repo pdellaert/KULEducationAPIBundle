@@ -233,7 +233,7 @@ class APIController extends Controller {
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			$cg = $xml->xpath("data/opleiding/cg[@level='1'");
 			if( !empty($cg) ) {
-				$data[(string) $cg->titel] = $this->parseCourseGroupInLevel($cg);
+				$data[(string) $cg->titel] = $this->parseCourseGroupInLevel($cg,$phid);
 			}
 		}
 
