@@ -186,10 +186,32 @@ class MainController extends Controller {
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			foreach( $xml->xpath("//opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
-				var_dump($fChild);
-				//$data[] = array('id'=> (int) $fChild['code']);
+				$teachers = array();
+				foreach( $fChild->xpath("docenten/docent") as $sChild ) {
+					$teachers[] = array(
+						'personel_id' => (string) $sChild['persno'],
+						'firstname' => (string) $sChild->voornaam,
+						'lastname' => (string) $sChild->familienaam
+						);
+				}
+				switch((string) $fChild['verplicht']) {
+					case 'J':
+						$base = 'mandatory';
+						break;
+					default:
+						$base = 'optional';
+				}
+				$data[$base][] = array(
+					'id' => (string) $fChild['objid'],
+					'course_id' => (string) $fChild['short'],
+					'title' => (string) $fChild->titel,
+					'period' => (string) $fChild->periode,
+					'studypoints' => (string) $fChild->pts,
+					'teachers' => $teachers
+					);
 			}
 		}
+		var_dump($data);
 
 		// Returning studies
 		$response = new Response(json_encode($data));
