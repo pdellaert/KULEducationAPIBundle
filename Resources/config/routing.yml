@@ -1,41 +1,41 @@
 dellaert_kul_education_api_base:
     pattern: /
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:index, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:index, _locale: nl }
 
 dellaert_kul_education_api_home:
     pattern:   /{_locale}/
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:index, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:index, _locale: nl }
     requirements:
         _locale: nl|en
 
 dellaert_kul_education_api_list_faculties_by_id_title:
     pattern:   /{_locale}/faculties
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listFacultiesByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listFacultiesByIdTitle, _locale: nl }
     requirements:
         _locale: nl|en
 
 dellaert_kul_education_api_list_levels_by_id_title_noid:
     pattern:   /{_locale}/levels
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listLevelsByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listLevelsByIdTitle, _locale: nl }
     requirements:
         _locale: nl|en
 
 dellaert_kul_education_api_list_levels_by_id_title:
     pattern:   /{_locale}/levels/{fid}
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listLevelsByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listLevelsByIdTitle, _locale: nl }
     requirements:
         fid: \d+
         _locale: nl|en
 
 dellaert_kul_education_api_list_studies_by_id_title_noid:
     pattern:   /{_locale}/studies
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listStudiesByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listStudiesByIdTitle, _locale: nl }
     requirements:
         _locale: nl|en
 
 dellaert_kul_education_api_list_studies_by_id_title:
     pattern:   /{_locale}/studies/{fid}/{lid}
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listStudiesByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listStudiesByIdTitle, _locale: nl }
     requirements:
         fid: \d+
         lid: \d+
@@ -43,39 +43,39 @@ dellaert_kul_education_api_list_studies_by_id_title:
 
 dellaert_kul_education_api_list_programs_by_id_title_noid:
     pattern:   /{_locale}/programs
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listProgramsByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listProgramsByIdTitle, _locale: nl }
     requirements:
         _locale: nl|en
 
 dellaert_kul_education_api_list_programs_by_id_title:
     pattern:   /{_locale}/programs/{sid}
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listProgramsByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listProgramsByIdTitle, _locale: nl }
     requirements:
         sid: \d+
         _locale: nl|en
 
 dellaert_kul_education_api_list_stages_by_id_title_noid:
     pattern:   /{_locale}/stages
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listStagesByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listStagesByIdTitle, _locale: nl }
     requirements:
         _locale: nl|en
 
 dellaert_kul_education_api_list_stages_by_id_title:
     pattern:   /{_locale}/stages/{pid}
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listStagesByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listStagesByIdTitle, _locale: nl }
     requirements:
         sid: \d+
         _locale: nl|en
 
 dellaert_kul_education_api_list_courses_by_id_title_noid:
     pattern:   /{_locale}/courses
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listCoursesByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCoursesByIdTitle, _locale: nl }
     requirements:
         _locale: nl|en
 
 dellaert_kul_education_api_list_courses_by_id_title:
     pattern:   /{_locale}/courses/{pid}/{phid}
-    defaults: { _controller: DellaertKULEducationAPIBundle:Main:listCoursesByIdTitle, _locale: nl }
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCoursesByIdTitle, _locale: nl }
     requirements:
         phid: \d+
         sid: \d+
