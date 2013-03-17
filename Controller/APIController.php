@@ -166,7 +166,7 @@ class APIController extends Controller {
 		return $response;
 	}
 
-	public function listCoursesByIdTitleAction($pid,$phid) {
+	public function listCoursesAction($pid,$phid) {
 		// Locale
 		$language = substr($this->getRequest()->getLocale(),0,1);
 
