@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 class APIController extends Controller {
 
 	public function indexAction() {
-		return $this->render('DellaertKULEducationAPIBundle:Main:index.html.twig');
+		return $this->render('DellaertKULEducationAPIBundle:API:index.html.twig');
 	}
 
 	public function listFacultiesByIdTitleAction() {
