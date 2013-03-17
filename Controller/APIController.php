@@ -169,7 +169,7 @@ class APIController extends Controller {
 		return $response;
 	}
 
-	public function listCoursesAction($pid,$phid) {
+	public function listCoursesInLevelAction($pid,$phid) {
 		// Locale
 		$language = substr($this->getRequest()->getLocale(),0,1);
 
@@ -211,9 +211,68 @@ class APIController extends Controller {
 			}
 		}
 
-		// Returning studies
+		// Returning courses
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
+	}
+
+	public function listCoursesByGroupsInLevelAction($pid,$phid) {
+		// Locale
+		$language = substr($this->getRequest()->getLocale(),0,1);
+
+		// Return value
+		$data = array();
+
+		// URL Setup
+		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $this->container->getParameter('dellaert_kul_education_api.method');
+		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
+
+		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+			$cg = $xml->xpath("data/opleiding/cg[@level='1'");
+			if( !empty($cg) ) {
+				$data[(string) $cg->titel] = $this->parseCourseGroupInLevel($cg);
+			}
+		}
+
+		// Returning courses
+		$response = new Response(json_encode($data));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
+	}
+
+	private function parseCourseGroupInLevel($cg,$phid) {
+		$data = array();
+		foreach( $cg->xpath("opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
+			$teachers = array();
+			foreach( $fChild->xpath("docenten/docent") as $sChild ) {
+				$teachers[] = array(
+					'personel_id' => (string) $sChild['persno'],
+					'naam' => (string) $sChild->naam,
+					'firstname' => (string) $sChild->voornaam,
+					'lastname' => (string) $sChild->familienaam
+					);
+			}
+
+			$data['courses'][] = array(
+				'id' => (string) $fChild['objid'],
+				'course_id' => (string) $fChild['short'],
+				'title' => (string) $fChild->titel,
+				'period' => (string) $fChild->periode,
+				'studypoints' => (string) $fChild->pts,
+				'mandatory' => (string) $fChild['verplicht'],
+				'teachers' => $teachers
+				);
+		}
+
+		$nextLevel = ((int) $cg['level'])+1;
+
+		foreach( $cg->xpath("cg[@level='$nextLevel'") as $fChild ) {
+			$data[(string) $fChild->titel] = $this->parseCourseGroupInLevel($fChil,$phid);
+		}
+
+		return $data;
 	}
 }

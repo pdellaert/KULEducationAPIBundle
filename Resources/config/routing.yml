@@ -57,15 +57,29 @@ dellaert_kul_education_api_list_stages_by_id_title:
         sid: \d+
         _locale: nl|en
 
-dellaert_kul_education_api_list_courses_noids:
-    pattern:   /{_locale}/courses
-    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCourses, _locale: nl }
+dellaert_kul_education_api_list_courses_in_level_noids:
+    pattern:   /{_locale}/courses-in-level
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCoursesInLevel, _locale: nl }
     requirements:
         _locale: nl|en
 
-dellaert_kul_education_api_list_courses:
-    pattern:   /{_locale}/courses/{pid}/{phid}
-    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCourses, _locale: nl }
+dellaert_kul_education_api_list_courses_in_level:
+    pattern:   /{_locale}/courses-in-level/{pid}/{phid}
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCoursesInLevel, _locale: nl }
+    requirements:
+        phid: \d+
+        sid: \d+
+        _locale: nl|en
+
+dellaert_kul_education_api_list_courses_by_groups_in_level_noids:
+    pattern:   /{_locale}/courses-by-groups-in-level
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCoursesByGroupsInLevel, _locale: nl }
+    requirements:
+        _locale: nl|en
+
+dellaert_kul_education_api_list_courses_by_groups_in_level:
+    pattern:   /{_locale}/courses-by-groups-in-level/{pid}/{phid}
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCoursesByGroupsInLevel, _locale: nl }
     requirements:
         phid: \d+
         sid: \d+
