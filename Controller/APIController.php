@@ -1,13 +1,13 @@
 <?php
-namespace Dellaert\KULEducationXMLBundle\Controller;
+namespace Dellaert\KULEducationAPIBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class MainController extends Controller {
+class APIController extends Controller {
 
 	public function indexAction() {
-		return $this->render('DellaertKULEducationXMLBundle:Main:index.html.twig');
+		return $this->render('DellaertKULEducationAPIBundle:Main:index.html.twig');
 	}
 
 	public function listFacultiesByIdTitleAction() {

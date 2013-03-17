@@ -1,6 +1,6 @@
 <?php
 
-namespace Dellaert\KULEducationXMLBundle\DependencyInjection;
+namespace Dellaert\KULEducationAPIBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
