@@ -233,7 +233,7 @@ class APIController extends Controller {
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			$cg = $xml->xpath("data/opleiding/cg[@level='1']");
 			if( !empty($cg) ) {
-				$data[(string) $cg->titel] = $this->parseCourseGroupInLevel($cg,$phid);
+				$data[(string) $cg[0]->titel] = $this->parseCourseGroupInLevel($cg[0],$phid);
 			}
 		}
 
@@ -270,7 +270,7 @@ class APIController extends Controller {
 		$nextLevel = ((int) $cg['level'])+1;
 
 		foreach( $cg->xpath("cg[@level='$nextLevel'") as $fChild ) {
-			$data[(string) $fChild->titel] = $this->parseCourseGroupInLevel($fChil,$phid);
+			$data[(string) $fChild->titel] = $this->parseCourseGroupInLevel($fChild,$phid);
 		}
 
 		return $data;
