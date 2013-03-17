@@ -18,9 +18,9 @@ class APIController extends Controller {
 		$data = array();
 
 		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
+		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $this->container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml'; 
 		
 		// Getting XML
@@ -29,7 +29,7 @@ class APIController extends Controller {
 				$title = $fChild->xpath("titels/titel[@taal='$language']");
 
 				if( empty($title) ) {
-					$title = $fChild->xpath("titels/titel[@taal='".$this->container->getParameter('dellaert_kul_education_xml.fallback_locale')."']");
+					$title = $fChild->xpath("titels/titel[@taal='".$this->container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
 				}
 
 				$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $title[0]);
@@ -50,9 +50,9 @@ class APIController extends Controller {
 		$data = array();
 
 		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
+		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $this->container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
 		
 		// Getting XML
@@ -64,7 +64,7 @@ class APIController extends Controller {
 					$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='$language']");
 
 					if( empty($title) ) {
-						$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$this->container->getParameter('dellaert_kul_education_xml.fallback_locale')."']");
+						$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$this->container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
 					}
 
 					$data[] = array('id'=>(string) $fChild['id'],'title'=>(string) $title[0]);
@@ -86,9 +86,9 @@ class APIController extends Controller {
 		$data = array();
 
 		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
+		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $this->container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
 		
 		// Getting XML
@@ -122,9 +122,9 @@ class APIController extends Controller {
 		$data = array();
 
 		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
+		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $this->container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$sid.'.xml';
 
 		// Getting XML
@@ -152,9 +152,9 @@ class APIController extends Controller {
 		$data = array();
 
 		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
+		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $this->container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
 
 		// Getting XML
@@ -178,9 +178,9 @@ class APIController extends Controller {
 		$data = array();
 
 		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_xml.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_xml.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_xml.method');
+		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $this->container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
 
 		// Getting XML
