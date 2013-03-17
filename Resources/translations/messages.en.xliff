@@ -54,6 +54,38 @@
 				<source>stage</source>
 				<target>Stage</target>
 			</trans-unit>
+			<trans-unit id="14">
+				<source>no.course</source>
+				<target>No courses available</target>
+			</trans-unit>
+			<trans-unit id="15">
+				<source>course.mandatory</source>
+				<target>Mandatory courses</target>
+			</trans-unit>
+			<trans-unit id="16">
+				<source>course.optional</source>
+				<target>Optional courses</target>
+			</trans-unit>
+			<trans-unit id="17">
+				<source>course.id</source>
+				<target>Course ID</target>
+			</trans-unit>
+			<trans-unit id="18">
+				<source>course.title</source>
+				<target>Course</target>
+			</trans-unit>
+			<trans-unit id="19">
+				<source>course.period</source>
+				<target>Term</target>
+			</trans-unit>
+			<trans-unit id="20">
+				<source>course.studypoints</source>
+				<target>ECTS</target>
+			</trans-unit>
+			<trans-unit id="21">
+				<source>course.teachers</source>
+				<target>Teachers</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -8,6 +8,7 @@
 			$('#studies').hide();
 			$('#programs').hide();
 			$('#stages').hide();
+			$('#courses').hide();
 
 			$.getJSON('{{ path('dellaert_kul_education_xml_list_faculties_by_id_title', {'_locale': app.request.locale}) }}', function(data){
 				var len = data.length;
@@ -24,6 +25,9 @@
 			$('#faculties').show();
 
 			$('#faculties').change(function(){
+				$('#courses').hide();
+				var html = '';
+				$('#courses').html(html);
 				$('#stages').hide();
 				var html = '<option value="-1">{% trans %}choose.stage{% endtrans %}</option>';
 				$('#stages').html(html);
@@ -35,7 +39,7 @@
 				$('#studies').html(html);
 
 				if( $(this).val() != -1 ) {
-					$.getJSON('{{ path('dellaert_kul_education_xml_list_levels_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$(this).val(), function(data) {
+					$.getJSON('{{ path('dellaert_kul_education_xml_list_levels_by_id_title_noid', {'_locale': app.request.locale}) }}/' + $(this).val(), function(data) {
 						var len = data.length;
 						if( len == 0 ) {
 							var html = '<option value="-1">{% trans %}no.level{% endtrans %}</option>'
@@ -56,6 +60,9 @@
 			});
 
 			$('#levels').change(function(){
+				$('#courses').hide();
+				var html = '';
+				$('#courses').html(html);
 				$('#stages').hide();
 				var html = '<option value="-1">{% trans %}choose.stage{% endtrans %}</option>';
 				$('#stages').html(html);
@@ -64,7 +71,7 @@
 				$('#programs').html(html);
 
 				if( $(this).val() != -1 ) {
-					$.getJSON('{{ path('dellaert_kul_education_xml_list_studies_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$('#faculties').val()+'/'+$(this).val(), function(data) {
+					$.getJSON('{{ path('dellaert_kul_education_xml_list_studies_by_id_title_noid', {'_locale': app.request.locale}) }}/' + $('#faculties').val() + '/' + $(this).val(), function(data) {
 						var len = data.length;
 						if( len == 0 ) {
 							var html = '<option value="-1">{% trans %}no.study{% endtrans %}</option>'
@@ -85,12 +92,15 @@
 			});
 
 			$('#studies').change(function(){
+				$('#courses').hide();
+				var html = '';
+				$('#courses').html(html);
 				$('#stages').hide();
 				var html = '<option value="-1">{% trans %}choose.stage{% endtrans %}</option>';
 				$('#stages').html(html);
 
 				if( $(this).val() != -1 ) {
-					$.getJSON('{{ path('dellaert_kul_education_xml_list_programs_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$(this).val(), function(data) {
+					$.getJSON('{{ path('dellaert_kul_education_xml_list_programs_by_id_title_noid', {'_locale': app.request.locale}) }}/' + $(this).val(), function(data) {
 						var len = data.length;
 						if( len == 0 ) {
 							var html = '<option value="-1">{% trans %}no.program{% endtrans %}</option>'
@@ -110,9 +120,13 @@
 				}
 			});
 
-			$('#programs').change(function(){				
+			$('#programs').change(function(){
+				$('#courses').hide();
+				var html = '';
+				$('#courses').html(html);
+
 				if( $(this).val() != -1 ) {
-					$.getJSON('{{ path('dellaert_kul_education_xml_list_stages_by_id_title_noid', {'_locale': app.request.locale}) }}/'+$(this).val(), function(data) {
+					$.getJSON('{{ path('dellaert_kul_education_xml_list_stages_by_id_title_noid', {'_locale': app.request.locale}) }}/' + $(this).val(), function(data) {
 						var len = data.length;
 						if( len == 0 ) {
 							var html = '<option value="-1">{% trans %}no.stage{% endtrans %}</option>'
@@ -129,6 +143,83 @@
 					$('#stages').hide();
 					var html = '<option value="-1">{% trans %}choose.stage{% endtrans %}</option>';
 					$('#stages').html(html);
+				}
+			});
+
+			$('#stage').change(function(){				
+				if( $(this).val() != -1 ) {
+					$.getJSON('{{ path('dellaert_kul_education_xml_list_courses_by_id_title_noid', {'_locale': app.request.locale}) }}/' + $('#programs').val() + '/' + $(this).val(), function(data) {
+						var html = '';
+
+						var len = data.mandatory.length;
+
+						if( len > 0 ) {
+							html += '<b>{% trans %}course.mandatory{% endtrans %}</b><br />'
+								+'<table><tr><td><b>{% trans %}course.id{% endtrans %}</b></td>'
+								+'<td><b>{% trans %}course.title{% endtrans %}</b></td>'
+								+'<td><b>{% trans %}course.period{% endtrans %}</b></td>'
+								+'<td><b>{% trans %}course.studypoints{% endtrans %}</b></td>'
+								+'<td><b>{% trans %}course.teachers{% endtrans %}</b></td></tr>';
+
+							for( var i=0; i < len; i++ ) {
+								html += '<tr><td>'+data.mandatory[i].course_id+'</td>'
+									+'<td>'+data.mandatory[i].title+'</td>'
+									+'<td>'+data.mandatory[i].period+'</td>'
+									+'<td>'+data.mandatory[i].studypoints+'</td>'
+									+'<td>';
+								lenteachers = data.mandatory[i].teachers.length;
+								for( var j=0; j<lenteachers; j++ ) {
+									html += data.mandatory[i].teachers[j].lastname+', '+data.mandatory[i].teachers[j].firstname;
+									if( j < lenteachers-1 ) {
+										html += '; ';
+									}
+								}
+								html += '</td></tr>';
+							}
+
+							html += '</table><br />';
+						}
+
+						var len = data.optional.length;
+
+						if( len > 0 ) {
+							html += '<b>{% trans %}course.optional{% endtrans %}</b><br />'
+								+'<table><tr><td><b>{% trans %}course.id{% endtrans %}</b></td>'
+								+'<td><b>{% trans %}course.title{% endtrans %}</b></td>'
+								+'<td><b>{% trans %}course.period{% endtrans %}</b></td>'
+								+'<td><b>{% trans %}course.studypoints{% endtrans %}</b></td>'
+								+'<td><b>{% trans %}course.teachers{% endtrans %}</b></td></tr>';
+
+							for( var i=0; i < len; i++ ) {
+								html += '<tr><td>'+data.optional[i].course_id+'</td>'
+									+'<td>'+data.optional[i].title+'</td>'
+									+'<td>'+data.optional[i].period+'</td>'
+									+'<td>'+data.optional[i].studypoints+'</td>'
+									+'<td>';
+								lenteachers = data.optional[i].teachers.length;
+								for( var j=0; j<lenteachers; j++ ) {
+									html += data.optional[i].teachers[j].lastname+', '+data.optional[i].teachers[j].firstname;
+									if( j < lenteachers-1 ) {
+										html += '; ';
+									}
+								}
+								html += '</td></tr>';
+							}
+						}
+
+						if( html == '' ) {
+							html = '{% trans %}no.course{% endtrans %}';
+						}
+
+						$('#courses').html(html);
+
+
+					});
+					$('#courses').show();
+				} else {
+					$('#courses').hide();
+					var html = '';
+					$('#courses').html(html);
 				}
 			});
 		});
@@ -154,5 +245,6 @@
 		<select name="stage" id="stages" size="1">
 			<option value="-1">{% trans %}choose.stage{% endtrans %}</option>
 		</select>
+		<div id="courses"></div>
 	</form>
 {% endblock %}

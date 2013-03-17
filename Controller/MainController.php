@@ -211,7 +211,6 @@ class MainController extends Controller {
 					);
 			}
 		}
-		var_dump($data);
 
 		// Returning studies
 		$response = new Response(json_encode($data));
