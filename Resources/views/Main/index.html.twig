@@ -151,7 +151,11 @@
 					$.getJSON('{{ path('dellaert_kul_education_xml_list_courses_by_id_title_noid', {'_locale': app.request.locale}) }}/' + $('#programs').val() + '/' + $(this).val(), function(data) {
 						var html = '';
 
-						var len = data.mandatory.length;
+						if( typeof data.mandatory != 'undefined' ) {
+							var len = data.mandatory.length;
+						} else {
+							var len = 0;
+						}
 
 						if( len > 0 ) {
 							html += '<b>{% trans %}course.mandatory{% endtrans %}</b><br />'
@@ -180,7 +184,11 @@
 							html += '</table><br />';
 						}
 
-						var len = data.optional.length;
+						if( typeof data.optional != 'undefined' ) {
+							var len = data.optional.length;
+						} else {
+							var len = 0;
+						}
 
 						if( len > 0 ) {
 							html += '<b>{% trans %}course.optional{% endtrans %}</b><br />'
