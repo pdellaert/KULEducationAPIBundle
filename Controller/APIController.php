@@ -269,7 +269,7 @@ class APIController extends Controller {
 
 		$nextLevel = ((int) $cg['level'])+1;
 
-		foreach( $cg->xpath("cg[@level='$nextLevel'") as $fChild ) {
+		foreach( $cg->xpath("cg[@level='$nextLevel']") as $fChild ) {
 			$data[(string) $fChild->titel] = $this->parseCourseGroupInLevel($fChild,$phid);
 		}
 
