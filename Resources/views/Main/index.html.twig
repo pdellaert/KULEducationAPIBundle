@@ -146,7 +146,7 @@
 				}
 			});
 
-			$('#stage').change(function(){				
+			$('#stages').change(function(){				
 				if( $(this).val() != -1 ) {
 					$.getJSON('{{ path('dellaert_kul_education_xml_list_courses_by_id_title_noid', {'_locale': app.request.locale}) }}/' + $('#programs').val() + '/' + $(this).val(), function(data) {
 						var html = '';
