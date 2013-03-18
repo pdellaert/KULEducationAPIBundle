@@ -192,7 +192,8 @@ class APIController extends Controller {
 					'personel_id' => (string) $sChild['persno'],
 					'name' => (string) $sChild->naam,
 					'firstname' => (string) $sChild->voornaam,
-					'lastname' => (string) $sChild->familienaam
+					'lastname' => (string) $sChild->familienaam,
+					'firstletter' => (string) $sChild->voorletters
 					);
 			}
 
@@ -250,7 +251,8 @@ class APIController extends Controller {
 					'personel_id' => (string) $sChild['persno'],
 					'name' => (string) $sChild->naam,
 					'firstname' => (string) $sChild->voornaam,
-					'lastname' => (string) $sChild->familienaam
+					'lastname' => (string) $sChild->familienaam,
+					'firstletter' => (string) $sChild->voorletters
 					);
 			}
 
