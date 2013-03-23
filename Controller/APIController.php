@@ -9,7 +9,7 @@ class APIController extends Controller {
 
 	public function listFacultiesByIdTitleAction() {
 		// Getting Faculties live
-		$data = APIUtility::getLiveFacultiesByIdTitle($this);
+		$data = APIUtility::getLiveFacultiesByIdTitle($this->container,$this->getRequest()->getLocale());
 
 		// Returning faculties
 		$response = new Response(json_encode($data));
@@ -19,7 +19,7 @@ class APIController extends Controller {
 
 	public function listLevelsByIdTitleAction($fid) {
 		// Getting Levels live
-		$data = APIUtility::getLiveLevelsByIdTitle($this, $fid);
+		$data = APIUtility::getLiveLevelsByIdTitle($this->container,$this->getRequest()->getLocale(), $fid);
 
 		// Returning levels
 		$response = new Response(json_encode($data));
@@ -29,7 +29,7 @@ class APIController extends Controller {
 
 	public function listStudiesByIdTitleAction($fid,$lid) {
 		// Getting Studies live
-		$data = APIUtility::getLiveStudiesByIdTitle($this,$fid,$lid);
+		$data = APIUtility::getLiveStudiesByIdTitle($this->container,$this->getRequest()->getLocale(),$fid,$lid);
 
 		// Returning studies
 		$response = new Response(json_encode($data));
@@ -39,7 +39,7 @@ class APIController extends Controller {
 
 	public function listProgramsByIdTitleAction($sid) {
 		// Getting Programs live
-		$data = APIUtility::getLiveProgramsByIdTitle($this,$sid);
+		$data = APIUtility::getLiveProgramsByIdTitle($this->container,$this->getRequest()->getLocale(),$sid);
 
 		// Returning programs
 		$response = new Response(json_encode($data));
@@ -49,7 +49,7 @@ class APIController extends Controller {
 
 	public function listStagesByIdTitleAction($pid) {
 		// Getting Stages live
-		$data = APIUtility::getLiveStagesByIdTitle($this,$pid);
+		$data = APIUtility::getLiveStagesByIdTitle($this->container,$this->getRequest()->getLocale(),$pid);
 
 		// Returning stages
 		$response = new Response(json_encode($data));
@@ -59,7 +59,7 @@ class APIController extends Controller {
 
 	public function listCoursesInLevelAction($pid,$phid) {
 		// Getting Courses live
-		$data = APIUtility::getLiveCoursesInLevel($this,$pid,$phid);
+		$data = APIUtility::getLiveCoursesInLevel($this->container,$this->getRequest()->getLocale(),$pid,$phid);
 
 		// Returning courses
 		$response = new Response(json_encode($data));
@@ -69,12 +69,12 @@ class APIController extends Controller {
 
 	public function listCoursesByGroupsInLevelAction($pid,$phid) {
 		// Getting Courses live
-		$data = APIUtility::getLiveCoursesByGroupsInLevel($this,$pid,$phid);
+		$data = APIUtility::getLiveCoursesByGroupsInLevel($this->container,$this->getRequest()->getLocale(),$pid,$phid);
 
 		// Returning courses
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
 	}
-	
+
 }

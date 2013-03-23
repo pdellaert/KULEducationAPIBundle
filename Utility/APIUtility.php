@@ -3,17 +3,17 @@ namespace Dellaert\KULEducationAPIBundle\Utility;
 
 class APIUtility {
 
-	public static function getLiveFacultiesByIdTitle($context) {
+	public static function getLiveFacultiesByIdTitle($container,$locale) {
 		// Locale
-		$language = substr($context->getRequest()->getLocale(),0,1);
+		$language = substr($locale,0,1);
 
 		// Return value
 		$data = array();
 
 		// URL Setup
-		$url = $context->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $context->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $context->container->getParameter('dellaert_kul_education_api.method');
+		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml'; 
 		
 		// Getting XML
@@ -22,7 +22,7 @@ class APIUtility {
 				$title = $fChild->xpath("titels/titel[@taal='$language']");
 
 				if( empty($title) ) {
-					$title = $fChild->xpath("titels/titel[@taal='".$context->container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
+					$title = $fChild->xpath("titels/titel[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
 				}
 
 				$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $title[0]);
@@ -33,17 +33,17 @@ class APIUtility {
 	}
 
 
-	public static function getLiveLevelsByIdTitle($context,$fid) {
+	public static function getLiveLevelsByIdTitle($container,$locale,$fid) {
 		// Locale
-		$language = substr($context->getRequest()->getLocale(),0,1);
+		$language = substr($locale,0,1);
 
 		// Return value
 		$data = array();
 
 		// URL Setup
-		$url = $context->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $context->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $context->container->getParameter('dellaert_kul_education_api.method');
+		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
 		
 		// Getting XML
@@ -55,7 +55,7 @@ class APIUtility {
 					$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='$language']");
 
 					if( empty($title) ) {
-						$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$context->container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
+						$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
 					}
 
 					$studiesInLang = $fChild->xpath("diplomas/diploma[originele_titel[@taal='$language']]");
@@ -69,17 +69,17 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveStudiesByIdTitle($context,$fid,$lid) {
+	public static function getLiveStudiesByIdTitle($container,$locale,$fid,$lid) {
 		// Locale
-		$language = substr($context->getRequest()->getLocale(),0,1);
+		$language = substr($locale,0,1);
 
 		// Return value
 		$data = array();
 
 		// URL Setup
-		$url = $context->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $context->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $context->container->getParameter('dellaert_kul_education_api.method');
+		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
 		
 		// Getting XML
@@ -102,17 +102,17 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveProgramsByIdTitle($context,$sid) {
+	public static function getLiveProgramsByIdTitle($container,$locale,$sid) {
 		// Locale
-		$language = substr($context->getRequest()->getLocale(),0,1);
+		$language = substr($locale,0,1);
 
 		// Return value
 		$data = array();
 
 		// URL Setup
-		$url = $context->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $context->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $context->container->getParameter('dellaert_kul_education_api.method');
+		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$sid.'.xml';
 
 		// Getting XML
@@ -129,17 +129,17 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveStagesByIdTitle($context, $pid) {
+	public static function getLiveStagesByIdTitle($container,$locale, $pid) {
 		// Locale
-		$language = substr($context->getRequest()->getLocale(),0,1);
+		$language = substr($locale,0,1);
 
 		// Return value
 		$data = array();
 
 		// URL Setup
-		$url = $context->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $context->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $context->container->getParameter('dellaert_kul_education_api.method');
+		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
 
 		// Getting XML
@@ -152,17 +152,17 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveCoursesInLevel($context,$pid,$phid) {
+	public static function getLiveCoursesInLevel($container,$locale,$pid,$phid) {
 		// Locale
-		$language = substr($context->getRequest()->getLocale(),0,1);
+		$language = substr($locale,0,1);
 
 		// Return value
 		$data = array();
 
 		// URL Setup
-		$url = $context->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $context->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $context->container->getParameter('dellaert_kul_education_api.method');
+		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
 
 		// Getting XML
@@ -195,17 +195,17 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveCoursesByGroupsInLevel($context,$pid,$phid) {
+	public static function getLiveCoursesByGroupsInLevel($container,$locale,$pid,$phid) {
 		// Locale
-		$language = substr($context->getRequest()->getLocale(),0,1);
+		$language = substr($locale,0,1);
 
 		// Return value
 		$data = array();
 
 		// URL Setup
-		$url = $context->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $context->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $context->container->getParameter('dellaert_kul_education_api.method');
+		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
 
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
