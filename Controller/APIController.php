@@ -3,34 +3,13 @@ namespace Dellaert\KULEducationAPIBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Dellaert\KULEducationAPIBundle\Utility\APIUtility;
 
 class APIController extends Controller {
 
 	public function listFacultiesByIdTitleAction() {
-		// Locale
-		$language = substr($this->getRequest()->getLocale(),0,1);
-
-		// Return value
-		$data = array();
-
-		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_api.method');
-		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml'; 
-		
-		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("data/instelling/departement") as $fChild ) {
-				$title = $fChild->xpath("titels/titel[@taal='$language']");
-
-				if( empty($title) ) {
-					$title = $fChild->xpath("titels/titel[@taal='".$this->container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
-				}
-
-				$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $title[0]);
-			}
-		}
+		// Getting Faculties live
+		$data = APIUtility::getLiveFacultiesByIdTitle($this);
 
 		// Returning faculties
 		$response = new Response(json_encode($data));
@@ -39,37 +18,8 @@ class APIController extends Controller {
 	}
 
 	public function listLevelsByIdTitleAction($fid) {
-		// Locale
-		$language = substr($this->getRequest()->getLocale(),0,1);
-
-		// Return value
-		$data = array();
-
-		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_api.method');
-		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
-		
-		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			$faculty = $xml->xpath("data/instelling/departement[@objid='$fid']");
-
-			if( !empty($faculty) ) {
-				foreach( $faculty[0]->xpath("classificaties/classificatie/graad") as $fChild ){
-					$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='$language']");
-
-					if( empty($title) ) {
-						$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$this->container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
-					}
-
-					$studiesInLang = $fChild->xpath("diplomas/diploma[originele_titel[@taal='$language']]");
-					if( !empty($studiesInLang) ) {
-						$data[] = array('id'=>(string) $fChild['id'],'title'=>(string) $title[0]);
-					}
-				}
-			}
-		}
+		// Getting Levels live
+		$data = APIUtility::getLiveLevelsByIdTitle($this, $fid);
 
 		// Returning levels
 		$response = new Response(json_encode($data));
@@ -78,34 +28,8 @@ class APIController extends Controller {
 	}
 
 	public function listStudiesByIdTitleAction($fid,$lid) {
-		// Locale
-		$language = substr($this->getRequest()->getLocale(),0,1);
-
-		// Return value
-		$data = array();
-
-		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_api.method');
-		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
-		
-		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			$faculty = $xml->xpath("data/instelling/departement[@objid='$fid']");
-
-			if( !empty($faculty) ) {
-				$level = $faculty[0]->xpath("classificaties/classificatie/graad[@id='$lid']");
-
-				if( !empty($level) ) {
-					foreach( $level[0]->xpath("diplomas/diploma") as $fChild ){
-						if( ((string) $fChild->originele_titel['taal']) == $language ) {
-							$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $fChild->originele_titel);
-						}
-					}
-				}
-			}
-		}
+		// Getting Studies live
+		$data = APIUtility::getLiveStudiesByIdTitle($this,$fid,$lid);
 
 		// Returning studies
 		$response = new Response(json_encode($data));
@@ -114,100 +38,28 @@ class APIController extends Controller {
 	}
 
 	public function listProgramsByIdTitleAction($sid) {
-		// Locale
-		$language = substr($this->getRequest()->getLocale(),0,1);
+		// Getting Programs live
+		$data = APIUtility::getLiveProgramsByIdTitle($this,$sid);
 
-		// Return value
-		$data = array();
-
-		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_api.method');
-		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$sid.'.xml';
-
-		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("data/diploma/opleidingen/opleiding") as $fChild ){
-				$title = $fChild->titel;
-
-				if( !empty($title) ) {
-					$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $title,'studypoints'=>(string) $fChild->studiepunten);
-				}
-			}
-		}
-
-		// Returning studies
+		// Returning programs
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
 	}
 
 	public function listStagesByIdTitleAction($pid) {
-		// Locale
-		$language = substr($this->getRequest()->getLocale(),0,1);
+		// Getting Stages live
+		$data = APIUtility::getLiveStagesByIdTitle($this,$pid);
 
-		// Return value
-		$data = array();
-
-		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_api.method');
-		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
-
-		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("data/opleiding/fases/fase") as $fChild ) {
-				$data[] = array('id'=> (int) $fChild['code']);
-			}
-		}
-
-		// Returning studies
+		// Returning stages
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
 	}
 
 	public function listCoursesInLevelAction($pid,$phid) {
-		// Locale
-		$language = substr($this->getRequest()->getLocale(),0,1);
-
-		// Return value
-		$data = array();
-
-		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_api.method');
-		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
-
-		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("//opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
-			$teachers = array();
-			foreach( $fChild->xpath("docenten/docent") as $sChild ) {
-				$teachers[] = array(
-					'function' => (string) $sChild['functie'],
-					'personel_id' => (string) $sChild['persno'],
-					'name' => (string) $sChild->naam,
-					'firstname' => (string) $sChild->voornaam,
-					'lastname' => (string) $sChild->familienaam,
-					'firstletter' => (string) $sChild->voorletters
-					);
-			}
-
-			$data[] = array(
-				'id' => (string) $fChild['objid'],
-				'course_id' => (string) $fChild['short'],
-				'title' => (string) $fChild->titel,
-				'period' => (string) $fChild->periode,
-				'studypoints' => (string) $fChild->pts,
-				'mandatory' => (string) $fChild['verplicht'],
-				'teachers' => $teachers
-				);
-			}
-		}
+		// Getting Courses live
+		$data = APIUtility::getLiveCoursesInLevel($this,$pid,$phid);
 
 		// Returning courses
 		$response = new Response(json_encode($data));
@@ -216,66 +68,13 @@ class APIController extends Controller {
 	}
 
 	public function listCoursesByGroupsInLevelAction($pid,$phid) {
-		// Locale
-		$language = substr($this->getRequest()->getLocale(),0,1);
-
-		// Return value
-		$data = array();
-
-		// URL Setup
-		$url = $this->container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $this->container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $this->container->getParameter('dellaert_kul_education_api.method');
-		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
-
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			$cg = $xml->xpath("data/opleiding/cg[@level='1']");
-			if( !empty($cg) ) {
-				$data[(string) $cg[0]->titel] = $this->parseCourseGroupInLevel($cg[0],$phid);
-			}
-		}
+		// Getting Courses live
+		$data = APIUtility::getLiveCoursesByGroupsInLevel($this,$pid,$phid);
 
 		// Returning courses
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
 	}
-
-	private function parseCourseGroupInLevel($cg,$phid) {
-		$data = array();
-		foreach( $cg->xpath("opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
-			$teachers = array();
-			foreach( $fChild->xpath("docenten/docent") as $sChild ) {
-				$teachers[] = array(
-					'function' => (string) $sChild['functie'],
-					'personel_id' => (string) $sChild['persno'],
-					'name' => (string) $sChild->naam,
-					'firstname' => (string) $sChild->voornaam,
-					'lastname' => (string) $sChild->familienaam,
-					'firstletter' => (string) $sChild->voorletters
-					);
-			}
-
-			$data['courses'][] = array(
-				'id' => (string) $fChild['objid'],
-				'course_id' => (string) $fChild['short'],
-				'title' => (string) $fChild->titel,
-				'period' => (string) $fChild->periode,
-				'studypoints' => (string) $fChild->pts,
-				'mandatory' => (string) $fChild['verplicht'],
-				'teachers' => $teachers
-				);
-		}
-
-		$nextLevel = ((int) $cg['level'])+1;
-
-		foreach( $cg->xpath("cg[@level='$nextLevel']") as $fChild ) {
-			$subCg = $this->parseCourseGroupInLevel($fChild,$phid);
-			if( !empty($subCg) ) {
-				$data[(string) $fChild->titel] = $subCg;
-			}
-		}
-
-		return $data;
-	}
+	
 }
