@@ -82,6 +82,16 @@ class KULCourse
     	$this->kulTeachers = new ArrayCollection();
     	$this->kulStageProgramCourseLinks = new ArrayCollection();
     }
+    
+    public function preInsert()
+    {
+        $this->preUpdate();
+    }
+    
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
 
     /**
      * Get id

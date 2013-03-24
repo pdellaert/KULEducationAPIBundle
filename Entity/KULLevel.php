@@ -55,6 +55,16 @@ class KULLevel
     public function __construct() {
     	$this->kulFaculties = new ArrayCollection();
     }
+    
+    public function preInsert()
+    {
+        $this->preUpdate();
+    }
+    
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
 
     /**
      * Get id

@@ -46,6 +46,16 @@ class KULAcademyYear
 	 * @Assert\NotBlank()
 	 */
 	protected $title;
+    
+    public function preInsert()
+    {
+        $this->preUpdate();
+    }
+    
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
 
     /**
      * Get id

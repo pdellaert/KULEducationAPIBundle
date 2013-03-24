@@ -64,6 +64,16 @@ class KULStudy
     public function __construct() {
     	$this->kulPrograms = new ArrayCollection();
     }
+    
+    public function preInsert()
+    {
+        $this->preUpdate();
+    }
+    
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
 
     /**
      * Get id

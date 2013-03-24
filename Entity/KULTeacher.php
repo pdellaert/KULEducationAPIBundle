@@ -68,6 +68,16 @@ class KULTeacher
     public function __construct() {
     	$this->kulCourses = new ArrayCollection();
     }
+    
+    public function preInsert()
+    {
+        $this->preUpdate();
+    }
+    
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
 
     /**
      * Get id
