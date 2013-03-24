@@ -42,7 +42,7 @@ class KULLevel
 
 	/**
 	 * @ORM\ManyToMany(targetEntity="KULFaculty", inversedBy="kulLevels")
-	 * @JoinTable(name="kulapi_level_faculties")
+	 * @ORM\JoinTable(name="kulapi_level_faculties")
 	 */
 	protected $kulFaculties;
 

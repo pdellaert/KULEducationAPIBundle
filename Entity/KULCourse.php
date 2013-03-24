@@ -69,7 +69,7 @@ class KULCourse
 
 	/**
 	 * @ORM\ManyToMany(targetEntity="KULTeacher", inversedBy="kulCourses")
-	 * @JoinTable(name="kulapi_course_teachers")
+	 * @ORM\JoinTable(name="kulapi_course_teachers")
 	 */
 	protected $kulTeachers;
 
