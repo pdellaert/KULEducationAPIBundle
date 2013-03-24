@@ -36,18 +36,18 @@ class KULCourse
 	protected $enabled;
 
 	/**
-	 * @ORM\Column(type="string", length="255")
+	 * @ORM\Column(type="string", length=255)
 	 */
 	protected $kulId;
 	
 	/**
-	 * @ORM\Column(type="string", length="255")
+	 * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank()
 	 */
 	protected $courseId;
 	
 	/**
-	 * @ORM\Column(type="string", length="255")
+	 * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank()
 	 */
 	protected $title;
@@ -63,7 +63,7 @@ class KULCourse
 	protected $studypoints;
 
 	/**
-	 * @ORM\Column(type="string", length="1")
+	 * @ORM\Column(type="string", length=1)
 	 */
 	protected $mandatory;
 

@@ -36,7 +36,7 @@ class KULProgram
 	protected $enabled;
 
 	/**
-	 * @ORM\Column(type="string", length="255")
+	 * @ORM\Column(type="string", length=255)
 	 */
 	protected $kulId;
 	
@@ -51,7 +51,7 @@ class KULProgram
     protected $kulStageProgramCourseLinks;
 
 	/**
-	 * @ORM\Column(type="string", length="255")
+	 * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank()
 	 */
 	protected $title;

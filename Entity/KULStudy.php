@@ -36,7 +36,7 @@ class KULStudy
 	protected $enabled;
 
 	/**
-	 * @ORM\Column(type="string", length="255")
+	 * @ORM\Column(type="string", length=255)
 	 */
 	protected $kulId;
     
@@ -56,7 +56,7 @@ class KULStudy
     protected $kulPrograms;
 
 	/**
-	 * @ORM\Column(type="string", length="255")
+	 * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank()
 	 */
 	protected $title;

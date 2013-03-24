@@ -36,13 +36,13 @@ class KULLanguage
 	protected $enabled;
 
 	/**
-	 * @ORM\Column(type="string", length="255")
+	 * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank()
 	 */
 	protected $locale;
 
 	/**
-	 * @ORM\Column(type="string", length="255")
+	 * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank()
 	 */
 	protected $title;
