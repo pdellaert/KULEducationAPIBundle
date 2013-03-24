@@ -8,9 +8,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="kulapi_faculty")
+ * @ORM\Table(name="kulapi_study")
  */
-class KULFaculty
+class KULStudy
 {
 	/**
 	 * @ORM\Id
@@ -39,21 +39,21 @@ class KULFaculty
 	 * @ORM\Column(type="string", length="255")
 	 */
 	protected $kulId;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="KULFaculty")
+     */
+    protected $kulFaculty;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="KULLevel")
+     */
+    protected $kulLevel;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="KULAcademyYear")
-	 */
-	protected $kulYear;
-
-	/**
-	 * @ORM\ManyToOne(targetEntity="KULLanguage")
-	 */
-	protected $kulLanguage;
-
-	/**
-	 * @ORM\ManyToMany(targetEntity="KULLevel", mappedBy="kulFaculties")
-	 */
-	protected $kulLevels;
+    /**
+     * @ORM\OneToMany(targetEntity="KULProgram", mappedBy="kulStudy")
+     */
+    protected $kulPrograms;
 
 	/**
 	 * @ORM\Column(type="string", length="255")
@@ -62,6 +62,6 @@ class KULFaculty
 	protected $title;
     
     public function __construct() {
-    	$this->kulLevels = new ArrayCollection();
+    	$this->kulPrograms = new ArrayCollection();
     }
 }
