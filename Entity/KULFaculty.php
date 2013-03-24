@@ -64,4 +64,185 @@ class KULFaculty
     public function __construct() {
     	$this->kulLevels = new ArrayCollection();
     }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return KULFaculty
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return KULFaculty
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set kulId
+     *
+     * @param string $kulId
+     * @return KULFaculty
+     */
+    public function setKulId($kulId)
+    {
+        $this->kulId = $kulId;
+    
+        return $this;
+    }
+
+    /**
+     * Get kulId
+     *
+     * @return string 
+     */
+    public function getKulId()
+    {
+        return $this->kulId;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return KULFaculty
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set kulYear
+     *
+     * @param \Dellaert\KULEducationAPIBundle\Entity\KULAcademyYear $kulYear
+     * @return KULFaculty
+     */
+    public function setKulYear(\Dellaert\KULEducationAPIBundle\Entity\KULAcademyYear $kulYear = null)
+    {
+        $this->kulYear = $kulYear;
+    
+        return $this;
+    }
+
+    /**
+     * Get kulYear
+     *
+     * @return \Dellaert\KULEducationAPIBundle\Entity\KULAcademyYear 
+     */
+    public function getKulYear()
+    {
+        return $this->kulYear;
+    }
+
+    /**
+     * Set kulLanguage
+     *
+     * @param \Dellaert\KULEducationAPIBundle\Entity\KULLanguage $kulLanguage
+     * @return KULFaculty
+     */
+    public function setKulLanguage(\Dellaert\KULEducationAPIBundle\Entity\KULLanguage $kulLanguage = null)
+    {
+        $this->kulLanguage = $kulLanguage;
+    
+        return $this;
+    }
+
+    /**
+     * Get kulLanguage
+     *
+     * @return \Dellaert\KULEducationAPIBundle\Entity\KULLanguage 
+     */
+    public function getKulLanguage()
+    {
+        return $this->kulLanguage;
+    }
+
+    /**
+     * Add kulLevels
+     *
+     * @param \Dellaert\KULEducationAPIBundle\Entity\KULLevel $kulLevels
+     * @return KULFaculty
+     */
+    public function addKulLevel(\Dellaert\KULEducationAPIBundle\Entity\KULLevel $kulLevels)
+    {
+        $this->kulLevels[] = $kulLevels;
+    
+        return $this;
+    }
+
+    /**
+     * Remove kulLevels
+     *
+     * @param \Dellaert\KULEducationAPIBundle\Entity\KULLevel $kulLevels
+     */
+    public function removeKulLevel(\Dellaert\KULEducationAPIBundle\Entity\KULLevel $kulLevels)
+    {
+        $this->kulLevels->removeElement($kulLevels);
+    }
+
+    /**
+     * Get kulLevels
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getKulLevels()
+    {
+        return $this->kulLevels;
+    }
 }

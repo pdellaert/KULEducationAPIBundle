@@ -55,4 +55,139 @@ class KULLevel
     public function __construct() {
     	$this->kulFaculties = new ArrayCollection();
     }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return KULLevel
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return KULLevel
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set kulId
+     *
+     * @param string $kulId
+     * @return KULLevel
+     */
+    public function setKulId($kulId)
+    {
+        $this->kulId = $kulId;
+    
+        return $this;
+    }
+
+    /**
+     * Get kulId
+     *
+     * @return string 
+     */
+    public function getKulId()
+    {
+        return $this->kulId;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return KULLevel
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Add kulFaculties
+     *
+     * @param \Dellaert\KULEducationAPIBundle\Entity\KULFaculty $kulFaculties
+     * @return KULLevel
+     */
+    public function addKulFacultie(\Dellaert\KULEducationAPIBundle\Entity\KULFaculty $kulFaculties)
+    {
+        $this->kulFaculties[] = $kulFaculties;
+    
+        return $this;
+    }
+
+    /**
+     * Remove kulFaculties
+     *
+     * @param \Dellaert\KULEducationAPIBundle\Entity\KULFaculty $kulFaculties
+     */
+    public function removeKulFacultie(\Dellaert\KULEducationAPIBundle\Entity\KULFaculty $kulFaculties)
+    {
+        $this->kulFaculties->removeElement($kulFaculties);
+    }
+
+    /**
+     * Get kulFaculties
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getKulFaculties()
+    {
+        return $this->kulFaculties;
+    }
 }

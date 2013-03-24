@@ -46,4 +46,106 @@ class KULAcademyYear
 	 * @Assert\NotBlank()
 	 */
 	protected $title;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return KULAcademyYear
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return KULAcademyYear
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set urlPart
+     *
+     * @param string $urlPart
+     * @return KULAcademyYear
+     */
+    public function setUrlPart($urlPart)
+    {
+        $this->urlPart = $urlPart;
+    
+        return $this;
+    }
+
+    /**
+     * Get urlPart
+     *
+     * @return string 
+     */
+    public function getUrlPart()
+    {
+        return $this->urlPart;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return KULAcademyYear
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
 }
