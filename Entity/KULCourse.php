@@ -22,7 +22,7 @@ class KULCourse
 	protected $id;
 
 	/**
-	 * @ORM\Column(type="datetime", nullable="true")
+	 * @ORM\Column(type="datetime", nullable=true)
 	 * 
 	 * @var \DateTime
 	 */
