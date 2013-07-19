@@ -96,7 +96,7 @@ class GenerateCSV extends Command
 								$ptxt = 'jaarvak';
 								break;
 						}
-						$output->writeln('"'.$course['course_id'].'";"'.$preg_replace('/\s+/',' ',$course['title']).'";"d";"'.preg_replace('/\s+/',' ',$program['title']).'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+						$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"d";"'.preg_replace('/\s+/',' ',$program['title']).'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
 					}
 				}
 			}
