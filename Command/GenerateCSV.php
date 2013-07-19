@@ -50,7 +50,7 @@ class GenerateCSV extends Command
 		foreach($studies as $study) {
 			$programs = APIUtility::getLiveProgramsByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$study['id']);
 			foreach($programs as $program) {
-				$output->writeln('"vn";"v";"d";"'.preg_replace('/\s/', ' ', $program['title']).'";"f";"m";"s"');
+				$output->writeln('"vn";"v";"d";"'.preg_replace('/\s+/',' ',$program['title']).'";"f";"m";"s"');
 			}
 		}
 	}
