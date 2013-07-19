@@ -48,7 +48,10 @@ class GenerateCSV extends Command
 
 		$studies = APIUtility::getLiveStudiesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$fid,$lid);
 		foreach($studies as $study) {
-			$output->writeln('"vn";"v";"d";"'.$study['title'].'";"f";"m";"s"');
+			$programs = APIUtility::getLiveProgramsByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$study['id']);
+			foreach($programs as $program) {
+				$output->writeln('"vn";"v";"d";"'.$program['title'].'";"f";"m";"s"');
+			}
 		}
 	}
 }
