@@ -50,7 +50,31 @@ class GenerateCSV extends Command
 		foreach($studies as $study) {
 			$programs = APIUtility::getLiveProgramsByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$study['id']);
 			foreach($programs as $program) {
-				$output->writeln('"vn";"v";"d";"'.preg_replace('/\s+/',' ',$program['title']).'";"f";"m";"s"');
+				$stages = APIUtility::getLiveStagesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$program['id']);
+				foreach($stages as $stage) {
+					switch($stage['id']) {
+						case 1:
+							$ftxt = 'eerste fase';
+							break;
+						case 2:
+							$ftxt = 'tweede fase';
+							break;
+						case 3:
+							$ftxt = 'derde fase';
+							break;
+						case 4:
+							$ftxt = 'vierde fase';
+							break;
+						case 5:
+							$ftxt = 'vijfde fase';
+							break;
+						case 0:
+						default:
+							$ftxt = 'geen fase';
+							break;
+					}
+					$output->writeln('"vn";"v";"d";"'.preg_replace('/\s+/',' ',$program['title']).'";"'.$ftxt.'";"m";"s"');
+				}
 			}
 		}
 	}
