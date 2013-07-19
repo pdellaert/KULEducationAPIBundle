@@ -47,7 +47,7 @@ class GenerateCSV extends Command
 		$output->writeln('"Vaknummer";"Vak";"Hoofddocent";"Studie";"Fase";"Verplicht";"Semester"');
 
 		$studies = APIUtility::getLiveStudiesByIdTitle($this->container,$locale,$fid,$lid);
-		foreach($studies => $study) {
+		foreach($studies as $study) {
 			$output->writeln('"vn";"v";"d";"'.$study['title'].'";"f";"m";"s"');
 		}
 	}
