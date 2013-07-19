@@ -96,7 +96,14 @@ class GenerateCSV extends Command
 								$ptxt = 'jaarvak';
 								break;
 						}
-						$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"d";"'.preg_replace('/\s+/',' ',$program['title']).'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+						$teachers = $course['teachers'];
+						if( count($teachers) == 0 ) {
+							$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"niet toegewezen";"'.preg_replace('/\s+/',' ',$program['title']).'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+						} else {
+							foreach( $teachers as $teacher ) {
+								$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.preg_replace('/\s+/',' ',$teacher['name']).'";"'.preg_replace('/\s+/',' ',$program['title']).'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+							}
+						}
 					}
 				}
 			}
