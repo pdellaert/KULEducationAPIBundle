@@ -1,5 +1,5 @@
 parameters:
     dellaert_kul_education_api.baseurl: http://onderwijsaanbod.kuleuven.be/
-    dellaert_kul_education_api.baseyear: 2012
+    dellaert_kul_education_api.baseyear: 2013
     dellaert_kul_education_api.method: xml
     dellaert_kul_education_api.fallback_locale: e
