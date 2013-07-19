@@ -53,27 +53,51 @@ class GenerateCSV extends Command
 				$stages = APIUtility::getLiveStagesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$program['id']);
 				foreach($stages as $stage) {
 					switch($stage['id']) {
-						case 1:
+						case '1':
 							$ftxt = 'eerste fase';
 							break;
-						case 2:
+						case '2':
 							$ftxt = 'tweede fase';
 							break;
-						case 3:
+						case '3':
 							$ftxt = 'derde fase';
 							break;
-						case 4:
+						case '4':
 							$ftxt = 'vierde fase';
 							break;
-						case 5:
+						case '5':
 							$ftxt = 'vijfde fase';
 							break;
-						case 0:
+						case '0':
 						default:
 							$ftxt = 'geen fase';
 							break;
 					}
-					$output->writeln('"vn";"v";"d";"'.preg_replace('/\s+/',' ',$program['title']).'";"'.$ftxt.'";"m";"s"');
+					$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
+					foreach($courses as $course) {
+						switch($course['mandatory']) {
+							case 'J':
+							case 'Y':
+								$mtxt = 'verplicht';
+								break;
+							default:
+								$mtxt = 'keuze';
+								break;
+						}
+						switch($course['period']) {
+							case '1':
+								$ptxt = 'eerste semester';
+								break;
+							case '2':
+								$ptxt = 'tweede semester';
+								break;
+							case '3':
+							default:
+								$ptxt = 'jaarvak';
+								break;
+						}
+						$output->writeln('"'.$course['course_id'].'";"'.$preg_replace('/\s+/',' ',$course['title']).'";"d";"'.preg_replace('/\s+/',' ',$program['title']).'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+					}
 				}
 			}
 		}
