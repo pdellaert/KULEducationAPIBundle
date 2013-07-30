@@ -113,7 +113,7 @@ class GenerateCSV extends Command
 							if($group == 'courses') {
 								$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$program['studypoints'].' sp.)');
 							} else {
-								$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$group.')('.$program['studypoints'].' sp.)')
+								$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$group.')('.$program['studypoints'].' sp.)');
 							}
 							foreach($courses as $course) {
 								$teachers = $course['teachers'];
