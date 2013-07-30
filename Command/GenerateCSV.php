@@ -36,7 +36,7 @@ class GenerateCSV extends Command
 			->addOption(
 				'options',
 				null,
-				InputOption::VALIE_NONE,
+				InputOption::VALUE_NONE,
 				'Do you want to have the first level options present'
 			)
 		;
