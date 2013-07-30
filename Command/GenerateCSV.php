@@ -42,11 +42,10 @@ class GenerateCSV extends Command
 		;
 	}
 
-	protected function handleCoursesByGroups($data, $level, $savelevel=null) {
-		$result = array();
+	protected function handleCoursesByGroups($data, $level, &$result, $savelevel=null) {
 		if($level == 1) {
 			foreach($data as $fData) {
-				$result = $this->handleCoursesByGroups($fData,2);
+				$result = $this->handleCoursesByGroups($fData,2,$result);
 			}
 		} else {
 			foreach($data as $fKey => $fData) {
@@ -55,13 +54,13 @@ class GenerateCSV extends Command
 						$result['courses'] = $fData;
 					} else {
 						foreach($fData as $course) {
-							$result[] = $course;
+							$result[$savelevel][] = $course;
 						}
 					}
 				} elseif($level == 2) {
-					$result[$fKey] = $this->handleCoursesByGroups($fData,$level+1,$fKey);
+					$this->handleCoursesByGroups($fData,3,$result,$fKey);
 				} else {
-					$result = $this->handleCoursesByGroups($fData,$level+1,$savelevel);
+					$this->handleCoursesByGroups($fData,$level+1,$result,$savelevel);
 				}
 			}
 		}
@@ -108,7 +107,7 @@ class GenerateCSV extends Command
 					}
 					if($options){
 						$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
-						$coursesList = $this->handleCoursesByGroups($coursesInGroups,1);
+						$coursesList = $this->handleCoursesByGroups($coursesInGroups,1,array());
 						$output->writeln(print_r($coursesList));
 					} else {
 						$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
