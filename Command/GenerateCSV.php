@@ -104,7 +104,7 @@ class GenerateCSV extends Command
 					}
 					if($options){
 						$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
-						$coursesList = handleCoursesByGroups($coursesInGroups,1);
+						$coursesList = $this->handleCoursesByGroups($coursesInGroups,1);
 						$output->writeln(print_r($coursesList));
 					} else {
 						$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
