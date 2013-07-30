@@ -61,7 +61,7 @@ class GenerateCSV extends Command
 				} elseif($level == 2) {
 					$result[$fKey] = $this->handleCoursesByGroups($fData,$level+1,$fKey);
 				} else {
-					$result[] = $this->handleCoursesByGroups($fData,$level+1,$savelevel);
+					$result = $this->handleCoursesByGroups($fData,$level+1,$savelevel);
 				}
 			}
 		}
