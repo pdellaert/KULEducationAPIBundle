@@ -42,6 +42,28 @@ class GenerateCSV extends Command
 		;
 	}
 
+	protected function handleCoursesByGroups($data, $level, $savelevel=null) {
+		$result = array();
+		if($level == 1) {
+			$result = handleCoursesByGroups($data[0],2);
+		} else {
+			foreach($data as $fKey => $fData) {
+				if($fKey == 'courses'){
+					if( $savelevel == null ) {
+						$result['courses'] = $fData;
+					} else {
+						$result[$savelevel] = $fData;
+					}
+				} elseif($level == 2) {
+					$result[$fKey] = handleCoursesByGroups($fData,$level+1,$fKey);
+				} else {
+					$result[$savelevel] = handleCoursesByGroups($fData,$level+1,$savelevel);
+				}
+			}
+		}
+		return $result;
+	}
+
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		// Handling options
@@ -82,7 +104,8 @@ class GenerateCSV extends Command
 					}
 					if($options){
 						$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
-						$output->writeln(print_r($coursesInGroups));
+						$coursesList = handleCoursesByGroups($coursesInGroups);
+						$output->writeln(print_r($coursesList));
 					} else {
 						$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
 						foreach($courses as $course) {
@@ -109,10 +132,10 @@ class GenerateCSV extends Command
 							}
 							$teachers = $course['teachers'];
 							if( count($teachers) == 0 ) {
-								$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"niet toegewezen";"'.preg_replace('/\s+/',' ',$program['title']).'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+								$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"niet toegewezen";"'.preg_replace('/\s+/',' ',$program['title'].'('.$program['studypoints'].' sp.)').'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
 							} else {
 								foreach( $teachers as $teacher ) {
-									$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.preg_replace('/\s+/',' ',$teacher['name']).'";"'.preg_replace('/\s+/',' ',$program['title']).'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+									$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.preg_replace('/\s+/',' ',$teacher['name']).'";"'.preg_replace('/\s+/',' ',$program['title'].'('.$program['studypoints'].' sp.)').'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
 								}
 							}
 						}
