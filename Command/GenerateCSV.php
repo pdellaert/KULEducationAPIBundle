@@ -54,12 +54,14 @@ class GenerateCSV extends Command
 					if( $savelevel == null ) {
 						$result['courses'] = $fData;
 					} else {
-						$result[$savelevel] = $fData;
+						foreach($fData as $course) {
+							$result[] = $course;
+						}
 					}
 				} elseif($level == 2) {
 					$result[$fKey] = $this->handleCoursesByGroups($fData,$level+1,$fKey);
 				} else {
-					$result[$savelevel] = $this->handleCoursesByGroups($fData,$level+1,$savelevel);
+					$result[] = $this->handleCoursesByGroups($fData,$level+1,$savelevel);
 				}
 			}
 		}
