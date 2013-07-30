@@ -115,40 +115,70 @@ class GenerateCSV extends Command
 							} else {
 								$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$group.')('.$program['studypoints'].' sp.)');
 							}
+							foreach($courses as $course) {
+								switch($course['mandatory']) {
+									case 'J':
+									case 'Y':
+										$mtxt = 'verplicht';
+										break;
+									default:
+										$mtxt = 'keuze';
+										break;
+								}
+								switch($course['period']) {
+									case '1':
+										$ptxt = 'eerste semester';
+										break;
+									case '2':
+										$ptxt = 'tweede semester';
+										break;
+									case '3':
+									default:
+										$ptxt = 'jaarvak';
+										break;
+								}
+								$teachers = $course['teachers'];
+								if( count($teachers) == 0 ) {
+									$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"niet toegewezen";"'.$programTxt.'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+								} else {
+									foreach( $teachers as $teacher ) {
+										$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.preg_replace('/\s+/',' ',$teacher['name']).'";"'.$programTxt.'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+									}
+								}
+							}
 						}
-
 					} else {
 						$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
 						$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$program['studypoints'].' sp.)');
-					}
-					foreach($courses as $course) {
-						switch($course['mandatory']) {
-							case 'J':
-							case 'Y':
-								$mtxt = 'verplicht';
-								break;
-							default:
-								$mtxt = 'keuze';
-								break;
-						}
-						switch($course['period']) {
-							case '1':
-								$ptxt = 'eerste semester';
-								break;
-							case '2':
-								$ptxt = 'tweede semester';
-								break;
-							case '3':
-							default:
-								$ptxt = 'jaarvak';
-								break;
-						}
-						$teachers = $course['teachers'];
-						if( count($teachers) == 0 ) {
-							$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"niet toegewezen";"'.$programTxt.'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
-						} else {
-							foreach( $teachers as $teacher ) {
-								$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.preg_replace('/\s+/',' ',$teacher['name']).'";"'.$programTxt.'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+						foreach($courses as $course) {
+							switch($course['mandatory']) {
+								case 'J':
+								case 'Y':
+									$mtxt = 'verplicht';
+									break;
+								default:
+									$mtxt = 'keuze';
+									break;
+							}
+							switch($course['period']) {
+								case '1':
+									$ptxt = 'eerste semester';
+									break;
+								case '2':
+									$ptxt = 'tweede semester';
+									break;
+								case '3':
+								default:
+									$ptxt = 'jaarvak';
+									break;
+							}
+							$teachers = $course['teachers'];
+							if( count($teachers) == 0 ) {
+								$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"niet toegewezen";"'.$programTxt.'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+							} else {
+								foreach( $teachers as $teacher ) {
+									$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.preg_replace('/\s+/',' ',$teacher['name']).'";"'.$programTxt.'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+								}
 							}
 						}
 					}
