@@ -45,7 +45,9 @@ class GenerateCSV extends Command
 	protected function handleCoursesByGroups($data, $level, $savelevel=null) {
 		$result = array();
 		if($level == 1) {
-			$result = $this->handleCoursesByGroups($data[0],2);
+			foreach($data as $fData) {
+				$result = $this->handleCoursesByGroups($fData,2);
+			}
 		} else {
 			foreach($data as $fKey => $fData) {
 				if($fKey == 'courses'){
