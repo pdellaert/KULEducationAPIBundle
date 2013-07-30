@@ -108,8 +108,25 @@ class GenerateCSV extends Command
 					if($options){
 						$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
 						$tmpArray = array();
-						$coursesList = $this->handleCoursesByGroups($coursesInGroups,1,$tmpArray);
-						$output->writeln(print_r($coursesList));
+						$coursesListInFirstGroup = $this->handleCoursesByGroups($coursesInGroups,1,$tmpArray);
+						foreach($coursesListInFirstGroup as $group => $courses) {
+							if($group == 'courses') {
+								$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$program['studypoints'].' sp.)');
+							} else {
+								$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$group.')('.$program['studypoints'].' sp.)')
+							}
+							foreach($courses as $course) {
+								$teachers = $course['teachers'];
+								if( count($teachers) == 0 ) {
+									$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"niet toegewezen";"'.$programTxt.'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+								} else {
+									foreach( $teachers as $teacher ) {
+										$output->writeln('"'.$course['course_id'].'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.preg_replace('/\s+/',' ',$teacher['name']).'";"'.$programTxt.'";"'.$ftxt.'";"'.$mtxt.'";"'.$ptxt.'"');
+									}
+								}
+							}
+						}
+
 					} else {
 						$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
 						foreach($courses as $course) {
