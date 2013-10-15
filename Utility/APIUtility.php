@@ -223,7 +223,13 @@ class APIUtility {
 
 		// Return value
 		$data = array();
-		$data = APIUtility::handleCoursesByGroupsToFlatList($coursesInGroups,1,$data);
+
+		array_walk_recursive($coursesInGroups, function($key, $value) {
+				if( $key == 'courses' ) {
+					$data = array_merge($value,$data);
+				}
+			});
+		}
 		/*
 		// Locale
 		$language = substr($locale,0,1);
@@ -264,24 +270,6 @@ class APIUtility {
 		*/
 
 		return $data;
-	}
-
-	public static function handleCoursesByGroupsToFlatList($data, $level, &$result) {
-		if($level == 1) {
-			foreach($data as $fData) {
-				$result = APIUtility::handleCoursesByGroupsToFlatList($fData,2,$result);
-			}
-		} else {
-			foreach($data as $fKey => $fData) {
-				if($fKey == 'courses'){
-					foreach($fData as $course) {
-						$result[] = $course;
-					}
-				} else {
-					APIUtility::handleCoursesByGroupsToFlatList($fData,$level+1,$result);
-				}
-			}
-		}
 	}
 
 	public static function getLiveCourseDetails($container,$original_language,$cid) {
