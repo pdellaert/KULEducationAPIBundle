@@ -152,50 +152,6 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveCoursesInLevel($container,$locale,$pid,$phid) {
-		// Locale
-		$language = substr($locale,0,1);
-
-		// Return value
-		$data = array();
-
-		// URL Setup
-		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $container->getParameter('dellaert_kul_education_api.method');
-		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
-
-		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("//opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
-			$teachers = array();
-			foreach( $fChild->xpath("docenten/docent") as $sChild ) {
-				$teachers[] = array(
-					'function' => (string) $sChild['functie'],
-					'personel_id' => (string) $sChild['persno'],
-					'name' => (string) $sChild->naam,
-					'firstname' => (string) $sChild->voornaam,
-					'lastname' => (string) $sChild->familienaam,
-					'firstletter' => (string) $sChild->voorletters
-					);
-			}
-
-			$data[] = array(
-				'id' => (string) $fChild['objid'],
-				'course_id' => (string) $fChild['short'],
-				'title' => (string) $fChild->titel,
-				'period' => (string) $fChild->periode,
-				'studypoints' => (string) $fChild->pts,
-				'mandatory' => (string) $fChild['verplicht'],
-				'original_language' => (string) $fChild['originele_taal'],
-				'teachers' => $teachers
-				);
-			}
-		}
-
-		return $data;
-	}
-
 	public static function getLiveCoursesByGroupsInLevel($container,$locale,$pid,$phid,$respect_no_show) {
 		// Locale
 		$language = substr($locale,0,1);
@@ -258,6 +214,74 @@ class APIUtility {
 		}
 
 		return $data;
+	}
+
+	// TODO: Take into account the 'tonen' setting (show or not show a group)
+	public static function getLiveCoursesInLevel($container,$locale,$pid,$phid,$respect_no_show) {
+
+		$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($container,$locale,$pid,$phid,$respect_no_show);
+
+		// Return value
+		$data = array();
+		APIUtility::handleCoursesByGroupsToFlatList($coursesInGroups,1,$data);
+		/*
+		// Locale
+		$language = substr($locale,0,1);
+
+		// URL Setup
+		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $container->getParameter('dellaert_kul_education_api.method');
+		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
+
+		// Getting XML
+		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+			foreach( $xml->xpath("//opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
+			$teachers = array();
+			foreach( $fChild->xpath("docenten/docent") as $sChild ) {
+				$teachers[] = array(
+					'function' => (string) $sChild['functie'],
+					'personel_id' => (string) $sChild['persno'],
+					'name' => (string) $sChild->naam,
+					'firstname' => (string) $sChild->voornaam,
+					'lastname' => (string) $sChild->familienaam,
+					'firstletter' => (string) $sChild->voorletters
+					);
+			}
+
+			$data[] = array(
+				'id' => (string) $fChild['objid'],
+				'course_id' => (string) $fChild['short'],
+				'title' => (string) $fChild->titel,
+				'period' => (string) $fChild->periode,
+				'studypoints' => (string) $fChild->pts,
+				'mandatory' => (string) $fChild['verplicht'],
+				'original_language' => (string) $fChild['originele_taal'],
+				'teachers' => $teachers
+				);
+			}
+		}
+		*/
+
+		return $data;
+	}
+
+	public static function handleCoursesByGroupsToFlatList($data, $level, &$result) {
+		if($level == 1) {
+			foreach($data as $fData) {
+				$result = $this->handleCoursesByGroups($fData,2,$result);
+			}
+		} else {
+			foreach($data as $fKey => $fData) {
+				if($fKey == 'courses'){
+					foreach($fData as $course) {
+						$result[] = $course;
+					}
+				} else {
+					APIUtility::handleCoursesByGroups($fData,$level+1,$result);
+				}
+			}
+		}
 	}
 
 	public static function getLiveCourseDetails($container,$original_language,$cid) {

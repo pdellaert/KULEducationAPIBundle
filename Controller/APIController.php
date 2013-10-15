@@ -57,9 +57,9 @@ class APIController extends Controller {
 		return $response;
 	}
 
-	public function listCoursesInLevelAction($pid,$phid) {
+	public function listCoursesInLevelAction($pid,$phid,$respect_no_show) {
 		// Getting Courses live
-		$data = APIUtility::getLiveCoursesInLevel($this->container,$this->getRequest()->getLocale(),$pid,$phid);
+		$data = APIUtility::getLiveCoursesInLevel($this->container,$this->getRequest()->getLocale(),$pid,$phid,$respect_no_show);
 
 		// Returning courses
 		$response = new Response(json_encode($data));

@@ -64,11 +64,12 @@ dellaert_kul_education_api_list_courses_in_level_noids:
         _locale: nl|en
 
 dellaert_kul_education_api_list_courses_in_level:
-    pattern:   /{_locale}/courses-in-level/{pid}/{phid}
-    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCoursesInLevel, _locale: nl }
+    pattern:   /{_locale}/courses-in-level/{pid}/{phid}/{respect_no_show}
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCoursesInLevel, _locale: nl, respect_no_show: 1 }
     requirements:
         phid: \d+
         sid: \d+
+        respect_no_show: 0|1
         _locale: nl|en
 
 dellaert_kul_education_api_list_courses_by_groups_in_level_noids:

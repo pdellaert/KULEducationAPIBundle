@@ -148,7 +148,7 @@ class GenerateCompareCSV extends Command
 							}
 						}
 					} else {
-						$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
+						$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id'],1);
 						$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$program['studypoints'].' sp.)');
 						foreach($courses as $course) {
 							switch($course['mandatory']) {

@@ -99,61 +99,66 @@ class GenerateCourseMaterialsCSV extends Command
 							$ftxt = 'geen';
 							break;
 					}
-					
-					$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
+
 					$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$program['studypoints'].' sp.)');
-					foreach($courses as $course) {
-						switch($course['mandatory']) {
-							case 'J':
-							case 'Y':
-								$mtxt = 'verplicht';
-								break;
-							default:
-								$mtxt = 'keuze';
-								break;
+
+					$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id'],1);
+					$tmpArray = array();
+					$coursesListInFirstGroup = $this->handleCoursesByGroups($coursesInGroups,1,$tmpArray);
+					foreach($coursesListInFirstGroup as $group => $courses) {
+						foreach($courses as $course) {
+							switch($course['mandatory']) {
+								case 'J':
+								case 'Y':
+									$mtxt = 'verplicht';
+									break;
+								default:
+									$mtxt = 'keuze';
+									break;
+							}
+							switch($course['period']) {
+								case '1':
+									$ptxt = '1';
+									break;
+								case '2':
+									$ptxt = '2';
+									break;
+								case '3':
+								default:
+									$ptxt = '1+2';
+									break;
+							}
+
+							$courseDetails = APIUtility::getLiveCourseDetails($this->getApplication()->getKernel()->getContainer(),$course['original_language'],$course['course_id']);
+							$courseMaterial = '';
+							foreach( $courseDetails['teaching_activities'] as $teaching_activity ) {
+								$courseMaterial .= strip_tags($teaching_activity['course_material']).' - ';
+							}
+							$courseMaterial = substr($courseMaterial, 0, -3);
+
+							//'"Laatste aanpassing op";"Instelling";"Opleiding";"Jaar";"Semester";"Vak";"Vaknummer";"Verplicht/Keuze";"Materiaal";"Aantal studenten";"Docent 1 voornaam";"Docent 1 naam";"Docent 1 e-mail";"Docent 1 Telefoon";"Docent 2 voornaam";"Docent 2 naam";"Docent 2 e-mail";"Docent 2 Telefoon";"Docent 3 voornaam";"Docent 3 naam";"Docent 3 e-mail";"Docent 3 Telefoon"');
+							$courseLine = '"'.date("d/m/Y").'";"KUL";"'.$programTxt.'";"'.$ftxt.'";"'.$ptxt.'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.$course['course_id'].'";"'.$mtxt.'";"'.$courseMaterial.'";"";';
+
+							$teachers = $course['teachers'];
+							switch(count($teachers)) {
+								case 0:
+									$courseLine .= '"Niet";"Toegewezen";"";"";"";"";"";"";"";"";"";""';
+									break;
+								case 1:
+									$courseLine .= '"'.preg_replace('/\s+/',' ',$teachers[0]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[0]['lastname']).'";"";"";"";"";"";"";"";"";"";""';
+									break;
+								case 2:
+									$courseLine .= '"'.preg_replace('/\s+/',' ',$teachers[0]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[0]['lastname']).'";"";"";"'.preg_replace('/\s+/',' ',$teachers[1]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[1]['lastname']).'";"";"";"";"";"";""';
+									break;
+								case 3:
+								default:
+									$courseLine .= '"'.preg_replace('/\s+/',' ',$teachers[0]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[0]['lastname']).'";"";"";"'.preg_replace('/\s+/',' ',$teachers[1]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[1]['lastname']).'";"";"";"'.preg_replace('/\s+/',' ',$teachers[2]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[2]['lastname']).'";"";""';
+									break;
+							}
+
+
+							$output->writeln($courseLine);
 						}
-						switch($course['period']) {
-							case '1':
-								$ptxt = '1';
-								break;
-							case '2':
-								$ptxt = '2';
-								break;
-							case '3':
-							default:
-								$ptxt = '1+2';
-								break;
-						}
-
-						$courseDetails = APIUtility::getLiveCourseDetails($this->getApplication()->getKernel()->getContainer(),$course['original_language'],$course['course_id']);
-						$courseMaterial = '';
-						foreach( $courseDetails['teaching_activities'] as $teaching_activity ) {
-							$courseMaterial .= strip_tags($teaching_activity['course_material']).' - ';
-						}
-						$courseMaterial = substr($courseMaterial, 0, -3);
-
-						//'"Laatste aanpassing op";"Instelling";"Opleiding";"Jaar";"Semester";"Vak";"Vaknummer";"Verplicht/Keuze";"Materiaal";"Aantal studenten";"Docent 1 voornaam";"Docent 1 naam";"Docent 1 e-mail";"Docent 1 Telefoon";"Docent 2 voornaam";"Docent 2 naam";"Docent 2 e-mail";"Docent 2 Telefoon";"Docent 3 voornaam";"Docent 3 naam";"Docent 3 e-mail";"Docent 3 Telefoon"');
-						$courseLine = '"'.date("d/m/Y").'";"KUL";"'.$programTxt.'";"'.$ftxt.'";"'.$ptxt.'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.$course['course_id'].'";"'.$mtxt.'";"'.$courseMaterial.'";"";';
-
-						$teachers = $course['teachers'];
-						switch(count($teachers)) {
-							case 0:
-								$courseLine .= '"Niet";"Toegewezen";"";"";"";"";"";"";"";"";"";""';
-								break;
-							case 1:
-								$courseLine .= '"'.preg_replace('/\s+/',' ',$teachers[0]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[0]['lastname']).'";"";"";"";"";"";"";"";"";"";""';
-								break;
-							case 2:
-								$courseLine .= '"'.preg_replace('/\s+/',' ',$teachers[0]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[0]['lastname']).'";"";"";"'.preg_replace('/\s+/',' ',$teachers[1]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[1]['lastname']).'";"";"";"";"";"";""';
-								break;
-							case 3:
-							default:
-								$courseLine .= '"'.preg_replace('/\s+/',' ',$teachers[0]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[0]['lastname']).'";"";"";"'.preg_replace('/\s+/',' ',$teachers[1]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[1]['lastname']).'";"";"";"'.preg_replace('/\s+/',' ',$teachers[2]['firstname']).'";"'.preg_replace('/\s+/',' ',$teachers[2]['lastname']).'";"";""';
-								break;
-						}
-
-
-						$output->writeln($courseLine);
 					}
 				}
 			}
