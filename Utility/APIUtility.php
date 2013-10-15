@@ -273,7 +273,7 @@ class APIUtility {
 			$course = $xml->xpath("data/opo");
 			if( !empty($course) ) {
 				$teachers = array();
-				foreach( $course->xpath("docenten/docent") as $fChild ) {
+				foreach( $course[0]->xpath("docenten/docent") as $fChild ) {
 					$teachers[] = array(
 						'function' => (string) $fChild['functie'],
 						'personel_id' => (string) $fChild['persno'],
@@ -286,7 +286,7 @@ class APIUtility {
 
 				// Teaching parts
 				$olas = array();
-				foreach( $course->xpath("olas/ola") as $fChild ) {
+				foreach( $course[0]->xpath("olas/ola") as $fChild ) {
 					$olaTeachers = array();
 					foreach( $fChild->xpath("docenten/docent") as $sChild ) {
 						$olaTeachers[] = array(
@@ -319,7 +319,7 @@ class APIUtility {
 
 				// Evaluation parts
 				$evas = array();
-				foreach( $course->xpath("evas/eva") as $fChild ) {
+				foreach( $course[0]->xpath("evas/eva") as $fChild ) {
 					$forms = array();
 					foreach( $fChild->xpath("vormen/vorm") as $sChild ) {
 						$forms[] = $sChild;
@@ -352,16 +352,16 @@ class APIUtility {
 				}
 
 				$data = array(
-					'id' => (string) $course['objid'],
-					'course_id' => (string) $course['short'],
-					'title' => (string) $course->titel,
-					'period' => (string) $course->periode,
-					'studypoints' => (string) $course->studiepunten,
-					'duration' => (string) $course->begeleidingsuren,
-					'language' => array( ((string) $course->onderwijstaal->code) => (string) $course->onderwijstaal->tekst ),
-					'level' => array( ((string) $course->niveau->code) => (string) $course->niveau->tekst ),
-					'aims' => (string) $course->doelstellingen,
-					'previous_knowledge' => (string) $course->begintermen,
+					'id' => (string) $course[0]['objid'],
+					'course_id' => (string) $course[0]['short'],
+					'title' => (string) $course[0]->titel,
+					'period' => (string) $course[0]->periode,
+					'studypoints' => (string) $course[0]->studiepunten,
+					'duration' => (string) $course[0]->begeleidingsuren,
+					'language' => array( ((string) $course[0]->onderwijstaal->code) => (string) $course[0]->onderwijstaal->tekst ),
+					'level' => array( ((string) $course[0]->niveau->code) => (string) $course[0]->niveau->tekst ),
+					'aims' => (string) $course[0]->doelstellingen,
+					'previous_knowledge' => (string) $course[0]->begintermen,
 					'teachers' => $teachers,
 					'teaching_activities' => $olas,
 					'evaluation_activities' => $evas
