@@ -83,7 +83,7 @@ dellaert_kul_education_api_list_courses_by_groups_in_level:
     requirements:
         phid: \d+
         sid: \d+
-        respect_no_show: \d
+        respect_no_show: 0|1
         _locale: nl|en
 
 dellaert_kul_education_api_list_course_details:
