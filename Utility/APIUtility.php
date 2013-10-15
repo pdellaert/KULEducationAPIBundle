@@ -269,7 +269,7 @@ class APIUtility {
 	public static function handleCoursesByGroupsToFlatList($data, $level, &$result) {
 		if($level == 1) {
 			foreach($data as $fData) {
-				$result = APIUtility::handleCoursesByGroups($fData,2,$result);
+				$result = APIUtility::handleCoursesByGroupsToFlatList($fData,2,$result);
 			}
 		} else {
 			foreach($data as $fKey => $fData) {
@@ -278,7 +278,7 @@ class APIUtility {
 						$result[] = $course;
 					}
 				} else {
-					APIUtility::handleCoursesByGroups($fData,$level+1,$result);
+					APIUtility::handleCoursesByGroupsToFlatList($fData,$level+1,$result);
 				}
 			}
 		}
