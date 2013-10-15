@@ -13,8 +13,8 @@ class GenerateCSV extends Command
 	protected function configure()
 	{
 		$this
-			->setName('kulapi:generate-csv')
-			->setDescription('Generate a CSV output of all the courses.')
+			->setName('kulapi:generate-compare-csv')
+			->setDescription('Generate a CSV output of all the courses to be used for comparison with the active OpenMercury ACCO website content.')
 			->addOption(
 				'fid',
 				null,
@@ -32,12 +32,6 @@ class GenerateCSV extends Command
 				null,
 				InputOption::VALUE_REQUIRED,
 				'What locale? nl|en'
-			)
-			->addOption(
-				'options',
-				null,
-				InputOption::VALUE_NONE,
-				'Do you want to have the first level options present'
 			)
 		;
 	}
@@ -73,10 +67,9 @@ class GenerateCSV extends Command
 		$fid = $input->getOption('fid');
 		$lid = $input->getOption('lid');
 		$locale = $input->getOption('locale'); 
-		$options = $input->getOption('options');
 
 		// Headers
-		$output->writeln('"Vaknummer";"Vak";"Hoofddocent";"Studie";"Fase";"Verplicht";"Semester"');
+		$output->writeln('"Laatste aanpassing op";"Instelling";"Opleiding";"Jaar";"Semester";"Vak";"Vaknummer";"Verplicht/Keuze";"Materiaal";"Aantal studenten";"Docent 1 voornaam";"Docent 1 naam";"Docent 1 e-mail";"Docent 1 Telefoon";"Docent 2 voornaam";"Docent 2 naam";"Docent 2 e-mail";"Docent 2 Telefoon";"Docent 3 voornaam";"Docent 3 naam";"Docent 3 e-mail";"Docent 3 Telefoon"');
 
 		$studies = APIUtility::getLiveStudiesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$fid,$lid);
 		foreach($studies as $study) {
@@ -86,23 +79,23 @@ class GenerateCSV extends Command
 				foreach($stages as $stage) {
 					switch($stage['id']) {
 						case '1':
-							$ftxt = 'eerste fase';
+							$ftxt = '1';
 							break;
 						case '2':
-							$ftxt = 'tweede fase';
+							$ftxt = '2';
 							break;
 						case '3':
-							$ftxt = 'derde fase';
+							$ftxt = '3';
 							break;
 						case '4':
-							$ftxt = 'vierde fase';
+							$ftxt = '4';
 							break;
 						case '5':
-							$ftxt = 'vijfde fase';
+							$ftxt = '5';
 							break;
 						case '0':
 						default:
-							$ftxt = 'geen fase';
+							$ftxt = 'geen';
 							break;
 					}
 					if($options){
