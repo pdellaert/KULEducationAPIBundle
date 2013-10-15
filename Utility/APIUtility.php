@@ -229,7 +229,6 @@ class APIUtility {
 					$data = array_merge($value,$data);
 				}
 			});
-		}
 		/*
 		// Locale
 		$language = substr($locale,0,1);
