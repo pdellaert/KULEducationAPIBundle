@@ -223,7 +223,7 @@ class APIUtility {
 
 		// Return value
 		$data = array();
-		APIUtility::handleCoursesByGroupsToFlatList($coursesInGroups,1,$data);
+		$data = APIUtility::handleCoursesByGroupsToFlatList($coursesInGroups,1,$data);
 		/*
 		// Locale
 		$language = substr($locale,0,1);
