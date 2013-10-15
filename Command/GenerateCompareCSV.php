@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Dellaert\KULEducationAPIBundle\Utility\APIUtility;
 
-class GenerateCSV extends Command
+class GenerateCompareCSV extends Command
 {
 	protected function configure()
 	{
