@@ -270,10 +270,10 @@ class APIUtility {
 		$callUrl = $url.$year.'/syllabi/'.$language.'/'.$method.'/'.$cid.'.xml';
 
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			$cg = $xml->xpath("data/opo");
-			if( !empty($cg) ) {
+			$course = $xml->xpath("data/opo");
+			if( !empty($course) ) {
 				$teachers = array();
-				foreach( $cg->xpath("docenten/docent") as $fChild ) {
+				foreach( $course->xpath("docenten/docent") as $fChild ) {
 					$teachers[] = array(
 						'function' => (string) $fChild['functie'],
 						'personel_id' => (string) $fChild['persno'],
@@ -286,7 +286,7 @@ class APIUtility {
 
 				// Teaching parts
 				$olas = array();
-				foreach( $cg->xpath("olas/ola") as $fChild ) {
+				foreach( $course->xpath("olas/ola") as $fChild ) {
 					$olaTeachers = array();
 					foreach( $fChild->xpath("docenten/docent") as $sChild ) {
 						$olaTeachers[] = array(
@@ -319,7 +319,7 @@ class APIUtility {
 
 				// Evaluation parts
 				$evas = array();
-				foreach( $cg->xpath("evas/eva") as $fChild ) {
+				foreach( $course->xpath("evas/eva") as $fChild ) {
 					$forms = array();
 					foreach( $fChild->xpath("vormen/vorm") as $sChild ) {
 						$forms[] = $sChild;
@@ -352,16 +352,16 @@ class APIUtility {
 				}
 
 				$data = array(
-					'id' => (string) $cg['objid'],
-					'course_id' => (string) $cg['short'],
-					'title' => (string) $cg->titel,
-					'period' => (string) $cg->periode,
-					'studypoints' => (string) $cg->studiepunten,
-					'duration' => (string) $cg->begeleidingsuren,
-					'language' => array( ((string) $fChild->onderwijstaal->code) => (string) $fChild->onderwijstaal->tekst ),
-					'level' => array( ((string) $fChild->niveau->code) => (string) $fChild->niveau->tekst ),
-					'aims' => (string) $cg->doelstellingen,
-					'previous_knowledge' => (string) $cg->begintermen,
+					'id' => (string) $course['objid'],
+					'course_id' => (string) $course['short'],
+					'title' => (string) $course->titel,
+					'period' => (string) $course->periode,
+					'studypoints' => (string) $course->studiepunten,
+					'duration' => (string) $course->begeleidingsuren,
+					'language' => array( ((string) $course->onderwijstaal->code) => (string) $course->onderwijstaal->tekst ),
+					'level' => array( ((string) $course->niveau->code) => (string) $course->niveau->tekst ),
+					'aims' => (string) $course->doelstellingen,
+					'previous_knowledge' => (string) $course->begintermen,
 					'teachers' => $teachers,
 					'teaching_activities' => $olas,
 					'evaluation_activities' => $evas
