@@ -267,7 +267,7 @@ class APIUtility {
 		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
-		$callUrl = $url.$year.'/syllabi/'.$language.'/'.$method.'/'.$cid.'.xml';
+		$callUrl = $url.$year.'/syllabi/'.$language.'/'.$method.'/'.$cid.strtoupper($language).'.xml';
 
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			$course = $xml->xpath("data/opo");
