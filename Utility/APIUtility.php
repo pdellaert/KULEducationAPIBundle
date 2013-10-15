@@ -216,51 +216,15 @@ class APIUtility {
 		return $data;
 	}
 
-	// TODO: Take into account the 'tonen' setting (show or not show a group)
 	public static function getLiveCoursesInLevel($container,$locale,$pid,$phid,$respect_no_show) {
 
 		$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($container,$locale,$pid,$phid,$respect_no_show);
 
 		// Return value
 		$data = APIUtility::handleCoursesInGroupsToFlatArray($coursesInGroups);
-		/*
-		// Locale
-		$language = substr($locale,0,1);
-
-		// URL Setup
-		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
-		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
-		$method = $container->getParameter('dellaert_kul_education_api.method');
-		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
-
-		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("//opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
-			$teachers = array();
-			foreach( $fChild->xpath("docenten/docent") as $sChild ) {
-				$teachers[] = array(
-					'function' => (string) $sChild['functie'],
-					'personel_id' => (string) $sChild['persno'],
-					'name' => (string) $sChild->naam,
-					'firstname' => (string) $sChild->voornaam,
-					'lastname' => (string) $sChild->familienaam,
-					'firstletter' => (string) $sChild->voorletters
-					);
-			}
-
-			$data[] = array(
-				'id' => (string) $fChild['objid'],
-				'course_id' => (string) $fChild['short'],
-				'title' => (string) $fChild->titel,
-				'period' => (string) $fChild->periode,
-				'studypoints' => (string) $fChild->pts,
-				'mandatory' => (string) $fChild['verplicht'],
-				'original_language' => (string) $fChild['originele_taal'],
-				'teachers' => $teachers
-				);
-			}
+		if( !is_array($data) ) {
+			$data = array();
 		}
-		*/
 
 		return $data;
 	}
