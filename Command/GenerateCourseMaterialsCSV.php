@@ -131,7 +131,7 @@ class GenerateCourseMaterialsCSV extends Command
 									break;
 							}
 
-							$courseDetails = APIUtility::getLiveCourseDetails($this->getApplication()->getKernel()->getContainer(),$locale,$course['course_id']);
+							$courseDetails = APIUtility::getLiveCourseDetails($this->getApplication()->getKernel()->getContainer(),$course['original_language'],$course['course_id']);
 							$courseMaterial = '';
 							foreach( $courseDetails['teaching_activities'] as $teaching_activity ) {
 								$courseMaterial .= strip_tags($teaching_activity['course_material']).' - ';

@@ -187,6 +187,7 @@ class APIUtility {
 				'period' => (string) $fChild->periode,
 				'studypoints' => (string) $fChild->pts,
 				'mandatory' => (string) $fChild['verplicht'],
+				'original_language' => (string) $fChild['originele_taal'],
 				'teachers' => $teachers
 				);
 			}
@@ -240,6 +241,7 @@ class APIUtility {
 				'period' => (string) $fChild->periode,
 				'studypoints' => (string) $fChild->pts,
 				'mandatory' => (string) $fChild['verplicht'],
+				'original_language' => (string) $fChild['originele_taal'],
 				'teachers' => $teachers
 				);
 		}
@@ -256,9 +258,9 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveCourseDetails($container,$locale,$cid) {
+	public static function getLiveCourseDetails($container,$original_language,$cid) {
 		// Locale
-		$language = substr($locale,0,1);
+		$language = strtolower($original_language);
 
 		// Return value
 		$data = array();
