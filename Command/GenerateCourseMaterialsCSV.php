@@ -13,7 +13,7 @@ class GenerateCourseMaterialsCSV extends Command
 	protected function configure()
 	{
 		$this
-			->setName('kulapi:generate-compare-csv')
+			->setName('kulapi:generate-course-materials-csv')
 			->setDescription('Generate a CSV output of all the courses to be used for comparison with the active OpenMercury ACCO website content.')
 			->addOption(
 				'fid',
