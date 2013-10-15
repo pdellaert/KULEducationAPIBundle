@@ -106,7 +106,7 @@ class GenerateCompareCSV extends Command
 							break;
 					}
 					if($options){
-						$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id']);
+						$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id'],1);
 						$tmpArray = array();
 						$coursesListInFirstGroup = $this->handleCoursesByGroups($coursesInGroups,1,$tmpArray);
 						foreach($coursesListInFirstGroup as $group => $courses) {

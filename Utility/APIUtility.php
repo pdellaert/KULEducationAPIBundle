@@ -196,7 +196,7 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveCoursesByGroupsInLevel($container,$locale,$pid,$phid) {
+	public static function getLiveCoursesByGroupsInLevel($container,$locale,$pid,$phid,$respect_no_show) {
 		// Locale
 		$language = substr($locale,0,1);
 
@@ -211,15 +211,15 @@ class APIUtility {
 
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			$cg = $xml->xpath("data/opleiding/cg[@level='1']");
-			if( !empty($cg) ) {
-				$data[(string) $cg[0]->titel] = APIUtility::parseCourseGroupInLevel($cg[0],$phid);
+			if( !empty($cg) && ( $respect_no_show == 0 || ($respect_no_show == 1 && $cg->tonen != 'N') ) ) {
+				$data[(string) $cg[0]->titel] = APIUtility::parseCourseGroupInLevel($cg[0],$phid,$respect_no_show);
 			}
 		}
 
 		return $data;
 	}
 
-	public static function parseCourseGroupInLevel($cg,$phid) {
+	public static function parseCourseGroupInLevel($cg,$phid,$respect_no_show) {
 		$data = array();
 		foreach( $cg->xpath("opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
 			$teachers = array();
@@ -249,8 +249,8 @@ class APIUtility {
 		$nextLevel = ((int) $cg['level'])+1;
 
 		foreach( $cg->xpath("cg[@level='$nextLevel']") as $fChild ) {
-			$subCg = APIUtility::parseCourseGroupInLevel($fChild,$phid);
-			if( !empty($subCg) ) {
+			$subCg = APIUtility::parseCourseGroupInLevel($fChild,$phid,$respect_no_show);
+			if( !empty($subCg) && ( $respect_no_show == 0 || ($respect_no_show == 1 && $subCg->tonen != 'N') ) ) {
 				$data[(string) $fChild->titel] = $subCg;
 			}
 		}
