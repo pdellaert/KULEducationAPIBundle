@@ -77,4 +77,14 @@ class APIController extends Controller {
 		return $response;
 	}
 
+	public function listCourseDetailsAction($cid) {
+		// Getting Stages live
+		$data = APIUtility::getLiveCourseDetails($this->container,$this->getRequest()->getLocale(),$cid);
+
+		// Returning stages
+		$response = new Response(json_encode($data));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
+	}
+
 }

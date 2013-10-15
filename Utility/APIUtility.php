@@ -255,4 +255,120 @@ class APIUtility {
 
 		return $data;
 	}
+
+	public static function getLiveCourseDetails($container,$locale,$cid) {
+		// Locale
+		$language = substr($locale,0,1);
+
+		// Return value
+		$data = array();
+
+		// URL Setup
+		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
+		$method = $container->getParameter('dellaert_kul_education_api.method');
+		$callUrl = $url.$year.'/syllabi/'.$language.'/'.$method.'/'.$cid.'.xml';
+
+		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+			$cg = $xml->xpath("data/opo");
+			if( !empty($cg) ) {
+				$teachers = array();
+				foreach( $cg->xpath("docenten/docent") as $fChild ) {
+					$teachers[] = array(
+						'function' => (string) $fChild['functie'],
+						'personel_id' => (string) $fChild['persno'],
+						'name' => (string) $fChild->naam,
+						'firstname' => (string) $fChild->voornaam,
+						'lastname' => (string) $fChild->familienaam,
+						'firstletter' => (string) $fChild->voorletters
+						);
+				}
+
+				// Teaching parts
+				$olas = array();
+				foreach( $cg->xpath("olas/ola") as $fChild ) {
+					$olaTeachers = array();
+					foreach( $fChild->xpath("docenten/docent") as $sChild ) {
+						$olaTeachers[] = array(
+							'function' => (string) $sChild['functie'],
+							'personel_id' => (string) $sChild['persno'],
+							'name' => (string) $sChild->naam,
+							'firstname' => (string) $sChild->voornaam,
+							'lastname' => (string) $sChild->familienaam,
+							'firstletter' => (string) $sChild->voorletters
+							);
+					}
+
+					$olas[] = array(
+						'id' => (string) $fChild['objid'],
+						'ola_id' => (string) $fChild['short'],
+						'title' => (string) $fChild->titel,
+						'period' => (string) $fChild->periode,
+						'studypoints' => (string) $fChild->studiepunten,
+						'duration' => (string) $fChild->begeleidingsuren,
+						'format' => (string) $fChild->werkvorm,
+						'format_extra' => (string) $fChild->toelichting_werkvorm,
+						'language' => array( ((string) $fChild->onderwijstaal->code) => ((string) $fChild->onderwijstaal->tekst) ),
+						'language_extra' => (string) $fChild->toelichting_onderwijstaal,
+						'content' => (string) $fChild->inhoud,
+						'aims' => (string) $fChild->doelstellingen,
+						'course_material' => (string) $fChild->studiemateriaal,
+						'teachers' => $olaTeachers
+						);
+				}
+
+				// Evaluation parts
+				$evas = array();
+				foreach( $cg->xpath("evas/eva") as $fChild ) {
+					$forms = array();
+					foreach( $fChild->xpath("vormen/vorm") as $sChild ) {
+						$forms[] = $sChild;
+					}
+
+					$question_types = array();
+					foreach( $fChild->xpath("vraagvormen/vraagvorm") as $sChild ) {
+						$question_types[] = $sChild;
+					}
+
+					$study_resources = array();
+					foreach( $fChild->xpath("leermaterialen/leermateriaal") as $sChild ) {
+						$study_resources[] = $sChild;
+					}
+
+					$evas[] = array(
+						'id' => (string) $fChild['objid'],
+						'eva_id' => (string) $fChild['short'],
+						'title' => (string) $fChild->titel,
+						'written' => (string) $fChild->schriftelijk,
+						'oral' => (string) $fChild->mondeling,
+						'explanation' => (string) $fChild->toelichting,
+						'retake_policy' => (string) $fChild->herexamen_mogelijk,
+						'retake_extra' => (string) $fChild->herexamen_toelichting,
+						'type' => array( ((string) $fChild->type['code']) => (string) $fChild->type->omschrijving ),
+						'form' => $forms,
+						'question_types' => $question_types,
+						'study_resources' => $study_resources
+						);
+				}
+
+				$data = array(
+					'id' => (string) $cg['objid'],
+					'course_id' => (string) $cg['short'],
+					'title' => (string) $cg->titel,
+					'period' => (string) $cg->periode,
+					'studypoints' => (string) $cg->studiepunten,
+					'duration' => (string) $cg->begeleidingsuren,
+					'language' => array( ((string) $fChild->onderwijstaal->code) => (string) $fChild->onderwijstaal->tekst ),
+					'level' => array( ((string) $fChild->niveau->code) => (string) $fChild->niveau->tekst ),
+					'aims' => (string) $cg->doelstellingen,
+					'previous_knowledge' => (string) $cg->begintermen,
+					'teachers' => $teachers,
+					'teaching_activities' => $olas,
+					'evaluation_activities' => $evas
+					);
+
+			}
+		}
+		return $data;
+	}
 }

@@ -84,3 +84,11 @@ dellaert_kul_education_api_list_courses_by_groups_in_level:
         phid: \d+
         sid: \d+
         _locale: nl|en
+
+dellaert_kul_education_api_list_course_details:
+    pattern:   /{_locale}/courses-details/{cid}
+    defaults: { _controller: DellaertKULEducationAPIBundle:API:listCourseDetails, _locale: nl }
+    requirements:
+        phid: \d+
+        sid: \d+
+        _locale: nl|en
