@@ -260,7 +260,7 @@ class APIUtility {
 
 	public static function getLiveCourseDetails($container,$original_language,$cid) {
 		// Locale
-		$language = strtolower($original_language);
+		$language = strtolower(substr($original_language,0,1));
 
 		// Return value
 		$data = array();
