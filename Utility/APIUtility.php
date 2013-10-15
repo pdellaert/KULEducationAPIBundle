@@ -224,7 +224,8 @@ class APIUtility {
 		// Return value
 		$data = array();
 
-		array_walk_recursive($coursesInGroups, function($key, $value) {
+		array_walk_recursive($coursesInGroups, function($value, $key) {
+				global $data;
 				if( $key == 'courses' ) {
 					$data = array_merge($value,$data);
 				}
