@@ -249,9 +249,11 @@ class APIUtility {
 		$nextLevel = ((int) $cg['level'])+1;
 
 		foreach( $cg->xpath("cg[@level='$nextLevel']") as $fChild ) {
-			$subCg = APIUtility::parseCourseGroupInLevel($fChild,$phid,$respect_no_show);
-			if( !empty($subCg) && ( $respect_no_show == 0 || ($respect_no_show == 1 && $subCg[0]->tonen != 'N') ) ) {
-				$data[(string) $fChild->titel] = $subCg;
+			if( $respect_no_show == 0 || ($respect_no_show == 1 && $fChild->tonen != 'N') ) {
+				$subCg = APIUtility::parseCourseGroupInLevel($fChild,$phid,$respect_no_show);
+				if( !empty($subCg) ) {
+					$data[(string) $fChild->titel] = $subCg;
+				}
 			}
 		}
 
