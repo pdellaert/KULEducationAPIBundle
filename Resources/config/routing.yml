@@ -14,7 +14,7 @@ dellaert_education_api_list_faculties_by_id_title:
     pattern:   /{_locale}/faculties-id-title/{scid}
     defaults: { _controller: DellaertKULEducationAPIBundle:API:listFacultiesByIdTitle, _locale: nl }
     requirements:
-        scid: \d+
+        scid: \w+
         _locale: nl|en
 
 dellaert_education_api_list_levels_by_id_title_noid:
@@ -27,7 +27,7 @@ dellaert_education_api_list_levels_by_id_title:
     pattern:   /{_locale}/levels-id-title/{scid}/{fid}
     defaults: { _controller: DellaertKULEducationAPIBundle:API:listLevelsByIdTitle, _locale: nl }
     requirements:
-        scid: \d+
+        scid: \w+
         fid: \d+
         _locale: nl|en
 
@@ -41,7 +41,7 @@ dellaert_education_api_list_studies_by_id_title:
     pattern:   /{_locale}/studies-id-title/{scid}/{fid}/{lid}
     defaults: { _controller: DellaertKULEducationAPIBundle:API:listStudiesByIdTitle, _locale: nl }
     requirements:
-        scid: \d+
+        scid: \w+
         fid: \d+
         lid: \d+
         _locale: nl|en
@@ -56,7 +56,7 @@ dellaert_education_api_list_programs_by_id_title:
     pattern:   /{_locale}/programs-id-title/{scid}/{sid}
     defaults: { _controller: DellaertKULEducationAPIBundle:API:listProgramsByIdTitle, _locale: nl }
     requirements:
-        scid: \d+
+        scid: \w+
         sid: \d+
         _locale: nl|en
 
@@ -70,7 +70,7 @@ dellaert_education_api_list_stages_by_id_title:
     pattern:   /{_locale}/stages-id-title/{scid}/{pid}
     defaults: { _controller: DellaertKULEducationAPIBundle:API:listStagesByIdTitle, _locale: nl }
     requirements:
-        scid: \d+
+        scid: \w+
         pid: \d+
         _locale: nl|en
 
@@ -84,7 +84,7 @@ dellaert_education_api_list_courses_in_level:
     pattern:   /{_locale}/courses-in-level/{scid}/{pid}/{phid}/{respect_no_show}
     defaults: { _controller: DellaertKULEducationAPIBundle:API:listCoursesInLevel, _locale: nl, respect_no_show: 1 }
     requirements:
-        scid: \d+
+        scid: \w+
         phid: \d+
         pid: \d+
         respect_no_show: 0|1
@@ -100,7 +100,7 @@ dellaert_education_api_list_courses_by_groups_in_level:
     pattern:   /{_locale}/courses-by-groups-in-level/{scid}/{pid}/{phid}/{respect_no_show}
     defaults: { _controller: DellaertKULEducationAPIBundle:API:listCoursesByGroupsInLevel, _locale: nl, respect_no_show: 1 }
     requirements:
-        scid: \d+
+        scid: \w+
         phid: \d+
         pid: \d+
         respect_no_show: 0|1
@@ -110,6 +110,6 @@ dellaert_education_api_list_course_details:
     pattern:   /{_locale}/course-details/{scid}/{cid}
     defaults: { _controller: DellaertKULEducationAPIBundle:API:listCourseDetails, _locale: nl }
     requirements:
-        scid: \d+
+        scid: \w+
         cid: \d+
         _locale: nl|en
