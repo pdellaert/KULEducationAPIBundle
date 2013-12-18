@@ -16,6 +16,12 @@ class GenerateCourseMaterialsCSV extends Command
 			->setName('kulapi:generate-course-materials-csv')
 			->setDescription('Generate a CSV output of all the courses to be used for comparison with the active OpenMercury ACCO website content.')
 			->addOption(
+				'scid',
+				null,
+				InputOption::VALUE_REQUIRED,
+				'Which school do you want to generate a CSV for.'
+			)
+			->addOption(
 				'fid',
 				null,
 				InputOption::VALUE_REQUIRED,
@@ -39,6 +45,7 @@ class GenerateCourseMaterialsCSV extends Command
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		// Handling options
+		$scid = $input->getOption('scid');
 		$fid = $input->getOption('fid');
 		$lid = $input->getOption('lid');
 		$locale = $input->getOption('locale'); 
@@ -47,11 +54,11 @@ class GenerateCourseMaterialsCSV extends Command
 		$output->write("\xEF\xBB\xBF");
 		$output->writeln('"Laatste aanpassing op";"Instelling";"Opleiding";"Jaar";"Semester";"Vak";"Vaknummer";"Verplicht/Keuze";"Materiaal";"Aantal studenten";"Docent 1 voornaam";"Docent 1 naam";"Docent 1 e-mail";"Docent 1 Telefoon";"Docent 2 voornaam";"Docent 2 naam";"Docent 2 e-mail";"Docent 2 Telefoon";"Docent 3 voornaam";"Docent 3 naam";"Docent 3 e-mail";"Docent 3 Telefoon"');
 
-		$studies = APIUtility::getLiveStudiesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$fid,$lid);
+		$studies = APIUtility::getLiveStudiesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$scid,$fid,$lid);
 		foreach($studies as $study) {
-			$programs = APIUtility::getLiveProgramsByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$study['id']);
+			$programs = APIUtility::getLiveProgramsByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$scid,$study['id']);
 			foreach($programs as $program) {
-				$stages = APIUtility::getLiveStagesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$program['id']);
+				$stages = APIUtility::getLiveStagesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$scid,$program['id']);
 				foreach($stages as $stage) {
 					switch($stage['id']) {
 						case '1':
@@ -74,7 +81,7 @@ class GenerateCourseMaterialsCSV extends Command
 							$ftxt = 'geen';
 							break;
 					}
-					$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id'],1);
+					$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$scid,$program['id'],$stage['id'],1);
 					$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$program['studypoints'].' sp.)');
 					foreach($courses as $course) {
 						switch($course['mandatory']) {
@@ -99,7 +106,7 @@ class GenerateCourseMaterialsCSV extends Command
 								break;
 						}
 
-						$courseDetails = APIUtility::getLiveCourseDetails($this->getApplication()->getKernel()->getContainer(),$course['original_language'],$course['course_id']);
+						$courseDetails = APIUtility::getLiveCourseDetails($this->getApplication()->getKernel()->getContainer(),$course['original_language'],$scid,$course['course_id']);
 						$courseMaterial = '';
 						foreach( $courseDetails['teaching_activities'] as $teaching_activity ) {
 							$courseMaterial .= strip_tags($teaching_activity['course_material']).' - ';

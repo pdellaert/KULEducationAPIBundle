@@ -16,6 +16,12 @@ class GenerateCompareCSV extends Command
 			->setName('kulapi:generate-compare-csv')
 			->setDescription('Generate a CSV output of all the courses to be used for comparison with the active OpenMercury ACCO website content.')
 			->addOption(
+				'scid',
+				null,
+				InputOption::VALUE_REQUIRED,
+				'Which school do you want to generate a CSV for.'
+			)
+			->addOption(
 				'fid',
 				null,
 				InputOption::VALUE_REQUIRED,
@@ -70,6 +76,7 @@ class GenerateCompareCSV extends Command
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		// Handling options
+		$scid = $input->getOption('scid');
 		$fid = $input->getOption('fid');
 		$lid = $input->getOption('lid');
 		$locale = $input->getOption('locale'); 
@@ -78,11 +85,11 @@ class GenerateCompareCSV extends Command
 		// Headers
 		$output->writeln('"Vaknummer";"Vak";"Hoofddocent";"Studie";"Fase";"Verplicht";"Semester"');
 
-		$studies = APIUtility::getLiveStudiesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$fid,$lid);
+		$studies = APIUtility::getLiveStudiesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$scid,$fid,$lid);
 		foreach($studies as $study) {
-			$programs = APIUtility::getLiveProgramsByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$study['id']);
+			$programs = APIUtility::getLiveProgramsByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$scid,$study['id']);
 			foreach($programs as $program) {
-				$stages = APIUtility::getLiveStagesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$program['id']);
+				$stages = APIUtility::getLiveStagesByIdTitle($this->getApplication()->getKernel()->getContainer(),$locale,$scid,$program['id']);
 				foreach($stages as $stage) {
 					switch($stage['id']) {
 						case '1':
@@ -106,7 +113,7 @@ class GenerateCompareCSV extends Command
 							break;
 					}
 					if($options){
-						$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id'],1);
+						$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$scid,$program['id'],$stage['id'],1);
 						$tmpArray = array();
 						$coursesListInFirstGroup = $this->handleCoursesByGroups($coursesInGroups,1,$tmpArray);
 						foreach($coursesListInFirstGroup as $group => $courses) {
@@ -148,7 +155,7 @@ class GenerateCompareCSV extends Command
 							}
 						}
 					} else {
-						$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$program['id'],$stage['id'],1);
+						$courses = APIUtility::getLiveCoursesInLevel($this->getApplication()->getKernel()->getContainer(),$locale,$scid,$program['id'],$stage['id'],1);
 						$programTxt = preg_replace('/\s+/',' ',$program['title'].'('.$program['studypoints'].' sp.)');
 						foreach($courses as $course) {
 							switch($course['mandatory']) {
