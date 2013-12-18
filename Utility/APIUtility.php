@@ -3,7 +3,20 @@ namespace Dellaert\KULEducationAPIBundle\Utility;
 
 class APIUtility {
 
-	public static function getLiveFacultiesByIdTitle($container,$locale) {
+	public static $schools = array(
+		1 => array('KU Leuven','http://onderwijsaanbod.kuleuven.be/'),
+		2 => array('KH Leuven','http://onderwijsaanbod.khleuven.be/')
+		);
+
+	public static function getLiveSchoolsByIdTitle($container,$locale) {
+		$data = array();
+		foreach( APIUtility::$schools as $schoolId => $school ) {
+			$data[] = array('id'=>(string) $schoolId,'title'=>(string) $school[0]);
+		}
+		return $data;
+	}
+
+	public static function getLiveFacultiesByIdTitle($container,$locale,$scid) {
 		// Locale
 		$language = substr($locale,0,1);
 
@@ -11,7 +24,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$url = APIUtility::$schools[$scid][1];
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml'; 
@@ -33,7 +46,7 @@ class APIUtility {
 	}
 
 
-	public static function getLiveLevelsByIdTitle($container,$locale,$fid) {
+	public static function getLiveLevelsByIdTitle($container,$locale,$scid,$fid) {
 		// Locale
 		$language = substr($locale,0,1);
 
@@ -41,7 +54,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$url = APIUtility::$schools[$scid][1];
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
@@ -69,7 +82,7 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveStudiesByIdTitle($container,$locale,$fid,$lid) {
+	public static function getLiveStudiesByIdTitle($container,$locale,$scid,$fid,$lid) {
 		// Locale
 		$language = substr($locale,0,1);
 
@@ -77,7 +90,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$url = APIUtility::$schools[$scid][1];
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
@@ -102,7 +115,7 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveProgramsByIdTitle($container,$locale,$sid) {
+	public static function getLiveProgramsByIdTitle($container,$locale,$scid,$sid) {
 		// Locale
 		$language = substr($locale,0,1);
 
@@ -110,7 +123,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$url = APIUtility::$schools[$scid][1];
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$sid.'.xml';
@@ -129,7 +142,7 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveStagesByIdTitle($container,$locale, $pid) {
+	public static function getLiveStagesByIdTitle($container,$locale,$scid,$pid) {
 		// Locale
 		$language = substr($locale,0,1);
 
@@ -137,7 +150,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$url = APIUtility::$schools[$scid][1];
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
@@ -152,7 +165,7 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveCoursesByGroupsInLevel($container,$locale,$pid,$phid,$respect_no_show) {
+	public static function getLiveCoursesByGroupsInLevel($container,$locale,$scid,$pid,$phid,$respect_no_show) {
 		// Locale
 		$language = substr($locale,0,1);
 
@@ -160,7 +173,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$url = APIUtility::$schools[$scid][1];
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
@@ -216,9 +229,9 @@ class APIUtility {
 		return $data;
 	}
 
-	public static function getLiveCoursesInLevel($container,$locale,$pid,$phid,$respect_no_show) {
+	public static function getLiveCoursesInLevel($container,$locale,$scid,$pid,$phid,$respect_no_show) {
 
-		$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($container,$locale,$pid,$phid,$respect_no_show);
+		$coursesInGroups = APIUtility::getLiveCoursesByGroupsInLevel($container,$locale,$scid,$pid,$phid,$respect_no_show);
 
 		// Return value
 		$data = APIUtility::handleCoursesInGroupsToFlatArray($coursesInGroups);
@@ -241,7 +254,7 @@ class APIUtility {
 		return $result;
 	}
 
-	public static function getLiveCourseDetails($container,$original_language,$cid) {
+	public static function getLiveCourseDetails($container,$original_language,$scid,$cid) {
 		// Locale
 		$language = strtolower(substr($original_language,0,1));
 
@@ -249,7 +262,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = $container->getParameter('dellaert_kul_education_api.baseurl');
+		$url = APIUtility::$schools[$scid][1];
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/syllabi/'.$language.'/'.$method.'/'.$cid.strtoupper($language).'.xml';
