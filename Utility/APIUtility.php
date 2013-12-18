@@ -4,8 +4,19 @@ namespace Dellaert\KULEducationAPIBundle\Utility;
 class APIUtility {
 
 	public static $schools = array(
-		1 => array('KU Leuven','http://onderwijsaanbod.kuleuven.be/'),
-		2 => array('KH Leuven','http://onderwijsaanbod.khleuven.be/')
+		'groept' => array('Groep T','http://onderwijsaanbod.groept.be/'),
+		'hub' => array('HU Brussel','http://onderwijsaanbod.ehsal.hubrussel.be/'),
+		'kuleuven' => array('KU Leuven','http://onderwijsaanbod.kuleuven.be/'),
+		'khleuven' => array('KH Leuven','http://onderwijsaanbod.khleuven.be/'),
+		'kaho' => array('KAHO','http://onderwijsaanbod.kahosl.be/'),
+		'khlimburg' => array('KH Limburg','http://onderwijsaanbod.khlim.be/'),
+		'luca' => array('LUCA','http://onderwijsaanbod.wenk.be/'),
+		'tmantwerpen' => array('Thomas More - Antwerpen','http://onderwijsaanbodantwerpen.thomasmore.be/'),
+		'tmkempen' => array('Thomas More - Kempen','http://onderwijsaanbodkempen.thomasmore.be/'),
+		'tmmechelen' => array('Thomas More - Mechelen','http://onderwijsaanbodmechelen.thomasmore.be/'),
+		'tmvosselaar' => array('Thomas More - Vosselaar','http://onderwijsaanbod.khk.be/'),
+		'vivesnoord' => array('Vives - Noord','http://onderwijsaanbod.vives-noord.be'),
+		'viveszuid' => array('Vives - Zuid','http://onderwijsaanbod.vives-zuid.be'),
 		);
 
 	public static function getLiveSchoolsByIdTitle($container,$locale) {
