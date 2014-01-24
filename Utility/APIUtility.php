@@ -141,11 +141,11 @@ class APIUtility {
 
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("data/diploma/programmas/programma") as $fChild ){
+			foreach( $xml->xpath("data/opleiding/programmas/programma") as $fChild ){
 				$title = $fChild->titel;
 
 				if( !empty($title) ) {
-					$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $title,'studypoints'=>(string) $fChild->studiepunten);
+					$data[] = array('id'=>(string) $fChild['id'],'title'=>(string) $title,'studypoints'=>(string) $fChild->studiepunten);
 				}
 			}
 		}
