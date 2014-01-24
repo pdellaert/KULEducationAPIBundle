@@ -214,13 +214,19 @@ class APIUtility {
 					);
 			}
 
+			if( $fChild['verplicht'] == 'True' ) {
+				$verplichtVal = 'J';
+			} else {
+				$verplichtVal = 'N';
+			}
+
 			$data['courses'][] = array(
 				'id' => (string) $fChild['id'],
 				'course_id' => (string) $fChild['code'],
 				'title' => (string) $fChild->titel,
 				'period' => (string) $fChild->aanbodperiode,
 				'studypoints' => (string) $fChild->studiepunten,
-				'mandatory' => (string) $fChild['verplicht'],
+				'mandatory' => (string) $verplichtVal,
 				'original_language' => (string) $fChild->taal->code,
 				'teachers' => $teachers
 				);
