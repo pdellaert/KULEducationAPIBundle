@@ -168,7 +168,7 @@ class APIUtility {
 
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("data/opleiding/fases/fase") as $fChild ) {
+			foreach( $xml->xpath("data/programma/fases/fase") as $fChild ) {
 				$data[] = array('id'=> (int) $fChild['code']);
 			}
 		}
@@ -190,7 +190,7 @@ class APIUtility {
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
 
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			$cg = $xml->xpath("data/opleiding/cg[@level='1']");
+			$cg = $xml->xpath("data/programma/modulegroep[@niveau='1']");
 			if( !empty($cg) && ( $respect_no_show == 0 || ($respect_no_show == 1 && $cg[0]->tonen != 'N') ) ) {
 				$data[(string) $cg[0]->titel] = APIUtility::parseCourseGroupInLevel($cg[0],$phid,$respect_no_show);
 			}
@@ -201,7 +201,7 @@ class APIUtility {
 
 	public static function parseCourseGroupInLevel($cg,$phid,$respect_no_show) {
 		$data = array();
-		foreach( $cg->xpath("opos/opo[fases/fase[contains(.,$phid)]]") as $fChild ) {
+		foreach( $cg->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$phid)]]") as $fChild ) {
 			$teachers = array();
 			foreach( $fChild->xpath("docenten/docent") as $sChild ) {
 				$teachers[] = array(
@@ -215,20 +215,20 @@ class APIUtility {
 			}
 
 			$data['courses'][] = array(
-				'id' => (string) $fChild['objid'],
-				'course_id' => (string) $fChild['short'],
+				'id' => (string) $fChild['id'],
+				'course_id' => (string) $fChild['code'],
 				'title' => (string) $fChild->titel,
-				'period' => (string) $fChild->periode,
-				'studypoints' => (string) $fChild->pts,
+				'period' => (string) $fChild->aanbodperiode,
+				'studypoints' => (string) $fChild->studiepunten,
 				'mandatory' => (string) $fChild['verplicht'],
-				'original_language' => (string) $fChild->originele_taal,
+				'original_language' => (string) $fChild->taal,
 				'teachers' => $teachers
 				);
 		}
 
-		$nextLevel = ((int) $cg['level'])+1;
+		$nextLevel = ((int) $cg['niveau'])+1;
 
-		foreach( $cg->xpath("cg[@level='$nextLevel']") as $fChild ) {
+		foreach( $cg->xpath("modulegroep[@niveau='$nextLevel']") as $fChild ) {
 			if( $respect_no_show == 0 || ($respect_no_show == 1 && $fChild->tonen != 'N') ) {
 				$subCg = APIUtility::parseCourseGroupInLevel($fChild,$phid,$respect_no_show);
 				if( !empty($subCg) ) {
