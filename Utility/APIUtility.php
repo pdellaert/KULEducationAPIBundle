@@ -221,7 +221,7 @@ class APIUtility {
 				'period' => (string) $fChild->aanbodperiode,
 				'studypoints' => (string) $fChild->studiepunten,
 				'mandatory' => (string) $fChild['verplicht'],
-				'original_language' => (string) $fChild->taal,
+				'original_language' => (string) $fChild->taal->code,
 				'teachers' => $teachers
 				);
 		}
