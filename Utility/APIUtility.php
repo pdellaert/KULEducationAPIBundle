@@ -191,7 +191,7 @@ class APIUtility {
 
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			$cg = $xml->xpath("data/programma/modulegroep[@niveau='1']");
-			if( !empty($cg) && ( $respect_no_show == 0 || ($respect_no_show == 1 && $cg[0]->tonen != 'N') ) ) {
+			if( !empty($cg) && ( $respect_no_show == 0 || ($respect_no_show == 1 && $cg[0]->tonen_in_programmagids != 'False') ) ) {
 				$data[(string) $cg[0]->titel] = APIUtility::parseCourseGroupInLevel($cg[0],$phid,$respect_no_show);
 			}
 		}
@@ -229,7 +229,7 @@ class APIUtility {
 		$nextLevel = ((int) $cg['niveau'])+1;
 
 		foreach( $cg->xpath("modulegroep[@niveau='$nextLevel']") as $fChild ) {
-			if( $respect_no_show == 0 || ($respect_no_show == 1 && $fChild->tonen != 'N') ) {
+			if( $respect_no_show == 0 || ($respect_no_show == 1 && $fChild->tonen_in_programmagids != 'False') ) {
 				$subCg = APIUtility::parseCourseGroupInLevel($fChild,$phid,$respect_no_show);
 				if( !empty($subCg) ) {
 					$data[(string) $fChild->titel] = $subCg;
