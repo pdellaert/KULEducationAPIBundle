@@ -141,7 +141,7 @@ class APIUtility {
 
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("data/diploma/opleidingen/opleiding") as $fChild ){
+			foreach( $xml->xpath("data/diploma/programmas/programma") as $fChild ){
 				$title = $fChild->titel;
 
 				if( !empty($title) ) {
