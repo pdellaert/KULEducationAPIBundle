@@ -111,5 +111,5 @@ dellaert_education_api_list_course_details:
     defaults: { _controller: DellaertKULEducationAPIBundle:API:listCourseDetails, _locale: nl }
     requirements:
         scid: \w+
-        cid: \d+
+        cid: \w+
         _locale: nl|en
