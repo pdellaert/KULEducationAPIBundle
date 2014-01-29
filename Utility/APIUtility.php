@@ -7,7 +7,7 @@ class APIUtility {
 
 	protected static function getSchoolBaseURL($container,$scid) {
 		$repository = $container->get('doctrine')->getRepository('DellaertKULEducationAPIBundle:School');
-		$school = $repository->getOneByShortname($scid);
+		$school = $repository->findOneByShortname($scid);
 		if( $school ) {
 			return $school->getBaseURL();
 		}
