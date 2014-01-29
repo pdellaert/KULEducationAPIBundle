@@ -4,13 +4,19 @@ namespace Dellaert\KULEducationAPIBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Dellaert\KULEducationAPIBundle\Utility\APIUtility;
+use Dellaert\KULEducationAPIBundle\Entity\School;
 
 class APIController extends Controller {
 
 	public function listSchoolsByIdTitleAction() {
-		// Getting Schools live
-		$data = APIUtility::getLiveSchoolsByIdTitle($this->container,$this->getRequest()->getLocale());
+		$repository = $this->getDoctrine()->getRepository('DellaertKULEducationAPIBundle:School');
+		$schools = $repository->findAll();
 
+		$data = array();
+		foreach( $schools as $school ) {
+			$data[] = array('id'=>$school->getShortname(),'title'=>$school->getName());
+		}
+		
 		// Returning faculties
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');
@@ -88,7 +94,7 @@ class APIController extends Controller {
 	}
 
 	public function listCourseDetailsAction($scid,$cid) {
-		// Getting Stages live
+		// Getting Course details live
 		$data = APIUtility::getLiveCourseDetails($this->container,$this->getRequest()->getLocale(),$scid,$cid);
 
 		// Returning stages

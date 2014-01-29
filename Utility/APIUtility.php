@@ -1,30 +1,17 @@
 <?php
 namespace Dellaert\KULEducationAPIBundle\Utility;
 
+use Dellaert\KULEducationAPIBundle\Entity\School;
+
 class APIUtility {
 
-	public static $schools = array(
-		'groept' => array('Groep T','http://onderwijsaanbod.groept.be/'),
-		'hub' => array('HU Brussel','http://onderwijsaanbod.ehsal.hubrussel.be/'),
-		'kuleuven' => array('KU Leuven','http://onderwijsaanbod.kuleuven.be/'),
-		'khleuven' => array('KH Leuven','http://onderwijsaanbod.khleuven.be/'),
-		'kaho' => array('KAHO','http://onderwijsaanbod.kahosl.be/'),
-		'khlimburg' => array('KH Limburg','http://onderwijsaanbod.khlim.be/'),
-		'luca' => array('LUCA','http://onderwijsaanbod.wenk.be/'),
-		'tmantwerpen' => array('Thomas More - Antwerpen','http://onderwijsaanbodantwerpen.thomasmore.be/'),
-		'tmkempen' => array('Thomas More - Kempen','http://onderwijsaanbodkempen.thomasmore.be/'),
-		'tmmechelen' => array('Thomas More - Mechelen','http://onderwijsaanbodmechelen.thomasmore.be/'),
-		'tmvosselaar' => array('Thomas More - Vosselaar','http://onderwijsaanbod.khk.be/'),
-		'vivesnoord' => array('Vives - Noord','http://onderwijsaanbod.vives-noord.be'),
-		'viveszuid' => array('Vives - Zuid','http://onderwijsaanbod.vives-zuid.be'),
-		);
-
-	public static function getLiveSchoolsByIdTitle($container,$locale) {
-		$data = array();
-		foreach( APIUtility::$schools as $schoolId => $school ) {
-			$data[] = array('id'=>(string) $schoolId,'title'=>(string) $school[0]);
+	protected static function getSchoolBaseURL($container,$scid) {
+		$repository = $container->get('doctrine')->getRepository('DellaertKULEducationAPIBundle:School');
+		$school = $repository->getOneByShortname($scid);
+		if( $school ) {
+			return $school->getBaseURL();
 		}
-		return $data;
+		return false;
 	}
 
 	public static function getLiveFacultiesByIdTitle($container,$locale,$scid) {
@@ -35,7 +22,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = APIUtility::$schools[$scid][1];
+		$url = APIUtility::getSchoolBaseURL($container,$scid);
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml'; 
@@ -65,7 +52,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = APIUtility::$schools[$scid][1];
+		$url = APIUtility::getSchoolBaseURL($container,$scid);
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
@@ -101,7 +88,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = APIUtility::$schools[$scid][1];
+		$url = APIUtility::getSchoolBaseURL($container,$scid);
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
@@ -134,7 +121,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = APIUtility::$schools[$scid][1];
+		$url = APIUtility::getSchoolBaseURL($container,$scid);
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$sid.'.xml';
@@ -161,7 +148,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = APIUtility::$schools[$scid][1];
+		$url = APIUtility::getSchoolBaseURL($container,$scid);
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
@@ -184,7 +171,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = APIUtility::$schools[$scid][1];
+		$url = APIUtility::getSchoolBaseURL($container,$scid);
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
@@ -279,7 +266,7 @@ class APIUtility {
 		$data = array();
 
 		// URL Setup
-		$url = APIUtility::$schools[$scid][1];
+		$url = APIUtility::getSchoolBaseURL($container,$scid);
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/syllabi/'.$language.'/'.$method.'/'.$cid.strtoupper($language).'.xml';
