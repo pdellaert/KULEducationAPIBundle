@@ -272,7 +272,7 @@ class APIUtility {
 		$callUrl = $url.$year.'/syllabi/'.$language.'/'.$method.'/'.$cid.strtoupper($language).'.xml';
 
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			$course = $xml->xpath("data/opo");
+			$course = $xml->xpath("data/opleidingsonderdeel");
 			if( !empty($course) ) {
 				$teachers = array();
 				foreach( $course[0]->xpath("docenten/docent") as $fChild ) {
@@ -288,7 +288,7 @@ class APIUtility {
 
 				// Teaching parts
 				$olas = array();
-				foreach( $course[0]->xpath("olas/ola") as $fChild ) {
+				foreach( $course[0]->xpath("onderwijsleeractiviteiten/onderwijsleeractiviteit") as $fChild ) {
 					$olaTeachers = array();
 					foreach( $fChild->xpath("docenten/docent") as $sChild ) {
 						$olaTeachers[] = array(
@@ -302,16 +302,16 @@ class APIUtility {
 					}
 
 					$olas[] = array(
-						'id' => (string) $fChild['objid'],
-						'ola_id' => (string) $fChild['short'],
+						'id' => (string) $fChild['id'],
+						'ola_id' => (string) $fChild['code'],
 						'title' => (string) $fChild->titel,
-						'period' => (string) $fChild->periode,
+						'period' => (string) $fChild->aanbodperiode,
 						'studypoints' => (string) $fChild->studiepunten,
 						'duration' => (string) $fChild->begeleidingsuren,
 						'format' => (string) $fChild->werkvorm,
 						'format_extra' => (string) $fChild->toelichting_werkvorm,
-						'language' => array( ((string) $fChild->onderwijstaal->code) => ((string) $fChild->onderwijstaal->tekst) ),
-						'language_extra' => (string) $fChild->toelichting_onderwijstaal,
+						'language' => array( ((string) $fChild->doceertaal->code) => ((string) $fChild->doceertaal->tekst) ),
+						'language_extra' => (string) $fChild->toelichting_doceertaal,
 						'content' => (string) $fChild->inhoud,
 						'aims' => (string) $fChild->doelstellingen,
 						'course_material' => (string) $fChild->studiemateriaal,
@@ -321,7 +321,7 @@ class APIUtility {
 
 				// Evaluation parts
 				$evas = array();
-				foreach( $course[0]->xpath("evas/eva") as $fChild ) {
+				foreach( $course[0]->xpath("evaluatieactiviteiten/evaluatieactiviteit") as $fChild ) {
 					$forms = array();
 					foreach( $fChild->xpath("vormen/vorm") as $sChild ) {
 						$forms[] = $sChild;
@@ -338,8 +338,8 @@ class APIUtility {
 					}
 
 					$evas[] = array(
-						'id' => (string) $fChild['objid'],
-						'eva_id' => (string) $fChild['short'],
+						'id' => (string) $fChild['id'],
+						'eva_id' => (string) $fChild['code'],
 						'title' => (string) $fChild->titel,
 						'written' => (string) $fChild->schriftelijk,
 						'oral' => (string) $fChild->mondeling,
@@ -354,13 +354,13 @@ class APIUtility {
 				}
 
 				$data = array(
-					'id' => (string) $course[0]['objid'],
-					'course_id' => (string) $course[0]['short'],
+					'id' => (string) $course[0]['id'],
+					'course_id' => (string) $course[0]['code'],
 					'title' => (string) $course[0]->titel,
-					'period' => (string) $course[0]->periode,
+					'period' => (string) $course[0]->aanbodperiode,
 					'studypoints' => (string) $course[0]->studiepunten,
 					'duration' => (string) $course[0]->begeleidingsuren,
-					'language' => array( ((string) $course[0]->onderwijstaal->code) => (string) $course[0]->onderwijstaal->tekst ),
+					'language' => array( ((string) $course[0]->doceertalen[0]->code) => (string) $course[0]->doceertalen[0]->tekst ),
 					'level' => array( ((string) $course[0]->niveau->code) => (string) $course[0]->niveau->tekst ),
 					'aims' => (string) $course[0]->doelstellingen,
 					'previous_knowledge' => (string) $course[0]->begintermen,
