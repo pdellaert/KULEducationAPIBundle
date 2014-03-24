@@ -130,7 +130,7 @@ class GenerateSchoolStructureTxt extends Command
 	protected function parseSublevels($data,$level) {
 		foreach( $data as $sublevelTitle=>$sublevel ) {
 			if( $sublevelTitle != 'courses' ) {
-				$output->writeln(str_repeat('|  ', ($level+4).'|- '.$sublevelTitle);
+				$output->writeln(str_repeat('|  ', ($level+4)).'|- '.$sublevelTitle);
 				parseSublevels($sublevel,$level+1);
 			}
 		}
