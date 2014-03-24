@@ -102,14 +102,14 @@ class GenerateSchoolStructureTxt extends Command
 
 									// STAGE HANDLING
 									$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$programId.'.xml';
-									if( $progamXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+									if( $programXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 										foreach( $programXml->xpath("data/programma/fases/fase") as $stage ) {
 											$stageCode = $stage['code'];
 											// Printing stage
 											$output->writeln('         |- Fase '.$stageCode);
 
 											if( $sublevels ) {
-												$cg = $progamXml->xpath("data/programma/modulegroep[@niveau='1']");
+												$cg = $programXml->xpath("data/programma/modulegroep[@niveau='1']");
 												if( !empty($cg) && ( $respect_no_show == 0 || ($respect_no_show == 1 && $cg[0]->tonen_in_programmagids != 'False') ) ) {
 													$data[(string) $cg[0]->titel] = APIUtility::parseCourseGroupInLevel($cg[0],$stageCode,$respect_no_show);
 												}
