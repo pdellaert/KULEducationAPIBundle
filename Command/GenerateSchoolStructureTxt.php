@@ -49,7 +49,7 @@ class GenerateSchoolStructureTxt extends Command
 		$respect_no_show = !$showhidden;
 
 		// Container
-		$container = $this->getApplication()->getKernel()->getContainer()
+		$container = $this->getApplication()->getKernel()->getContainer();
 
 		// XML Base variables
 		$schoolURL = APIUtility::getSchoolBaseURL($scid);
