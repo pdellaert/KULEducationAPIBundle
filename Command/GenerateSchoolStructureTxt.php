@@ -27,7 +27,7 @@ class GenerateSchoolStructureTxt extends Command
 				'What locale? nl|en'
 			)
 			->addOption(
-				'options',
+				'sublevels',
 				null,
 				InputOption::VALUE_NONE,
 				'Do you want to have the sublevels present?'
@@ -44,7 +44,7 @@ class GenerateSchoolStructureTxt extends Command
 		// Handling options
 		$scid = $input->getOption('scid');
 		$locale = $input->getOption('locale'); 
-		$options = $input->getOption('options');
+		$sublevels = $input->getOption('sublevels');
 		$showhidden = $input->getOption('showhidden');
 		$respect_no_show = !$showhidden;
 
@@ -108,7 +108,7 @@ class GenerateSchoolStructureTxt extends Command
 											// Printing stage
 											$output->writeln('         |- Fase '.$stageCode);
 
-											if( $options ) {
+											if( $sublevels ) {
 												$cg = $progamXml->xpath("data/programma/modulegroep[@niveau='1']");
 												if( !empty($cg) && ( $respect_no_show == 0 || ($respect_no_show == 1 && $cg[0]->tonen_in_programmagids != 'False') ) ) {
 													$data[(string) $cg[0]->titel] = APIUtility::parseCourseGroupInLevel($cg[0],$stageCode,$respect_no_show);
