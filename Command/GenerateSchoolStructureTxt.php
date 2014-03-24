@@ -78,7 +78,7 @@ class GenerateSchoolStructureTxt extends Command
 					}
 
 					// Printing level
-					$output->writeln('|- '.$levelTitle);
+					$output->writeln('|- '.$levelTitle[0]);
 
 					// STUDY HANDLING
 					foreach( $level->xpath("diplomas/diploma[originele_titel[@taal='$language']]") as $study ) {
@@ -101,7 +101,7 @@ class GenerateSchoolStructureTxt extends Command
 									$output->writeln('      |- '.$programTitle.' ('.$programStudypoints.')');
 
 									// STAGE HANDLING
-									$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
+									$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$programId.'.xml';
 									if( $progamXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 										foreach( $programXml->xpath("data/programma/fases/fase") as $stage ) {
 											$stageCode = $stage['code'];
