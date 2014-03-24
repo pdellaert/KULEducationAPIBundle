@@ -114,7 +114,7 @@ class GenerateSchoolStructureTxt extends Command
 													$data[(string) $cg[0]->titel] = APIUtility::parseCourseGroupInLevel($cg[0],$stageCode,$respect_no_show);
 												}
 												// COURSE GROUP HANDLING
-												parseSublevels($data,0);
+												$this->parseSublevels($data,0);
 											}
 										}
 									}
@@ -131,7 +131,7 @@ class GenerateSchoolStructureTxt extends Command
 		foreach( $data as $sublevelTitle=>$sublevel ) {
 			if( $sublevelTitle != 'courses' ) {
 				$output->writeln(str_repeat('|  ', ($level+4)).'|- '.$sublevelTitle);
-				parseSublevels($sublevel,$level+1);
+				$this->parseSublevels($sublevel,$level+1);
 			}
 		}
 	}
