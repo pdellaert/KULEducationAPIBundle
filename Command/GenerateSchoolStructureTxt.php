@@ -52,7 +52,7 @@ class GenerateSchoolStructureTxt extends Command
 		$container = $this->getApplication()->getKernel()->getContainer()
 
 		// XML Base variables
-		$schoolURL = APIUtility::getSchoolBaseURL(,$scid);
+		$schoolURL = APIUtility::getSchoolBaseURL($scid);
 		$language = substr($locale,0,1);
 		$year = $container->getParameter('dellaert_kul_education_api.baseyear');
 		$method = $container->getParameter('dellaert_kul_education_api.method');
