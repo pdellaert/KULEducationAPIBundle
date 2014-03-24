@@ -86,7 +86,7 @@ class GenerateSchoolStructureTxt extends Command
 						$studyTitle = $study->originele_titel;
 
 						// Printing study
-						$output->writeln('   |- '.$studyTitle);
+						$output->writeln('|  |- '.$studyTitle);
 
 						// PROGRAM HANDLING
 						$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$studyId.'.xml';
@@ -98,7 +98,7 @@ class GenerateSchoolStructureTxt extends Command
 
 								if( !empty($programTitle) ) {
 									// Printing program
-									$output->writeln('      |- '.$programTitle.' ('.$programStudypoints.')');
+									$output->writeln('|  |  |- '.$programTitle.' ('.$programStudypoints.')');
 
 									// STAGE HANDLING
 									$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$programId.'.xml';
@@ -106,7 +106,7 @@ class GenerateSchoolStructureTxt extends Command
 										foreach( $programXml->xpath("data/programma/fases/fase") as $stage ) {
 											$stageCode = $stage['code'];
 											// Printing stage
-											$output->writeln('         |- Fase '.$stageCode);
+											$output->writeln('|  |  |  |- Fase '.$stageCode);
 
 											if( $sublevels ) {
 												$cg = $programXml->xpath("data/programma/modulegroep[@niveau='1']");
@@ -130,7 +130,7 @@ class GenerateSchoolStructureTxt extends Command
 	protected function parseSublevels($data,$level) {
 		foreach( $data as $sublevelTitle=>$sublevel ) {
 			if( $sublevelTitle != 'courses' ) {
-				$output->writeln(str_repeat(' ', ($level*3)+12).'|- '.$sublevelTitle);
+				$output->writeln(str_repeat('|  ', ($level+4).'|- '.$sublevelTitle);
 				parseSublevels($sublevel,$level+1);
 			}
 		}
