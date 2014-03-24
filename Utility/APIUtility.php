@@ -5,7 +5,7 @@ use Dellaert\KULEducationAPIBundle\Entity\School;
 
 class APIUtility {
 
-	protected static function getSchoolBaseURL($container,$scid) {
+	public static function getSchoolBaseURL($container,$scid) {
 		$repository = $container->get('doctrine')->getRepository('DellaertKULEducationAPIBundle:School');
 		$school = $repository->findOneByShortname($scid);
 		if( $school ) {
