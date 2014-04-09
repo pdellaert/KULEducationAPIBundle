@@ -69,7 +69,7 @@ class APIUtility {
 						$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
 					}
 
-					$studiesInLang = $fChild->xpath("diplomas/diploma[originele_titel[@taal='$language']]");
+					$studiesInLang = $fChild->xpath("opleidingen/opleiding[titel[@taal='$language']]");
 					if( !empty($studiesInLang) ) {
 						$data[] = array('id'=>(string) $fChild['id'],'title'=>(string) $title[0]);
 					}
@@ -102,8 +102,8 @@ class APIUtility {
 
 				if( !empty($level) ) {
 					foreach( $level[0]->xpath("opleidingen/opleiding") as $fChild ){
-						if( ((string) $fChild->originele_titel['taal']) == $language ) {
-							$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $fChild->originele_titel);
+						if( ((string) $fChild->titel['taal']) == $language ) {
+							$data[] = array('id'=>(string) $fChild['id'],'title'=>(string) $fChild->titel);
 						}
 					}
 				}
