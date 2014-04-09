@@ -36,7 +36,7 @@ class APIUtility {
 					$title = $fChild->xpath("titels/titel[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
 				}
 
-				$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $title[0]);
+				$data[] = array('id'=>(string) $fChild['id'],'title'=>(string) $title[0]);
 			}
 		}
 
@@ -62,7 +62,7 @@ class APIUtility {
 			$faculty = $xml->xpath("data/instelling/hoofddepartement[@id='$fid']");
 
 			if( !empty($faculty) ) {
-				foreach( $faculty[0]->xpath("classificaties/classificatie/graad") as $fChild ){
+				foreach( $faculty[0]->xpath("kwalificatie/classificatie/graad") as $fChild ){
 					$title = $fChild->xpath("omschrijvingen/omschrijving[@taal='$language']");
 
 					if( empty($title) ) {
@@ -98,10 +98,10 @@ class APIUtility {
 			$faculty = $xml->xpath("data/instelling/hoofddepartement[@id='$fid']");
 
 			if( !empty($faculty) ) {
-				$level = $faculty[0]->xpath("classificaties/classificatie/graad[@id='$lid']");
+				$level = $faculty[0]->xpath("kwalificatie/classificatie/graad[@id='$lid']");
 
 				if( !empty($level) ) {
-					foreach( $level[0]->xpath("diplomas/diploma") as $fChild ){
+					foreach( $level[0]->xpath("opleidingen/opleiding") as $fChild ){
 						if( ((string) $fChild->originele_titel['taal']) == $language ) {
 							$data[] = array('id'=>(string) $fChild['objid'],'title'=>(string) $fChild->originele_titel);
 						}
