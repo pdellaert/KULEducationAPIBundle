@@ -29,7 +29,7 @@ class APIUtility {
 		
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			foreach( $xml->xpath("data/instelling/departement") as $fChild ) {
+			foreach( $xml->xpath("data/instelling/hoofddepartement") as $fChild ) {
 				$title = $fChild->xpath("titels/titel[@taal='$language']");
 
 				if( empty($title) ) {
@@ -59,7 +59,7 @@ class APIUtility {
 		
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			$faculty = $xml->xpath("data/instelling/departement[@objid='$fid']");
+			$faculty = $xml->xpath("data/instelling/hoofddepartement[@objid='$fid']");
 
 			if( !empty($faculty) ) {
 				foreach( $faculty[0]->xpath("classificaties/classificatie/graad") as $fChild ){
@@ -95,7 +95,7 @@ class APIUtility {
 		
 		// Getting XML
 		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
-			$faculty = $xml->xpath("data/instelling/departement[@objid='$fid']");
+			$faculty = $xml->xpath("data/instelling/hoofddepartement[@objid='$fid']");
 
 			if( !empty($faculty) ) {
 				$level = $faculty[0]->xpath("classificaties/classificatie/graad[@id='$lid']");
