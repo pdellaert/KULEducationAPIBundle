@@ -57,6 +57,12 @@ class GenerateACCODynamicsImportXMLs extends Command
                 InputOption::VALUE_NONE,
                 'Do you want to show hidden sublevels?'
             );
+            ->addOption(
+                'debug',
+                null,
+                InputOption::VALUE_NONE,
+                'Do you want to show debug output?'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -67,6 +73,7 @@ class GenerateACCODynamicsImportXMLs extends Command
         $locale = $input->getOption('locale');
         $path = $input->getOption('path');
         $showhidden = $input->getOption('showhidden');
+        $debug = $input->getOption('debug');
         $respect_no_show = !$showhidden;
 
         // Base variables
@@ -88,28 +95,36 @@ class GenerateACCODynamicsImportXMLs extends Command
         if( $mainXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
             // FACULTY HANDLING
             foreach( $mainXml->xpath("data/instelling/hoofddepartement") as $faculty ) {
-                if( $fid != -1 && $faculty['id'] != $fid ) {
-                    break;
-                }
-
                 $faculty_id = $faculty['id'];
                 $faculty_title = $faculty->xpath("titels/titel[@taal='$language']");
                 if( empty($faculty_title) ) {
                     $faculty_title = $faculty->xpath("titels/titel[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
                 }
 
+                if( $fid != -1 && $faculty['id'] != $fid ) {
+                    $this->debugOutput($output,$debug,'Skipping faculty: '.$faculty_id.' - '.$faculty_title);
+                    continue;
+                }
+
+                $this->debugOutput($output,$debug,'Parsing faculty: '.$faculty_id.' - '.$faculty_title);
+
                 // LEVEL HANDLING
                 foreach( $faculty->xpath("kwalificatie/classificatie/graad") as $level ) {
+                    $level_id = $level['id'];
                     $level_title = $level->xpath("omschrijvingen/omschrijving[@taal='$language']");
                     if( empty($level_title) ) {
                         $level_title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
                     }
+
+                    $this->debugOutput($output,$debug,'Parsing level: '.$level_id.' - '.$level_title);
 
                     // STUDY HANDLING
                     foreach( $level->xpath("opleidingen/opleiding") as $study ) {
                         if( ((string) $study->titel['taal']) == $language ) {
                             $study_id = $study['id'];
                             $study_title = $study->titel;
+
+                            $this->debugOutput($output,$debug,'Parsing study: '.$study_id.' - '.$study_title);
 
                             // PROGRAM HANDLING
                             $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$studyId.'.xml';
@@ -118,6 +133,8 @@ class GenerateACCODynamicsImportXMLs extends Command
                                     $program_id = $program['id'];
                                     $program_title = $program->titel;
                                     $program_studypoints = $program->studiepunten;
+
+                                    $this->debugOutput($output,$debug,'Parsing program: '.$program_id.' - '.$program_title.' ('.$program_studypoints.')');
 
                                     if( !empty($programTitle) ) {
                                         // STAGE HANDLING
@@ -144,10 +161,12 @@ class GenerateACCODynamicsImportXMLs extends Command
                                                         break;
                                                 }
 
+                                               $this->debugOutput($output,$debug,'Parsing stage: '.$stage_id);
+
                                                 //TODO: SUBLEVELS EN VAKKEN VANAF HIER!!!!
                                                 foreach( $programXml->xpath("data/programma/modulegroep[@niveau='1']") as $course_group ) {
                                                     if( $respect_no_show == 0 || ($respect_no_show == 1 && $course_group->tonen_in_programmagids != 'False') ) {
-                                                        $this->parseCourseGroup($container,$course_group,$stage_id,$scid,$courses,$teachers);
+                                                        $this->parseCourseGroup($container,$output,$debug,$course_group,$stage_id,$scid,$courses,$teachers);
                                                     }
                                                 }
                                             }
@@ -162,6 +181,7 @@ class GenerateACCODynamicsImportXMLs extends Command
         }
 
         // GENERATING COURSES XML
+        $this->debugOutput($output,$debug,'Creating courses XML');
         $course_xml = new \DOMDocument();
         $course_xml->formatOutput = true;
         
@@ -278,14 +298,19 @@ class GenerateACCODynamicsImportXMLs extends Command
         }
     }
 
-    protected function parseCourseGroup($container, $course_group, $stage_id, $scid, $courses, $teachers) {
+    protected function parseCourseGroup($container, $output, $debug, $course_group, $stage_id, $scid, $courses, $teachers) {
+        $course_group_title = $course_group->titel;
+        $this->debugOutput($output,$debug,'Parsing course group: '.$course_group_title);
+
         // COURSES IN THIS LEVEL HANDLING
         foreach( $course_group->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$phid)]]") as $course ) {
             $course_id = $course['code'];
+            $this->debugOutput($output,$debug,'Checking course: '.$course_id);
 
             // IF COURSE DOES NOT EXIST, ADD IT
             if( !array_key_exists($course_id, $courses) ) {
                 // GETTING COURSE DETAILS
+                $this->debugOutput($output,$debug,'Parsing course: '.$course_id);
                 $course_details = APIUtility::getLiveCourseDetails($container,$course->taal->code,$scid,$course_id);
                 // COURSE HANDLING
                 // TODO: VERPLICHT EN KOPPELEN IN BOOM
@@ -315,8 +340,14 @@ class GenerateACCODynamicsImportXMLs extends Command
         $next_level = ((int) $course_group['niveau'])+1;
         foreach( $course_group->xpath("modulegroep[@niveau='$nextLevel']") as $sub_course_group ) {
             if( $respect_no_show == 0 || ($respect_no_show == 1 && $sub_course_group->tonen_in_programmagids != 'False') ) {
-                $this->parseCourseGroup($container,$sub_course_group,$stage_id,$scid,$courses,$teachers);
+                $this->parseCourseGroup($container,$output,$debug,$sub_course_group,$stage_id,$scid,$courses,$teachers);
             }
+        }
+    }
+
+    protected function debugOutput($output,$debug,$msg) {
+        if( $debug ) {
+            $output->writeln(date('Y-m-d H:i:s').' - DEBUG: '.$msg);
         }
     }
 }
