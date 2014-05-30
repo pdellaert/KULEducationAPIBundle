@@ -258,7 +258,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 }
                 $course_xml_course->appendChild($course_xml_course_info);
                 // Course Studypoints element
-                $course_xml_course_studypoints = $course_xml->createElement('studiepunten',$course['studiepunten']);
+                $course_xml_course_studypoints = $course_xml->createElement('studiepunten',$course['studypoints']);
                 $course_xml_course->appendChild($course_xml_course_studypoints);
                 // Course Period element
                 $course_xml_course_period = $course_xml->createElement('periode','SEM '.$course['period']);
