@@ -168,7 +168,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                                                 //TODO: SUBLEVELS EN VAKKEN VANAF HIER!!!!
                                                 foreach( $programXml->xpath("data/programma/modulegroep[@niveau='1']") as $course_group ) {
                                                     if( $respect_no_show == 0 || ($respect_no_show == 1 && $course_group->tonen_in_programmagids != 'False') ) {
-                                                        $this->parseCourseGroup($container,$output,$debug,$course_group,$stage_id,$scid,$courses,$teachers);
+                                                        $this->parseCourseGroup($container,$output,$debug,$course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers);
                                                     }
                                                 }
                                             }
@@ -300,9 +300,10 @@ class GenerateACCODynamicsImportXMLs extends Command
         }
     }
 
-    protected function parseCourseGroup($container, $output, $debug, $course_group, $stage_id, $scid, $courses, $teachers) {
+    protected function parseCourseGroup($container, $output, $debug, $course_group, $stage_id, $scid, $respect_no_show, $courses, $teachers) {
         $course_group_title = $course_group->titel;
         $this->debugOutput($output,$debug,'Parsing course group: '.$course_group_title);
+        $this->debugOutput($output,$debug,"opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]");
 
         // COURSES IN THIS LEVEL HANDLING
         foreach( $course_group->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]") as $course ) {
