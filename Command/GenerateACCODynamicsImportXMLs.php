@@ -310,7 +310,7 @@ class GenerateACCODynamicsImportXMLs extends Command
             $this->debugOutput($output,$debug,'Checking course: '.$course_id);
 
             // IF COURSE DOES NOT EXIST, ADD IT
-            if( !array_key_exists($course_id, $courses) ) {
+            if( !array_key_exists((string) $course_id, $courses) ) {
                 // GETTING COURSE DETAILS
                 $this->debugOutput($output,$debug,'Parsing course: '.$course_id);
                 $course_details = APIUtility::getLiveCourseDetails($container,$course->taal->code,$scid,$course_id);
@@ -327,7 +327,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                     );
 
                     // IF TEACHER DOES NOT EXIST, ADD IT
-                    if( !array_key_exists($teacher_id, $teachers) ) {
+                    if( !array_key_exists((string) $teacher_id, $teachers) ) {
                         $teachers[$teacher_id] = array(
                             'firstname' => (string) $teacher->voornaam,
                             'lastname' => (string) $teacher->familienaam,
