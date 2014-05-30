@@ -306,11 +306,11 @@ class GenerateACCODynamicsImportXMLs extends Command
 
         // COURSES IN THIS LEVEL HANDLING
         foreach( $course_group->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]") as $course ) {
-            $course_id = $course['code'];
+            $course_id = (string) $course['code'];
             $this->debugOutput($output,$debug,'Checking course: '.$course_id);
 
             // IF COURSE DOES NOT EXIST, ADD IT
-            if( !array_key_exists((string) $course_id, $courses) ) {
+            if( !array_key_exists($course_id, $courses) ) {
                 // GETTING COURSE DETAILS
                 $this->debugOutput($output,$debug,'Parsing course: '.$course_id);
                 $course_details = APIUtility::getLiveCourseDetails($container,$course->taal->code,$scid,$course_id);
@@ -320,14 +320,14 @@ class GenerateACCODynamicsImportXMLs extends Command
 
                 // TEACHER HANDLING
                 foreach( $course_details['teachers'] as $teacher ) {
-                    $teacher_id = $teacher['persno'];
+                    $teacher_id = (string) $teacher['persno'];
                     $course_array['teachers'][] = array(
                         'function' => (string) $teacher['functie'],
                         'teacher_id' => $teacher_id
                     );
 
                     // IF TEACHER DOES NOT EXIST, ADD IT
-                    if( !array_key_exists((string) $teacher_id, $teachers) ) {
+                    if( !array_key_exists($teacher_id, $teachers) ) {
                         $teachers[$teacher_id] = array(
                             'firstname' => (string) $teacher->voornaam,
                             'lastname' => (string) $teacher->familienaam,
