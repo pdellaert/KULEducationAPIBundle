@@ -138,7 +138,7 @@ class GenerateACCODynamicsImportXMLs extends Command
 
                                     $this->debugOutput($output,$debug,'Parsing program: '.$program_id.' - '.$program_title.' ('.$program_studypoints.')');
 
-                                    if( !empty($programTitle) ) {
+                                    if( !empty($program_title) ) {
                                         // STAGE HANDLING
                                         $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$program_id.'.xml';
                                         if( $programXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
