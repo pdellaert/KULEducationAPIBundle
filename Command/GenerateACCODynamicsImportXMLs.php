@@ -145,7 +145,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                                                 }
 
                                                 //TODO: SUBLEVELS EN VAKKEN VANAF HIER!!!!
-                                                foreach( $programXml->xpath("data/programma/modulegroep[@niveau='1']" as $course_group ) ) {
+                                                foreach( $programXml->xpath("data/programma/modulegroep[@niveau='1']") as $course_group ) {
                                                     if( $respect_no_show == 0 || ($respect_no_show == 1 && $course_group->tonen_in_programmagids != 'False') ) {
                                                         $this->parseCourseGroup($container,$course_group,$stage_id,$scid,$courses,$teachers);
                                                     }
