@@ -96,9 +96,9 @@ class GenerateACCODynamicsImportXMLs extends Command
             // FACULTY HANDLING
             foreach( $mainXml->xpath("data/instelling/hoofddepartement") as $faculty ) {
                 $faculty_id = $faculty['id'];
-                $faculty_title = $faculty->xpath("titels/titel[@taal='$language']");
+                $faculty_title = $faculty->xpath("titels/titel[@taal='$language']")[0];
                 if( empty($faculty_title) ) {
-                    $faculty_title = $faculty->xpath("titels/titel[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
+                    $faculty_title = $faculty->xpath("titels/titel[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']")[0];
                 }
 
                 if( $fid != -1 && $faculty['id'] != $fid ) {
@@ -111,9 +111,9 @@ class GenerateACCODynamicsImportXMLs extends Command
                 // LEVEL HANDLING
                 foreach( $faculty->xpath("kwalificatie/classificatie/graad") as $level ) {
                     $level_id = $level['id'];
-                    $level_title = $level->xpath("omschrijvingen/omschrijving[@taal='$language']");
+                    $level_title = $level->xpath("omschrijvingen/omschrijving[@taal='$language']")[0];
                     if( empty($level_title) ) {
-                        $level_title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
+                        $level_title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']")[0];
                     }
 
                     $this->debugOutput($output,$debug,'Parsing level: '.$level_id.' - '.$level_title);
@@ -127,7 +127,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                             $this->debugOutput($output,$debug,'Parsing study: '.$study_id.' - '.$study_title);
 
                             // PROGRAM HANDLING
-                            $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$studyId.'.xml';
+                            $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$study_id.'.xml';
                             if( $studyXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
                                 foreach( $studyXml->xpath("data/opleiding/programmas/programma") as $program ) {
                                     $program_id = $program['id'];
@@ -138,7 +138,7 @@ class GenerateACCODynamicsImportXMLs extends Command
 
                                     if( !empty($programTitle) ) {
                                         // STAGE HANDLING
-                                        $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$programId.'.xml';
+                                        $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$program_id.'.xml';
                                         if( $programXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
                                             foreach( $programXml->xpath("data/programma/fases/fase") as $stage ) {
                                                 $stage_id = $stage['id'];
