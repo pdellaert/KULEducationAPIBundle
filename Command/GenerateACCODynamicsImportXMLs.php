@@ -303,7 +303,6 @@ class GenerateACCODynamicsImportXMLs extends Command
     protected function parseCourseGroup($container, $output, $debug, $course_group, $stage_id, $scid, $respect_no_show, $courses, $teachers) {
         $course_group_title = $course_group->titel;
         $this->debugOutput($output,$debug,'Parsing course group: '.$course_group_title);
-        $this->debugOutput($output,$debug,"opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]");
 
         // COURSES IN THIS LEVEL HANDLING
         foreach( $course_group->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]") as $course ) {
