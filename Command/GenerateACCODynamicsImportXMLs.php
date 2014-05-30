@@ -96,10 +96,11 @@ class GenerateACCODynamicsImportXMLs extends Command
             // FACULTY HANDLING
             foreach( $mainXml->xpath("data/instelling/hoofddepartement") as $faculty ) {
                 $faculty_id = $faculty['id'];
-                $faculty_title = $faculty->xpath("titels/titel[@taal='$language']")[0];
+                $faculty_title = $faculty->xpath("titels/titel[@taal='$language']");
                 if( empty($faculty_title) ) {
-                    $faculty_title = $faculty->xpath("titels/titel[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']")[0];
+                    $faculty_title = $faculty->xpath("titels/titel[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
                 }
+                $faculty_title = $faculty_title[0];
 
                 if( $fid != -1 && $faculty['id'] != $fid ) {
                     $this->debugOutput($output,$debug,'Skipping faculty: '.$faculty_id.' - '.$faculty_title);
@@ -111,10 +112,11 @@ class GenerateACCODynamicsImportXMLs extends Command
                 // LEVEL HANDLING
                 foreach( $faculty->xpath("kwalificatie/classificatie/graad") as $level ) {
                     $level_id = $level['id'];
-                    $level_title = $level->xpath("omschrijvingen/omschrijving[@taal='$language']")[0];
+                    $level_title = $level->xpath("omschrijvingen/omschrijving[@taal='$language']");
                     if( empty($level_title) ) {
-                        $level_title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']")[0];
+                        $level_title = $fChild->xpath("omschrijvingen/omschrijving[@taal='".$container->getParameter('dellaert_kul_education_api.fallback_locale')."']");
                     }
+                    $level_title = $level_title[0];
 
                     $this->debugOutput($output,$debug,'Parsing level: '.$level_id.' - '.$level_title);
 
