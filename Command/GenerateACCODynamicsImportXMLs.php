@@ -305,7 +305,7 @@ class GenerateACCODynamicsImportXMLs extends Command
         $this->debugOutput($output,$debug,'Parsing course group: '.$course_group_title);
 
         // COURSES IN THIS LEVEL HANDLING
-        foreach( $course_group->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$phid)]]") as $course ) {
+        foreach( $course_group->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]") as $course ) {
             $course_id = $course['code'];
             $this->debugOutput($output,$debug,'Checking course: '.$course_id);
 
