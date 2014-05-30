@@ -320,17 +320,17 @@ class GenerateACCODynamicsImportXMLs extends Command
 
                 // TEACHER HANDLING
                 foreach( $course_details['teachers'] as $teacher ) {
-                    $teacher_id = (string) $teacher['persno'];
+                    $teacher_id = (string) $teacher['personel_id'];
                     $course_array['teachers'][] = array(
-                        'function' => (string) $teacher['functie'],
+                        'function' => (string) $teacher['function'],
                         'teacher_id' => $teacher_id
                     );
 
                     // IF TEACHER DOES NOT EXIST, ADD IT
                     if( !array_key_exists($teacher_id, $teachers) ) {
                         $teachers[$teacher_id] = array(
-                            'firstname' => (string) $teacher->voornaam,
-                            'lastname' => (string) $teacher->familienaam,
+                            'firstname' => (string) $teacher['firstname'],
+                            'lastname' => (string) $teacher['lastname'],
                             'email' => ''
                         );
                     }
