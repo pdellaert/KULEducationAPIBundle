@@ -342,7 +342,7 @@ class GenerateACCODynamicsImportXMLs extends Command
         $next_level = ((int) $course_group['niveau'])+1;
         foreach( $course_group->xpath("modulegroep[@niveau='$next_level']") as $sub_course_group ) {
             if( $respect_no_show == 0 || ($respect_no_show == 1 && $sub_course_group->tonen_in_programmagids != 'False') ) {
-                $this->parseCourseGroup($container,$output,$debug,$sub_course_group,$stage_id,$scid,$courses,$teachers);
+                $this->parseCourseGroup($container,$output,$debug,$sub_course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers);
             }
         }
     }
