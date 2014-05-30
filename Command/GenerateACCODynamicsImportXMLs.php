@@ -56,7 +56,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'Do you want to show hidden sublevels?'
-            );
+            )
             ->addOption(
                 'debug',
                 null,
