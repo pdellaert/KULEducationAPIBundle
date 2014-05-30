@@ -270,7 +270,7 @@ class GenerateACCODynamicsImportXMLs extends Command
         $course_xml->appendChild($course_xml_literaturelist);
 
         // Saving as file
-        $course_xml_result = $course_xml($path.'/'.$listid.'-courses.xml');
+        $course_xml_result = $course_xml->save($path.'/'.$listid.'-courses.xml');
         if( $course_xml_result ) {
             $output->writeln('Created courses XML, containing '.count($courses).' courses and '.count($teachers).' teachers, with size '.$course_xml_result.' bytes');
         } else {
