@@ -143,7 +143,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                                         $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$program_id.'.xml';
                                         if( $programXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
                                             foreach( $programXml->xpath("data/programma/fases/fase") as $stage ) {
-                                                $stage_id = $stage['id'];
+                                                $stage_id = (int) $stage['code'];
                                                 if( $locale == 'nl' ) {
                                                     $stage_title = 'Fase';
                                                 } else {
