@@ -253,7 +253,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 // Course Info element
                 $course_xml_course_info = $course_xml->createElement('info');
                 {
-                    $course_xml_course_info_cdata = $course_xml->createCDATASection(substr(strip_tags($course['aims']),0,250));
+                    $course_xml_course_info_cdata = $course_xml->createCDATASection(substr(html_entity_decode(strip_tags($course['aims'])),0,250));
                     $course_xml_course_info->appendChild($course_xml_course_info_cdata);
                 }
                 $course_xml_course->appendChild($course_xml_course_info);
@@ -302,7 +302,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                     // Course Info element
                     $course_xml_ola_info = $course_xml->createElement('info');
                     {
-                        $course_xml_ola_info_cdata = $course_xml->createCDATASection(substr(strip_tags($course_ola['content']),0,250));
+                        $course_xml_ola_info_cdata = $course_xml->createCDATASection(substr(html_entity_decode(strip_tags($course_ola['content'])),0,250));
                         $course_xml_ola_info->appendChild($course_xml_ola_info_cdata);
                     }
                     $course_xml_ola->appendChild($course_xml_ola_info);
@@ -369,9 +369,11 @@ class GenerateACCODynamicsImportXMLs extends Command
                 // COURSE TEACHER HANDLING
                 foreach( $course_details['teachers'] as $teacher ) {
                     $teacher_id = (string) $teacher['personel_id'];
+                    $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
 
                     // IF TEACHER DOES NOT EXIST, ADD IT
                     if( !array_key_exists($teacher_id, $teachers) ) {
+                        $this->debugOutput($output,$debug,'Parsing teacher: '.$teacher_id);
                         $teacher_email = '';
                         if( $teacher['on_who-is-who'] == 'True' ) {
                             $teacher_email = $this->getTeacherEmail($container,$teacher_id);
@@ -389,9 +391,11 @@ class GenerateACCODynamicsImportXMLs extends Command
                 foreach( $course_details['teaching_activities'] as $ola ) {
                     foreach( $ola['teachers'] as $teacher ) {
                         $teacher_id = (string) $teacher['personel_id'];
+                        $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
 
                         // IF TEACHER DOES NOT EXIST, ADD IT
                         if( !array_key_exists($teacher_id, $teachers) ) {
+                            $this->debugOutput($output,$debug,'Parsing teacher: '.$teacher_id);
                             $teacher_email = '';
                             if( $teacher['on_who-is-who'] == 'True' ) {
                                 $teacher_email = $this->getTeacherEmail($container,$teacher_id);
