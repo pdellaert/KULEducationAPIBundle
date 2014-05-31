@@ -528,7 +528,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                     $structure_xml_course_id = $structure_xml->createElement('vak-ID',$course_id);
                     $structure_xml_course->appendChild($structure_xml_course_id);
                     // XML Courese Mandatory
-                    $structure_xml_course_mandatory - $structure_xml->createElement('verplicht',(string) $course['verplicht']);
+                    $structure_xml_course_mandatory = $structure_xml->createElement('verplicht',(string) $course['verplicht']);
                     $structure_xml_course->appendChilde($structure_xml_course_mandatory);
                 }
                 $structure_xml_level->appendChild($structure_xml_course);
