@@ -290,7 +290,6 @@ class GenerateACCODynamicsImportXMLs extends Command
                                                 }
                                                 $structure_xml_literaturelist->appendChild($structure_xml_level);
 
-                                                //TODO: SUBLEVELS EN VAKKEN VANAF HIER!!!!
                                                 foreach( $programXml->xpath("data/programma/modulegroep[@niveau='1']") as $course_group ) {
                                                     if( $respect_no_show == 0 || ($respect_no_show == 1 && $course_group->tonen_in_programmagids != 'False') ) {
                                                         $this->parseCourseGroup($container,$output,$debug,$course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers,$structure_xml,$structure_xml_literaturelist,$xml_stage_id,$xml_cur_level_id);
