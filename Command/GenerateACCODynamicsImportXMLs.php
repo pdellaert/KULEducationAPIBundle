@@ -253,7 +253,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 // Course Info element
                 $course_xml_course_info = $course_xml->createElement('info');
                 {
-                    $course_xml_course_info_cdata = $course_xml->createCDATASection(substr($course['aims'],0,250));
+                    $course_xml_course_info_cdata = $course_xml->createCDATASection(substr(strip_tags($course['aims']),0,250));
                     $course_xml_course_info->appendChild($course_xml_course_info_cdata);
                 }
                 $course_xml_course->appendChild($course_xml_course_info);
@@ -302,7 +302,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                     // Course Info element
                     $course_xml_ola_info = $course_xml->createElement('info');
                     {
-                        $course_xml_ola_info_cdata = $course_xml->createCDATASection(substr($course_ola['content'],0,250));
+                        $course_xml_ola_info_cdata = $course_xml->createCDATASection(substr(strip_tags($course_ola['content']),0,250));
                         $course_xml_ola_info->appendChild($course_xml_ola_info_cdata);
                     }
                     $course_xml_ola->appendChild($course_xml_ola_info);
