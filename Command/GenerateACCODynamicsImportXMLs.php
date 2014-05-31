@@ -349,8 +349,10 @@ class GenerateACCODynamicsImportXMLs extends Command
     }
 
     protected function parseCourseGroup($container, $output, $debug, $course_group, $stage_id, $scid, $respect_no_show, &$courses, &$teachers) {
-        if( strpos((string) $course_group['fases'],$stage_id) !== false ) {
-            $course_group_title = $course_group->titel;
+        $course_group_title = $course_group->titel;
+        $course_group_stages = $course_group['fases'];
+        $this->debugOutput($output,$debug,'Checking stage on course group: '.$course_group_title.' ('.$course_group_stages.')');
+        if( strpos($course_group_stages,$stage_id) !== false ) {
             $this->debugOutput($output,$debug,'Parsing course group: '.$course_group_title);
 
             // COURSES IN THIS LEVEL HANDLING
