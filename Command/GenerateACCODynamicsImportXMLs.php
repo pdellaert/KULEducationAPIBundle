@@ -279,17 +279,65 @@ class GenerateACCODynamicsImportXMLs extends Command
                     }
                     $course_xml_course->appendChild($course_xml_course_teacher);
                 }
-                /**
-                 * BIG TODO: 
-                 * OLAS HANDLING
-                 **/
             }
             $course_xml_courses->appendChild($course_xml_course);
+            // Course OLAs are just new courses with the same course_id but different module_id
+            foreach( $course['teaching_activities'] as $course_ola ) {
+                // Course element
+                $course_xml_ola = $course_xml->createElement('vak');
+                {
+                    // Course ID element
+                    $course_xml_ola_id = $course_xml->createElement('vak-ID',$course_id);
+                    $course_xml_ola->appendChild($course_xml_ola_id);
+                    // Course Module ID element
+                    $course_xml_ola_module_id = $course_xml->createElement('module-ID',$course_ola['ola_id']);
+                    $course_xml_ola->appendChild($course_xml_ola_module_id);
+                    // Course Title element
+                    $course_xml_ola_title = $course_xml->createElement('titel');
+                    {
+                        $course_xml_ola_title_cdata = $course_xml->createCDATASection($course_ola['title']);
+                        $course_xml_ola_title->appendChild($course_xml_ola_title_cdata);
+                    }
+                    $course_xml_ola->appendChild($course_xml_ola_title);
+                    // Course Info element
+                    $course_xml_ola_info = $course_xml->createElement('info');
+                    {
+                        $course_xml_ola_info_cdata = $course_xml->createCDATASection(substr($course_ola['content'],0,250));
+                        $course_xml_ola_info->appendChild($course_xml_ola_info_cdata);
+                    }
+                    $course_xml_ola->appendChild($course_xml_ola_info);
+                    // Course Studypoints element
+                    $course_xml_ola_studypoints = $course_xml->createElement('studiepunten',$course_ola['studypoints']);
+                    $course_xml_ola->appendChild($course_xml_ola_studypoints);
+                    // Course Period element
+                    $course_xml_ola_period = $course_xml->createElement('periode','SEM '.$course_ola['period']);
+                    $course_xml_ola->appendChild($course_xml_ola_period);
+                    // Course Students element
+                    $course_xml_ola_students = $course_xml->createElement('studenten',0);
+                    $course_xml_ola->appendChild($course_xml_ola_students);
+                    // Course Teachers
+                    foreach( $course_ola['teachers'] as $teacher ) {
+                        $course_xml_ola_teacher = $course_xml->createElement('docent');
+                        {
+                            // Course Teacher ID element
+                            $course_xml_ola_teacher_id = $course_xml->createElement('docent-ID',$teacher['personel_id']);
+                            $course_xml_ola_teacher->appendChild($course_xml_ola_teacher_id);
+                            // Course Teacher Title element
+                            $course_xml_ola_teacher_title = $course_xml->createElement('titel',$teacher['function']);
+                            $course_xml_ola_teacher->appendChild($course_xml_ola_teacher_title);
+                        }
+                        $course_xml_ola->appendChild($course_xml_ola_teacher);
+                    }
+                }
+                $course_xml_courses->appendChild($course_xml_ola);
+            }
         }
         $course_xml_literaturelist->appendChild($course_xml_courses);
 
         // Closing Root tag
         $course_xml->appendChild($course_xml_literaturelist);
+
+        $this->debugOutput($output,$debug,'Finished courses XML');
 
         // Saving as file
         $course_xml_result = $course_xml->save($path.'/'.$listid.'-courses.xml');
