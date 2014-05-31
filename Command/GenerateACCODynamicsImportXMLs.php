@@ -349,47 +349,26 @@ class GenerateACCODynamicsImportXMLs extends Command
     }
 
     protected function parseCourseGroup($container, $output, $debug, $course_group, $stage_id, $scid, $respect_no_show, &$courses, &$teachers) {
-        $course_group_title = $course_group->titel;
-        $this->debugOutput($output,$debug,'Parsing course group: '.$course_group_title);
+        if( strpos($course_group['fases'],$stage_id) !== false ) {
+            $course_group_title = $course_group->titel;
+            $this->debugOutput($output,$debug,'Parsing course group: '.$course_group_title);
 
-        // COURSES IN THIS LEVEL HANDLING
-        foreach( $course_group->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]") as $course ) {
-            $course_id = (string) $course['code'];
-            $this->debugOutput($output,$debug,'Checking course: '.$course_id);
+            // COURSES IN THIS LEVEL HANDLING
+            foreach( $course_group->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]") as $course ) {
+                $course_id = (string) $course['code'];
+                $this->debugOutput($output,$debug,'Checking course: '.$course_id);
 
-            // IF COURSE DOES NOT EXIST, ADD IT
-            if( !array_key_exists($course_id, $courses) ) {
-                // GETTING COURSE DETAILS
-                $this->debugOutput($output,$debug,'Parsing course: '.$course_id);
-                $course_details = APIUtility::getLiveCourseDetails($container,$course->taal->code,$scid,$course_id);
-                // COURSE HANDLING
-                // TODO: VERPLICHT EN KOPPELEN IN BOOM
-                $courses[$course_id] = $course_details;
+                // IF COURSE DOES NOT EXIST, ADD IT
+                if( !array_key_exists($course_id, $courses) ) {
+                    // GETTING COURSE DETAILS
+                    $this->debugOutput($output,$debug,'Parsing course: '.$course_id);
+                    $course_details = APIUtility::getLiveCourseDetails($container,$course->taal->code,$scid,$course_id);
+                    // COURSE HANDLING
+                    // TODO: VERPLICHT EN KOPPELEN IN BOOM
+                    $courses[$course_id] = $course_details;
 
-                // COURSE TEACHER HANDLING
-                foreach( $course_details['teachers'] as $teacher ) {
-                    $teacher_id = (string) $teacher['personel_id'];
-                    $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
-
-                    // IF TEACHER DOES NOT EXIST, ADD IT
-                    if( !array_key_exists($teacher_id, $teachers) ) {
-                        $this->debugOutput($output,$debug,'Parsing teacher: '.$teacher_id);
-                        $teacher_email = '';
-                        if( $teacher['on_who-is-who'] == 'True' ) {
-                            $teacher_email = $this->getTeacherEmail($container,$teacher_id);
-                        }
-
-                        $teachers[$teacher_id] = array(
-                            'firstname' => (string) $teacher['firstname'],
-                            'lastname' => (string) $teacher['lastname'],
-                            'email' => $teacher_email
-                        );
-                    }
-                }
-
-                // COURSE MODULE TEACHER HANDLING
-                foreach( $course_details['teaching_activities'] as $ola ) {
-                    foreach( $ola['teachers'] as $teacher ) {
+                    // COURSE TEACHER HANDLING
+                    foreach( $course_details['teachers'] as $teacher ) {
                         $teacher_id = (string) $teacher['personel_id'];
                         $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
 
@@ -408,15 +387,38 @@ class GenerateACCODynamicsImportXMLs extends Command
                             );
                         }
                     }
+
+                    // COURSE MODULE TEACHER HANDLING
+                    foreach( $course_details['teaching_activities'] as $ola ) {
+                        foreach( $ola['teachers'] as $teacher ) {
+                            $teacher_id = (string) $teacher['personel_id'];
+                            $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
+
+                            // IF TEACHER DOES NOT EXIST, ADD IT
+                            if( !array_key_exists($teacher_id, $teachers) ) {
+                                $this->debugOutput($output,$debug,'Parsing teacher: '.$teacher_id);
+                                $teacher_email = '';
+                                if( $teacher['on_who-is-who'] == 'True' ) {
+                                    $teacher_email = $this->getTeacherEmail($container,$teacher_id);
+                                }
+
+                                $teachers[$teacher_id] = array(
+                                    'firstname' => (string) $teacher['firstname'],
+                                    'lastname' => (string) $teacher['lastname'],
+                                    'email' => $teacher_email
+                                );
+                            }
+                        }
+                    }
                 }
             }
-        }
 
-        // HANDLING SUBLEVELS
-        $next_level = ((int) $course_group['niveau'])+1;
-        foreach( $course_group->xpath("modulegroep[@niveau='$next_level']") as $sub_course_group ) {
-            if( $respect_no_show == 0 || ($respect_no_show == 1 && $sub_course_group->tonen_in_programmagids != 'False') ) {
-                $this->parseCourseGroup($container,$output,$debug,$sub_course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers);
+            // HANDLING SUBLEVELS
+            $next_level = ((int) $course_group['niveau'])+1;
+            foreach( $course_group->xpath("modulegroep[@niveau='$next_level']") as $sub_course_group ) {
+                if( $respect_no_show == 0 || ($respect_no_show == 1 && $sub_course_group->tonen_in_programmagids != 'False') ) {
+                    $this->parseCourseGroup($container,$output,$debug,$sub_course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers);
+                }
             }
         }
     }
