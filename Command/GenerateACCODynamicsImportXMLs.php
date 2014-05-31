@@ -27,10 +27,10 @@ class GenerateACCODynamicsImportXMLs extends Command
                 'Which school do you want to generate the XMLs for?'
             )
             ->addOption(
-                'fid',
+                'fids',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Which faculty do you want to generate the XMLs for?',
+                'Which faculty or faculties do you want to generate the XMLs for? (comma seperated, no spaces)',
                 -1
             )
             ->addOption(
@@ -68,7 +68,7 @@ class GenerateACCODynamicsImportXMLs extends Command
     protected function execute(InputInterface $input, OutputInterface $output) {
         // Handling options
         $scid = $input->getOption('scid');
-        $fid = $input->getOption('fid');
+        $fids = explode(',',$input->getOption('fids'));
         $listid = $input->getOption('listid');
         $locale = $input->getOption('locale');
         $path = $input->getOption('path');
@@ -113,7 +113,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 $faculty_title = $faculty_title[0];
                 $xml_faculty_id = ++$xml_cur_level_id;
 
-                if( $fid != -1 && $faculty['id'] != $fid ) {
+                if( $fids[0] != -1 && !in_array($faculty['id'],$fids) ) {
                     $this->debugOutput($output,$debug,'Skipping faculty: '.$faculty_id.' - '.$faculty_title);
                     continue;
                 }
