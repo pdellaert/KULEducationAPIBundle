@@ -8,12 +8,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Dellaert\KULEducationAPIBundle\Utility\APIUtility;
 
-/**
- * BIG TODO:
- * Everything concerning structure XML
- * Only Courses XML is ready for now!
- **/
-
 class GenerateACCODynamicsImportXMLs extends Command
 {
 	protected function configure() {
