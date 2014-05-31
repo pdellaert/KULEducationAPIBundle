@@ -282,7 +282,8 @@ class APIUtility {
 						'name' => (string) $fChild->naam,
 						'firstname' => (string) $fChild->voornaam,
 						'lastname' => (string) $fChild->familienaam,
-						'firstletter' => (string) $fChild->voorletters
+						'firstletter' => (string) $fChild->voorletters,
+						'on_who-is-who' => (string) $fChild->{'persoon_op_wie-is-wie'}
 						);
 				}
 
@@ -297,7 +298,8 @@ class APIUtility {
 							'name' => (string) $sChild->naam,
 							'firstname' => (string) $sChild->voornaam,
 							'lastname' => (string) $sChild->familienaam,
-							'firstletter' => (string) $sChild->voorletters
+							'firstletter' => (string) $sChild->voorletters,
+							'on_who-is-who' => (string) $fChild->{'persoon_op_wie-is-wie'}
 							);
 					}
 

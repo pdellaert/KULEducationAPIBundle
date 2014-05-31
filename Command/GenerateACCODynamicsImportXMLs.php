@@ -366,21 +366,43 @@ class GenerateACCODynamicsImportXMLs extends Command
                 // TODO: VERPLICHT EN KOPPELEN IN BOOM
                 $courses[$course_id] = $course_details;
 
-                // TEACHER HANDLING
+                // COURSE TEACHER HANDLING
                 foreach( $course_details['teachers'] as $teacher ) {
                     $teacher_id = (string) $teacher['personel_id'];
-                    $course_array['teachers'][] = array(
-                        'function' => (string) $teacher['function'],
-                        'teacher_id' => $teacher_id
-                    );
 
                     // IF TEACHER DOES NOT EXIST, ADD IT
                     if( !array_key_exists($teacher_id, $teachers) ) {
+                        $teacher_email = '';
+                        if( $teacher['on_who-is-who'] == 'True' ) {
+                            $teacher_email = $this->getTeacherEmail($container,$teacher_id);
+                        }
+
                         $teachers[$teacher_id] = array(
                             'firstname' => (string) $teacher['firstname'],
                             'lastname' => (string) $teacher['lastname'],
-                            'email' => ''
+                            'email' => $teacher_email
                         );
+                    }
+                }
+
+                // COURSE MODULE TEACHER HANDLING
+                foreach( $course_details['teaching_activities'] as $ola ) {
+                    foreach( $ola['teachers'] as $teacher ) {
+                        $teacher_id = (string) $teacher['personel_id'];
+
+                        // IF TEACHER DOES NOT EXIST, ADD IT
+                        if( !array_key_exists($teacher_id, $teachers) ) {
+                            $teacher_email = '';
+                            if( $teacher['on_who-is-who'] == 'True' ) {
+                                $teacher_email = $this->getTeacherEmail($container,$teacher_id);
+                            }
+
+                            $teachers[$teacher_id] = array(
+                                'firstname' => (string) $teacher['firstname'],
+                                'lastname' => (string) $teacher['lastname'],
+                                'email' => $teacher_email
+                            );
+                        }
                     }
                 }
             }
@@ -393,6 +415,25 @@ class GenerateACCODynamicsImportXMLs extends Command
                 $this->parseCourseGroup($container,$output,$debug,$sub_course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers);
             }
         }
+    }
+
+    protected function getTeacherEmail($container,$personel_id) {
+        $baseurl = $container->getParameter('dellaert_kul_education_api.who_is_who_baseurl');
+        $teacher_content = file_get_contents($baseurl.$personel_id);
+        $teacher_mail_link = '';
+        if( $teacher_content && preg_match_all('/document\.write\(String\.fromCharCode\((\([\(\)0-9,+]*?\))[\)]{2}/',$teacher_content,$matches) ) {
+                $character_codes = explode(',',$matches[1][0]);
+                foreach( $character_codes as $code ) {
+                        $numbers = explode('+',trim($code,'()'));
+                        $char = chr(array_sum($numbers));
+                        $teacher_mail_link .= $char;
+                }
+        }
+
+        if( preg_match('/\"mailto:(.*?)\"/',$teacher_mail_link,$matches) ) {
+                return $matches[1];
+        }
+        return '';
     }
 
     protected function debugOutput($output,$debug,$msg) {

@@ -2,3 +2,4 @@ parameters:
     dellaert_kul_education_api.baseyear: 2013
     dellaert_kul_education_api.method: xml
     dellaert_kul_education_api.fallback_locale: e
+    dellaert_kul_education_api.who_is_who_baseurl: 'http://www.kuleuven.be/wieiswie/nl/person/'
