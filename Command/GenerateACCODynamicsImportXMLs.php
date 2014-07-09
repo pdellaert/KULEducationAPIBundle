@@ -86,7 +86,7 @@ class GenerateACCODynamicsImportXMLs extends Command
         $method = $container->getParameter('dellaert_kul_education_api.method');
 
         // Structure XML start
-        $structure_xml = new \DOMDocument('1.0', 'ISO-8859-1');
+        $structure_xml = new \DOMDocument('1.0', 'UTF-8');
         $structure_xml->formatOutput = true;
         // Root element
         $structure_xml_literaturelist = $structure_xml->createElement('literatuurLijst');
@@ -316,7 +316,7 @@ class GenerateACCODynamicsImportXMLs extends Command
 
         // GENERATING COURSES XML
         $this->debugOutput($output,$debug,'Creating courses XML');
-        $course_xml = new \DOMDocument('1.0', 'ISO-8859-1');
+        $course_xml = new \DOMDocument('1.0', 'UTF-8');
         $course_xml->formatOutput = true;
         
         // Root element
