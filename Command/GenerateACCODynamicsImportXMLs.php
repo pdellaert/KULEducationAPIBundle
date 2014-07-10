@@ -126,7 +126,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                     // XML Level Title
                     $structure_xml_level_title = $structure_xml->createElement('titel');
                     {
-                        $structure_xml_level_title_cdata = $structure_xml->createCDATASection($faculty_title);
+                        $structure_xml_level_title_cdata = $structure_xml->createCDATASection(utf8_encode($faculty_title));
                         $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
                     }
                     $structure_xml_level->appendChild($structure_xml_level_title);
@@ -160,7 +160,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                         // XML Level Title
                         $structure_xml_level_title = $structure_xml->createElement('titel');
                         {
-                            $structure_xml_level_title_cdata = $structure_xml->createCDATASection($level_title);
+                            $structure_xml_level_title_cdata = $structure_xml->createCDATASection(utf8_encode($level_title));
                             $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
                         }
                         $structure_xml_level->appendChild($structure_xml_level_title);
@@ -191,7 +191,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                                 // XML Level Title
                                 $structure_xml_level_title = $structure_xml->createElement('titel');
                                 {
-                                    $structure_xml_level_title_cdata = $structure_xml->createCDATASection($study_title);
+                                    $structure_xml_level_title_cdata = $structure_xml->createCDATASection(utf8_encode($study_title));
                                     $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
                                 }
                                 $structure_xml_level->appendChild($structure_xml_level_title);
@@ -224,7 +224,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                                         // XML Level Title
                                         $structure_xml_level_title = $structure_xml->createElement('titel');
                                         {
-                                            $structure_xml_level_title_cdata = $structure_xml->createCDATASection($program_title.' ('.$program_studypoints.')');
+                                            $structure_xml_level_title_cdata = $structure_xml->createCDATASection(utf8_encode($program_title.' ('.$program_studypoints.')'));
                                             $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
                                         }
                                         $structure_xml_level->appendChild($structure_xml_level_title);
@@ -274,7 +274,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                                                     // XML Level Title
                                                     $structure_xml_level_title = $structure_xml->createElement('titel');
                                                     {
-                                                        $structure_xml_level_title_cdata = $structure_xml->createCDATASection($stage_title);
+                                                        $structure_xml_level_title_cdata = $structure_xml->createCDATASection(utf8_encode($stage_title));
                                                         $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
                                                     }
                                                     $structure_xml_level->appendChild($structure_xml_level_title);
@@ -339,21 +339,21 @@ class GenerateACCODynamicsImportXMLs extends Command
                 // Teacher firstname element
                 $course_xml_teacher_firstname = $course_xml->createElement('voornaam');
                 {
-                    $course_xml_teacher_firstname_cdata = $course_xml->createCDATASection($teacher['firstname']);
+                    $course_xml_teacher_firstname_cdata = $course_xml->createCDATASection(utf8_encode($teacher['firstname']));
                     $course_xml_teacher_firstname->appendChild($course_xml_teacher_firstname_cdata);
                 }
                 $course_xml_teacher->appendChild($course_xml_teacher_firstname);
                 // Teacher lastname element
                 $course_xml_teacher_lastname = $course_xml->createElement('familienaam');
                 {
-                    $course_xml_teacher_lastname_cdata = $course_xml->createCDATASection($teacher['lastname']);
+                    $course_xml_teacher_lastname_cdata = $course_xml->createCDATASection(utf8_encode($teacher['lastname']));
                     $course_xml_teacher_lastname->appendChild($course_xml_teacher_lastname_cdata);
                 }
                 $course_xml_teacher->appendChild($course_xml_teacher_lastname);
                 // Teacher email element
                 $course_xml_teacher_email = $course_xml->createElement('email');
                 {
-                    $course_xml_teacher_email_cdata = $course_xml->createCDATASection($teacher['email']);
+                    $course_xml_teacher_email_cdata = $course_xml->createCDATASection(utf8_encode($teacher['email']));
                     $course_xml_teacher_email->appendChild($course_xml_teacher_email_cdata);
                 }
                 $course_xml_teacher->appendChild($course_xml_teacher_email);
@@ -378,14 +378,14 @@ class GenerateACCODynamicsImportXMLs extends Command
                 // Course Title element
                 $course_xml_course_title = $course_xml->createElement('titel');
                 {
-                    $course_xml_course_title_cdata = $course_xml->createCDATASection($course['title']);
+                    $course_xml_course_title_cdata = $course_xml->createCDATASection(utf8_encode($course['title']));
                     $course_xml_course_title->appendChild($course_xml_course_title_cdata);
                 }
                 $course_xml_course->appendChild($course_xml_course_title);
                 // Course Info element
                 $course_xml_course_info = $course_xml->createElement('info');
                 {
-                    $course_xml_course_info_cdata = $course_xml->createCDATASection(substr(html_entity_decode(strip_tags($course['aims'])),0,250));
+                    $course_xml_course_info_cdata = $course_xml->createCDATASection(utf8_encode(substr(html_entity_decode(strip_tags($course['aims'])),0,250)));
                     $course_xml_course_info->appendChild($course_xml_course_info_cdata);
                 }
                 $course_xml_course->appendChild($course_xml_course_info);
@@ -427,14 +427,14 @@ class GenerateACCODynamicsImportXMLs extends Command
                     // Course Title element
                     $course_xml_ola_title = $course_xml->createElement('titel');
                     {
-                        $course_xml_ola_title_cdata = $course_xml->createCDATASection($course_ola['title']);
+                        $course_xml_ola_title_cdata = $course_xml->createCDATASection(utf8_encode($course_ola['title']));
                         $course_xml_ola_title->appendChild($course_xml_ola_title_cdata);
                     }
                     $course_xml_ola->appendChild($course_xml_ola_title);
                     // Course Info element
                     $course_xml_ola_info = $course_xml->createElement('info');
                     {
-                        $course_xml_ola_info_cdata = $course_xml->createCDATASection(substr(html_entity_decode(strip_tags($course_ola['content'])),0,250));
+                        $course_xml_ola_info_cdata = $course_xml->createCDATASection(utf8_encode(substr(html_entity_decode(strip_tags($course_ola['content'])),0,250)));
                         $course_xml_ola_info->appendChild($course_xml_ola_info_cdata);
                     }
                     $course_xml_ola->appendChild($course_xml_ola_info);
@@ -500,7 +500,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 // XML Level Title
                 $structure_xml_level_title = $structure_xml->createElement('titel');
                 {
-                    $structure_xml_level_title_cdata = $structure_xml->createCDATASection($course_group_title);
+                    $structure_xml_level_title_cdata = $structure_xml->createCDATASection(utf8_encode($course_group_title));
                     $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
                 }
                 $structure_xml_level->appendChild($structure_xml_level_title);
