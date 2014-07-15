@@ -28,6 +28,13 @@ class GenerateACCODynamicsImportXMLs extends Command
                 -1
             )
             ->addOption(
+                'lids',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Which level or levels do you want to generate the XMLs for? (comma seperated, no spaces)',
+                -1
+            )
+            ->addOption(
                 'listid',
                 null,
                 InputOption::VALUE_REQUIRED,
@@ -63,6 +70,7 @@ class GenerateACCODynamicsImportXMLs extends Command
         // Handling options
         $scid = $input->getOption('scid');
         $fids = explode(',',$input->getOption('fids'));
+        $lids = explode(',',$input->getOption('lids'));
         $listid = $input->getOption('listid');
         $locale = $input->getOption('locale');
         $path = $input->getOption('path');
@@ -145,6 +153,11 @@ class GenerateACCODynamicsImportXMLs extends Command
                     }
                     $level_title = $level_title[0];
                     $xml_level_id = ++$xml_cur_level_id;
+
+                    if( $lids[0] != -1 && !in_array($level['id'],$lids) ) {
+                        $this->debugOutput($output,$debug,'Skipping level: '.$level_id.' - '.$level_title);
+                        continue;
+                    }
 
                     $this->debugOutput($output,$debug,'Parsing level: '.$level_id.' - '.$level_title);
 
