@@ -129,6 +129,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 }
 
                 $this->debugOutput($output,$debug,'Waiting '.$wait_seconds.' seconds before next faculty');
+                sleep($wait_seconds);
                 $this->debugOutput($output,$debug,'Parsing faculty: '.$faculty_id.' - '.$faculty_title);
 
                 // Structure XML Faculty Adding
