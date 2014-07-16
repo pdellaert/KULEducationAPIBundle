@@ -53,6 +53,13 @@ class GenerateACCODynamicsImportXMLs extends Command
                 'Where do you want to store the XMLs?'
             )
             ->addOption(
+                'wait-seconds',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'How many seconds does the script wait between faculties to prevent overload?',
+                0
+            )
+            ->addOption(
                 'showhidden',
                 null,
                 InputOption::VALUE_NONE,
@@ -74,6 +81,7 @@ class GenerateACCODynamicsImportXMLs extends Command
         $listid = $input->getOption('listid');
         $locale = $input->getOption('locale');
         $path = $input->getOption('path');
+        $wait_seconds = $input->getOption('wait-seconds');
         $showhidden = $input->getOption('showhidden');
         $debug = $input->getOption('debug');
         $respect_no_show = !$showhidden;
@@ -120,6 +128,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                     continue;
                 }
 
+                $this->debugOutput($output,$debug,'Waiting '.$wait_seconds.' seconds before next faculty');
                 $this->debugOutput($output,$debug,'Parsing faculty: '.$faculty_id.' - '.$faculty_title);
 
                 // Structure XML Faculty Adding
