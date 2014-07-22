@@ -86,6 +86,9 @@ class GenerateACCODynamicsImportXMLs extends Command
         $debug = $input->getOption('debug');
         $respect_no_show = !$showhidden;
 
+        // Disabling XML errors and parsing them in the end
+        libxml_use_internal_errors(true);
+
         // Base variables
         $teachers = array();
         $courses = array();
@@ -500,6 +503,12 @@ class GenerateACCODynamicsImportXMLs extends Command
             $output->writeln('Created courses XML, containing '.count($courses).' courses and '.count($teachers).' teachers, with size '.$course_xml_result.' bytes');
         } else {
             $output->writeln('Failed to create courses XML, containing '.count($courses).' courses and '.count($teachers).' teachers!');
+        }
+
+        $output->writeln('List of XML errors: ');
+        // Handling XML errors
+        foreach (libxml_get_errors() as $error) {
+            $output->writeln($error->code);
         }
     }
 
