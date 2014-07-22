@@ -28,7 +28,7 @@ class APIUtility {
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml'; 
 		
 		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+		if( $xml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			foreach( $xml->xpath("data/instelling/hoofddepartement") as $fChild ) {
 				$title = $fChild->xpath("titels/titel[@taal='$language']");
 
@@ -58,7 +58,7 @@ class APIUtility {
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
 		
 		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+		if( $xml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			$faculty = $xml->xpath("data/instelling/hoofddepartement[@id='$fid']");
 
 			if( !empty($faculty) ) {
@@ -94,7 +94,7 @@ class APIUtility {
 		$callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
 		
 		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+		if( $xml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			$faculty = $xml->xpath("data/instelling/hoofddepartement[@id='$fid']");
 
 			if( !empty($faculty) ) {
@@ -127,7 +127,7 @@ class APIUtility {
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$sid.'.xml';
 
 		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+		if( $xml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			foreach( $xml->xpath("data/opleiding/programmas/programma") as $fChild ){
 				$title = $fChild->titel;
 
@@ -154,7 +154,7 @@ class APIUtility {
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
 
 		// Getting XML
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+		if( $xml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			foreach( $xml->xpath("data/programma/fases/fase") as $fChild ) {
 				$data[] = array('id'=> (int) $fChild['code']);
 			}
@@ -176,7 +176,7 @@ class APIUtility {
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$pid.'.xml';
 
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+		if( $xml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			$cg = $xml->xpath("data/programma/modulegroep[@niveau='1']");
 			if( !empty($cg) && ( $respect_no_show == 0 || ($respect_no_show == 1 && $cg[0]->tonen_in_programmagids != 'False') ) ) {
 				$data[(string) $cg[0]->titel] = APIUtility::parseCourseGroupInLevel($cg[0],$phid,$respect_no_show);
@@ -271,7 +271,7 @@ class APIUtility {
 		$method = $container->getParameter('dellaert_kul_education_api.method');
 		$callUrl = $url.$year.'/syllabi/'.$language.'/'.$method.'/'.$cid.strtoupper($language).'.xml';
 
-		if( $xml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+		if( $xml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
 			$course = $xml->xpath("data/opleidingsonderdeel");
 			if( !empty($course) ) {
 				$teachers = array();

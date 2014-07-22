@@ -86,9 +86,6 @@ class GenerateACCODynamicsImportXMLs extends Command
         $debug = $input->getOption('debug');
         $respect_no_show = !$showhidden;
 
-        // Disabling XML errors and parsing them in the end
-        libxml_use_internal_errors(true);
-
         // Base variables
         $teachers = array();
         $courses = array();
@@ -115,7 +112,7 @@ class GenerateACCODynamicsImportXMLs extends Command
 
         // Main index XML
         $callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
-        if( $mainXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+        if( $mainXml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
             // FACULTY HANDLING
             foreach( $mainXml->xpath("data/instelling/hoofddepartement") as $faculty ) {
                 $faculty_id = $faculty['id'];
@@ -229,7 +226,7 @@ class GenerateACCODynamicsImportXMLs extends Command
 
                             // PROGRAM HANDLING
                             $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$study_id.'.xml';
-                            if( $studyXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+                            if( $studyXml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
                                 foreach( $studyXml->xpath("data/opleiding/programmas/programma") as $program ) {
                                     $program_id = $program['id'];
                                     $program_title = $program->titel;
@@ -263,7 +260,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                                     if( !empty($program_title) ) {
                                         // STAGE HANDLING
                                         $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$program_id.'.xml';
-                                        if( $programXml = simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
+                                        if( $programXml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
                                             foreach( $programXml->xpath("data/programma/fases/fase") as $stage ) {
                                                 $stage_id = (int) $stage['code'];
                                                 if( $locale == 'nl' ) {
@@ -504,12 +501,6 @@ class GenerateACCODynamicsImportXMLs extends Command
         } else {
             $output->writeln('Failed to create courses XML, containing '.count($courses).' courses and '.count($teachers).' teachers!');
         }
-
-        $output->writeln('List of XML errors: ');
-        // Handling XML errors
-        foreach (libxml_get_errors() as $error) {
-            $output->writeln($error->code);
-        }
     }
 
     protected function parseCourseGroup($container, $output, $debug, $course_group, $stage_id, $scid, $respect_no_show, &$courses, &$teachers, $structure_xml, $structure_xml_literaturelist, $xml_parent_id, &$xml_cur_level_id) {
@@ -627,7 +618,7 @@ class GenerateACCODynamicsImportXMLs extends Command
 
     protected function getTeacherEmail($container,$personel_id) {
         $baseurl = $container->getParameter('dellaert_kul_education_api.who_is_who_baseurl');
-        $teacher_content = file_get_contents($baseurl.$personel_id);
+        $teacher_content = @file_get_contents($baseurl.$personel_id);
         $teacher_mail_link = '';
         if( $teacher_content && preg_match_all('/document\.write\(String\.fromCharCode\((\([\(\)0-9,+]*?\))[\)]{2}/',$teacher_content,$matches) ) {
                 $character_codes = explode(',',$matches[1][0]);
