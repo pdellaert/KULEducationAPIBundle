@@ -554,34 +554,14 @@ class GenerateACCODynamicsImportXMLs extends Command
                     // GETTING COURSE DETAILS
                     $this->debugOutput($output,$debug,'Parsing course: '.$course_id);
                     $course_details = APIUtility::getLiveCourseDetails($container,$course->taal->code,$scid,$course_id);
-                    // COURSE HANDLING
-                    // TODO: VERPLICHT EN KOPPELEN IN BOOM
-                    $courses[$course_id] = $course_details;
 
-                    // COURSE TEACHER HANDLING
-                    foreach( $course_details['teachers'] as $teacher ) {
-                        $teacher_id = (string) $teacher['personel_id'];
-                        $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
+                    if( !empty($course_details) ) {
+                        // COURSE HANDLING
+                        // TODO: VERPLICHT EN KOPPELEN IN BOOM
+                        $courses[$course_id] = $course_details;
 
-                        // IF TEACHER DOES NOT EXIST, ADD IT
-                        if( !array_key_exists($teacher_id, $teachers) ) {
-                            $this->debugOutput($output,$debug,'Parsing teacher: '.$teacher_id);
-                            $teacher_email = '';
-                            if( $teacher['on_who-is-who'] == 'True' ) {
-                                $teacher_email = $this->getTeacherEmail($container,$teacher_id);
-                            }
-
-                            $teachers[$teacher_id] = array(
-                                'firstname' => (string) $teacher['firstname'],
-                                'lastname' => (string) $teacher['lastname'],
-                                'email' => $teacher_email
-                            );
-                        }
-                    }
-
-                    // COURSE MODULE TEACHER HANDLING
-                    foreach( $course_details['teaching_activities'] as $ola ) {
-                        foreach( $ola['teachers'] as $teacher ) {
+                        // COURSE TEACHER HANDLING
+                        foreach( $course_details['teachers'] as $teacher ) {
                             $teacher_id = (string) $teacher['personel_id'];
                             $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
 
@@ -598,6 +578,29 @@ class GenerateACCODynamicsImportXMLs extends Command
                                     'lastname' => (string) $teacher['lastname'],
                                     'email' => $teacher_email
                                 );
+                            }
+                        }
+
+                        // COURSE MODULE TEACHER HANDLING
+                        foreach( $course_details['teaching_activities'] as $ola ) {
+                            foreach( $ola['teachers'] as $teacher ) {
+                                $teacher_id = (string) $teacher['personel_id'];
+                                $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
+
+                                // IF TEACHER DOES NOT EXIST, ADD IT
+                                if( !array_key_exists($teacher_id, $teachers) ) {
+                                    $this->debugOutput($output,$debug,'Parsing teacher: '.$teacher_id);
+                                    $teacher_email = '';
+                                    if( $teacher['on_who-is-who'] == 'True' ) {
+                                        $teacher_email = $this->getTeacherEmail($container,$teacher_id);
+                                    }
+
+                                    $teachers[$teacher_id] = array(
+                                        'firstname' => (string) $teacher['firstname'],
+                                        'lastname' => (string) $teacher['lastname'],
+                                        'email' => $teacher_email
+                                    );
+                                }
                             }
                         }
                     }
