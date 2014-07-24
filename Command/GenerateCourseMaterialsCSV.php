@@ -49,7 +49,6 @@ class GenerateCourseMaterialsCSV extends Command
 		$fid = $input->getOption('fid');
 		$lid = $input->getOption('lid');
 		$locale = $input->getOption('locale'); 
-		$schools = ACCOUtility::getLiveSchoolsbyIdTitle($this->container,$locale);
 
 		// Headers
 		$output->write("\xEF\xBB\xBF");
@@ -115,7 +114,7 @@ class GenerateCourseMaterialsCSV extends Command
 						$courseMaterial = substr($courseMaterial, 0, -3);
 
 						//'"Laatste aanpassing op";"Instelling";"Opleiding";"Jaar";"Semester";"Vak";"Vaknummer";"Verplicht/Keuze";"Materiaal";"Aantal studenten";"Docent 1 voornaam";"Docent 1 naam";"Docent 1 e-mail";"Docent 1 Telefoon";"Docent 2 voornaam";"Docent 2 naam";"Docent 2 e-mail";"Docent 2 Telefoon";"Docent 3 voornaam";"Docent 3 naam";"Docent 3 e-mail";"Docent 3 Telefoon"');
-						$courseLine = '"'.date("d/m/Y").'";"'.$schools[$scid].'";"'.$programTxt.'";"'.$ftxt.'";"'.$ptxt.'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.$course['course_id'].'";"'.$mtxt.'";"'.$courseMaterial.'";"";';
+						$courseLine = '"'.date("d/m/Y").'";"'.$scid.'";"'.$programTxt.'";"'.$ftxt.'";"'.$ptxt.'";"'.preg_replace('/\s+/',' ',$course['title']).'";"'.$course['course_id'].'";"'.$mtxt.'";"'.$courseMaterial.'";"";';
 
 						$teachers = $course['teachers'];
 						switch(count($teachers)) {
