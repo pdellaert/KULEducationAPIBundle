@@ -61,7 +61,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 'disable-type',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'What levels need to be skipped? Possible values: faculty, level, study, program, phase, sublevel. Can be added multiple times for multiple values.'
+                'What levels need to be skipped? Possible values: faculty, level, study, program, stage, sublevel. Can be added multiple times for multiple values.'
             )
             ->addOption(
                 'showhidden',
@@ -128,7 +128,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 $faculty_title = $faculty_title[0];
                 $xml_faculty_id = ++$xml_cur_level_id;
 
-                if( $fids[0] != -1 && !in_array($faculty['id'],$fids) ) {
+                if( !in_array($faculty_id,$fids) ) {
                     $this->debugOutput($output,$debug,'Skipping faculty: '.$faculty_id.' - '.$faculty_title);
                     continue;
                 }
@@ -137,27 +137,29 @@ class GenerateACCODynamicsImportXMLs extends Command
                 sleep($wait_seconds);
                 $this->debugOutput($output,$debug,'Parsing faculty: '.$faculty_id.' - '.$faculty_title);
 
-                // Structure XML Faculty Adding
-                $structure_xml_level = $structure_xml->createElement('niveau');
-                {
-                    // XML Level ID
-                    $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_faculty_id);
-                    $structure_xml_level->appendChild($structure_xml_level_id);
-                    // XML Level Parent ID
-                    $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID');
-                    $structure_xml_level->appendChild($structure_xml_parent_level_id);
-                    // XML Level Title
-                    $structure_xml_level_title = $structure_xml->createElement('titel');
+                if( !in_array('faculty',$disable_types) ) {
+                    // Structure XML Faculty Adding
+                    $structure_xml_level = $structure_xml->createElement('niveau');
                     {
-                        $structure_xml_level_title_cdata = $structure_xml->createCDATASection($faculty_title);
-                        $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                        // XML Level ID
+                        $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_faculty_id);
+                        $structure_xml_level->appendChild($structure_xml_level_id);
+                        // XML Level Parent ID
+                        $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID');
+                        $structure_xml_level->appendChild($structure_xml_parent_level_id);
+                        // XML Level Title
+                        $structure_xml_level_title = $structure_xml->createElement('titel');
+                        {
+                            $structure_xml_level_title_cdata = $structure_xml->createCDATASection($faculty_title);
+                            $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                        }
+                        $structure_xml_level->appendChild($structure_xml_level_title);
+                        // XML Level Mandatory
+                        $structure_xml_level_mandatory = $structure_xml->createElement('verplicht');
+                        $structure_xml_level->appendChild($structure_xml_level_mandatory);
                     }
-                    $structure_xml_level->appendChild($structure_xml_level_title);
-                    // XML Level Mandatory
-                    $structure_xml_level_mandatory = $structure_xml->createElement('verplicht');
-                    $structure_xml_level->appendChild($structure_xml_level_mandatory);
+                    $structure_xml_literaturelist->appendChild($structure_xml_level);
                 }
-                $structure_xml_literaturelist->appendChild($structure_xml_level);
 
                 // LEVEL HANDLING
                 foreach( $faculty->xpath("kwalificatie/classificatie/graad") as $level ) {
@@ -169,34 +171,40 @@ class GenerateACCODynamicsImportXMLs extends Command
                     $level_title = $level_title[0];
                     $xml_level_id = ++$xml_cur_level_id;
 
-                    if( $lids[0] != -1 && !in_array($level['id'],$lids) ) {
+                    if( !in_array($level_id,$lids) ) {
                         $this->debugOutput($output,$debug,'Skipping level: '.$level_id.' - '.$level_title);
                         continue;
                     }
 
                     $this->debugOutput($output,$debug,'Parsing level: '.$level_id.' - '.$level_title);
 
-                    // Structure XML Level Adding
-                    $structure_xml_level = $structure_xml->createElement('niveau');
-                    {
-                        // XML Level ID
-                        $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_level_id);
-                        $structure_xml_level->appendChild($structure_xml_level_id);
-                        // XML Level Parent ID
-                        $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_faculty_id);
-                        $structure_xml_level->appendChild($structure_xml_parent_level_id);
-                        // XML Level Title
-                        $structure_xml_level_title = $structure_xml->createElement('titel');
+                    if( !in_array('level',$disable_types) ) {
+                        // Structure XML Level Adding
+                        $structure_xml_level = $structure_xml->createElement('niveau');
                         {
-                            $structure_xml_level_title_cdata = $structure_xml->createCDATASection($level_title);
-                            $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                            // XML Level ID
+                            $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_level_id);
+                            $structure_xml_level->appendChild($structure_xml_level_id);
+                            // XML Level Parent ID
+                            if( in_array('faculty',$disable_types) ) {
+                                $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID');
+                            } else {
+                                $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_faculty_id);
+                            }
+                            $structure_xml_level->appendChild($structure_xml_parent_level_id);
+                            // XML Level Title
+                            $structure_xml_level_title = $structure_xml->createElement('titel');
+                            {
+                                $structure_xml_level_title_cdata = $structure_xml->createCDATASection($level_title);
+                                $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                            }
+                            $structure_xml_level->appendChild($structure_xml_level_title);
+                            // XML Level Mandatory
+                            $structure_xml_level_mandatory = $structure_xml->createElement('verplicht');
+                            $structure_xml_level->appendChild($structure_xml_level_mandatory);
                         }
-                        $structure_xml_level->appendChild($structure_xml_level_title);
-                        // XML Level Mandatory
-                        $structure_xml_level_mandatory = $structure_xml->createElement('verplicht');
-                        $structure_xml_level->appendChild($structure_xml_level_mandatory);
+                        $structure_xml_literaturelist->appendChild($structure_xml_level);
                     }
-                    $structure_xml_literaturelist->appendChild($structure_xml_level);
 
                     // STUDY HANDLING
                     foreach( $level->xpath("opleidingen/opleiding") as $study ) {
@@ -207,27 +215,35 @@ class GenerateACCODynamicsImportXMLs extends Command
 
                             $this->debugOutput($output,$debug,'Parsing study: '.$study_id.' - '.$study_title);
 
-                            // Structure XML Study Adding
-                            $structure_xml_level = $structure_xml->createElement('niveau');
-                            {
-                                // XML Level ID
-                                $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_study_id);
-                                $structure_xml_level->appendChild($structure_xml_level_id);
-                                // XML Level Parent ID
-                                $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_level_id);
-                                $structure_xml_level->appendChild($structure_xml_parent_level_id);
-                                // XML Level Title
-                                $structure_xml_level_title = $structure_xml->createElement('titel');
+                            if( !in_array('study', $disable_types) ) {
+                                // Structure XML Study Adding
+                                $structure_xml_level = $structure_xml->createElement('niveau');
                                 {
-                                    $structure_xml_level_title_cdata = $structure_xml->createCDATASection($study_title);
-                                    $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                                    // XML Level ID
+                                    $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_study_id);
+                                    $structure_xml_level->appendChild($structure_xml_level_id);
+                                    // XML Level Parent ID
+                                    if( in_array('faculty',$disable_types) && in_array('level',$disable_types) ) {
+                                        $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID');
+                                    } elseif( in_array('level',$disable_types) ) {
+                                        $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_faculty_id);
+                                    } else {
+                                        $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_level_id);
+                                    }
+                                    $structure_xml_level->appendChild($structure_xml_parent_level_id);
+                                    // XML Level Title
+                                    $structure_xml_level_title = $structure_xml->createElement('titel');
+                                    {
+                                        $structure_xml_level_title_cdata = $structure_xml->createCDATASection($study_title);
+                                        $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                                    }
+                                    $structure_xml_level->appendChild($structure_xml_level_title);
+                                    // XML Level Mandatory
+                                    $structure_xml_level_mandatory = $structure_xml->createElement('verplicht');
+                                    $structure_xml_level->appendChild($structure_xml_level_mandatory);
                                 }
-                                $structure_xml_level->appendChild($structure_xml_level_title);
-                                // XML Level Mandatory
-                                $structure_xml_level_mandatory = $structure_xml->createElement('verplicht');
-                                $structure_xml_level->appendChild($structure_xml_level_mandatory);
+                                $structure_xml_literaturelist->appendChild($structure_xml_level);
                             }
-                            $structure_xml_literaturelist->appendChild($structure_xml_level);
 
                             // PROGRAM HANDLING
                             $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/CQ_'.$study_id.'.xml';
@@ -240,27 +256,37 @@ class GenerateACCODynamicsImportXMLs extends Command
 
                                     $this->debugOutput($output,$debug,'Parsing program: '.$program_id.' - '.$program_title.' ('.$program_studypoints.')');
 
-                                    // Structure XML Program Adding
-                                    $structure_xml_level = $structure_xml->createElement('niveau');
-                                    {
-                                        // XML Level ID
-                                        $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_program_id);
-                                        $structure_xml_level->appendChild($structure_xml_level_id);
-                                        // XML Level Parent ID
-                                        $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_study_id);
-                                        $structure_xml_level->appendChild($structure_xml_parent_level_id);
-                                        // XML Level Title
-                                        $structure_xml_level_title = $structure_xml->createElement('titel');
+                                    if( !in_array('program',$disable_types) ) {
+                                        // Structure XML Program Adding
+                                        $structure_xml_level = $structure_xml->createElement('niveau');
                                         {
-                                            $structure_xml_level_title_cdata = $structure_xml->createCDATASection($program_title.' ('.$program_studypoints.')');
-                                            $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                                            // XML Level ID
+                                            $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_program_id);
+                                            $structure_xml_level->appendChild($structure_xml_level_id);
+                                            // XML Level Parent ID
+                                            if( in_array('faculty',$disable_types) && in_array('level',$disable_types) && in_array('study',$disable_types) ){
+                                                $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID');
+                                            } elseif( in_array('level',$disable_types) && in_array('study',$disable_types) ) {
+                                                $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_faculty_id);
+                                            } elseif( in_array('study',$disable_types) ) {
+                                                $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_level_id);
+                                            } else {
+                                                $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_study_id);
+                                            }
+                                            $structure_xml_level->appendChild($structure_xml_parent_level_id);
+                                            // XML Level Title
+                                            $structure_xml_level_title = $structure_xml->createElement('titel');
+                                            {
+                                                $structure_xml_level_title_cdata = $structure_xml->createCDATASection($program_title.' ('.$program_studypoints.')');
+                                                $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                                            }
+                                            $structure_xml_level->appendChild($structure_xml_level_title);
+                                            // XML Level Mandatory
+                                            $structure_xml_level_mandatory = $structure_xml->createElement('verplicht');
+                                            $structure_xml_level->appendChild($structure_xml_level_mandatory);
                                         }
-                                        $structure_xml_level->appendChild($structure_xml_level_title);
-                                        // XML Level Mandatory
-                                        $structure_xml_level_mandatory = $structure_xml->createElement('verplicht');
-                                        $structure_xml_level->appendChild($structure_xml_level_mandatory);
+                                        $structure_xml_literaturelist->appendChild($structure_xml_level);
                                     }
-                                    $structure_xml_literaturelist->appendChild($structure_xml_level);
 
                                     if( !empty($program_title) ) {
                                         // STAGE HANDLING
@@ -290,27 +316,39 @@ class GenerateACCODynamicsImportXMLs extends Command
 
                                                 $this->debugOutput($output,$debug,'Parsing stage: '.$stage_id);
 
-                                                // Structure XML Stage Adding
-                                                $structure_xml_level = $structure_xml->createElement('niveau');
-                                                {
-                                                    // XML Level ID
-                                                    $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_stage_id);
-                                                    $structure_xml_level->appendChild($structure_xml_level_id);
-                                                    // XML Level Parent ID
-                                                    $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_program_id);
-                                                    $structure_xml_level->appendChild($structure_xml_parent_level_id);
-                                                    // XML Level Title
-                                                    $structure_xml_level_title = $structure_xml->createElement('titel');
+                                                if( !in_array('stage',$disable_types) ) {
+                                                    // Structure XML Stage Adding
+                                                    $structure_xml_level = $structure_xml->createElement('niveau');
                                                     {
-                                                        $structure_xml_level_title_cdata = $structure_xml->createCDATASection($stage_title);
-                                                        $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                                                        // XML Level ID
+                                                        $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_stage_id);
+                                                        $structure_xml_level->appendChild($structure_xml_level_id);
+                                                        // XML Level Parent ID
+                                                        if( in_array('faculty',$disable_types) && in_array('level',$disable_types) && in_array('study',$disable_types) && in_array('program',$disable_types) ){
+                                                            $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID');
+                                                        } elseif( in_array('level',$disable_types) && in_array('study',$disable_types) && in_array('program',$disable_types) ) {
+                                                            $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_faculty_id);
+                                                        } elseif( in_array('study',$disable_types) && in_array('program',$disable_types) ) {
+                                                            $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_level_id);
+                                                        } elseif(  in_array('program',$disable_types) ) {
+                                                            $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_study_id);
+                                                        } else {
+                                                            $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_program_id);
+                                                        }
+                                                        $structure_xml_level->appendChild($structure_xml_parent_level_id);
+                                                        // XML Level Title
+                                                        $structure_xml_level_title = $structure_xml->createElement('titel');
+                                                        {
+                                                            $structure_xml_level_title_cdata = $structure_xml->createCDATASection($stage_title);
+                                                            $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                                                        }
+                                                        $structure_xml_level->appendChild($structure_xml_level_title);
+                                                        // XML Level Mandatory
+                                                        $structure_xml_level_mandatory = $structure_xml->createElement('verplicht');
+                                                        $structure_xml_level->appendChild($structure_xml_level_mandatory);
                                                     }
-                                                    $structure_xml_level->appendChild($structure_xml_level_title);
-                                                    // XML Level Mandatory
-                                                    $structure_xml_level_mandatory = $structure_xml->createElement('verplicht');
-                                                    $structure_xml_level->appendChild($structure_xml_level_mandatory);
+                                                    $structure_xml_literaturelist->appendChild($structure_xml_level);
                                                 }
-                                                $structure_xml_literaturelist->appendChild($structure_xml_level);
 
                                                 foreach( $programXml->xpath("data/programma/modulegroep[@niveau='1']") as $course_group ) {
                                                     if( $respect_no_show == 0 || ($respect_no_show == 1 && $course_group->tonen_in_programmagids != 'False') ) {
