@@ -350,24 +350,100 @@ class GenerateACCODynamicsImportXMLs extends Command
                                                     $structure_xml_literaturelist->appendChild($structure_xml_level);
                                                 }
 
-                                                // Setting the parent level for the course groups and courses start
-                                                if( in_array('faculty',$disable_types) && in_array('level',$disable_types) && in_array('study',$disable_types) && in_array('program',$disable_types) && in_array('stage',$disable_types) ){
-                                                    $xml_cg_parent_id = null;
-                                                } elseif( in_array('level',$disable_types) && in_array('study',$disable_types) && in_array('program',$disable_types) && in_array('stage',$disable_types) ) {
-                                                    $xml_cg_parent_id = $xml_faculty_id;
-                                                } elseif( in_array('study',$disable_types) && in_array('program',$disable_types) && in_array('stage',$disable_types) ) {
-                                                    $xml_cg_parent_id = $xml_level_id;
-                                                } elseif(  in_array('program',$disable_types) && in_array('stage',$disable_types) ) {
-                                                    $xml_cg_parent_id = $xml_study_id;
-                                                } elseif( in_array('stage',$disable_types) ) {
-                                                    $xml_cg_parent_id = $xml_program_id;
-                                                } else {
-                                                    $xml_cg_parent_id = $xml_stage_id;
-                                                }
+                                                if( in_array('sublevel',$disable_types) ) {
+                                                    // COURSES HANDLING
+                                                    foreach( $programXml->xpath("//opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]") as $course ) {
+                                                        $course_id = (string) $course['code'];
+                                                        $this->debugOutput($output,$debug,'Checking course: '.$course_id);
 
-                                                foreach( $programXml->xpath("data/programma/modulegroep[@niveau='1']") as $course_group ) {
-                                                    if( $respect_no_show == 0 || ($respect_no_show == 1 && $course_group->tonen_in_programmagids != 'False') ) {
-                                                        $this->parseCourseGroup($container,$output,$debug,$course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers,$structure_xml,$structure_xml_literaturelist,$xml_cg_parent_id,$xml_cur_level_id,$disable_types,0);
+                                                        // XML Level Course Adding
+                                                        $structure_xml_course = $structure_xml->createElement('vak');
+                                                        {
+                                                            // XML Course ID
+                                                            $structure_xml_course_id = $structure_xml->createElement('vak-ID',$course_id);
+                                                            $structure_xml_course->appendChild($structure_xml_course_id);
+                                                            // XML Courese Mandatory
+                                                            $structure_xml_course_mandatory = $structure_xml->createElement('verplicht',(string) $course['verplicht']);
+                                                            $structure_xml_course->appendChild($structure_xml_course_mandatory);
+                                                        }
+                                                        $structure_xml_level->appendChild($structure_xml_course);
+
+                                                        // IF COURSE DOES NOT EXIST, ADD IT
+                                                        if( !array_key_exists($course_id, $courses) ) {
+                                                            // GETTING COURSE DETAILS
+                                                            $this->debugOutput($output,$debug,'Parsing course: '.$course_id);
+                                                            $course_details = APIUtility::getLiveCourseDetails($container,$course->taal->code,$scid,$course_id);
+
+                                                            if( !empty($course_details) ) {
+                                                                // COURSE HANDLING
+                                                                $courses[$course_id] = $course_details;
+
+                                                                // COURSE TEACHER HANDLING
+                                                                foreach( $course_details['teachers'] as $teacher ) {
+                                                                    $teacher_id = (string) $teacher['personel_id'];
+                                                                    $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
+
+                                                                    // IF TEACHER DOES NOT EXIST, ADD IT
+                                                                    if( !array_key_exists($teacher_id, $teachers) ) {
+                                                                        $this->debugOutput($output,$debug,'Parsing teacher: '.$teacher_id);
+                                                                        $teacher_email = '';
+                                                                        if( $teacher['on_who-is-who'] == 'True' ) {
+                                                                            $teacher_email = $this->getTeacherEmail($container,$teacher_id);
+                                                                        }
+
+                                                                        $teachers[$teacher_id] = array(
+                                                                            'firstname' => (string) $teacher['firstname'],
+                                                                            'lastname' => (string) $teacher['lastname'],
+                                                                            'email' => $teacher_email
+                                                                        );
+                                                                    }
+                                                                }
+
+                                                                // COURSE MODULE TEACHER HANDLING
+                                                                foreach( $course_details['teaching_activities'] as $ola ) {
+                                                                    foreach( $ola['teachers'] as $teacher ) {
+                                                                        $teacher_id = (string) $teacher['personel_id'];
+                                                                        $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
+
+                                                                        // IF TEACHER DOES NOT EXIST, ADD IT
+                                                                        if( !array_key_exists($teacher_id, $teachers) ) {
+                                                                            $this->debugOutput($output,$debug,'Parsing teacher: '.$teacher_id);
+                                                                            $teacher_email = '';
+                                                                            if( $teacher['on_who-is-who'] == 'True' ) {
+                                                                                $teacher_email = $this->getTeacherEmail($container,$teacher_id);
+                                                                            }
+
+                                                                            $teachers[$teacher_id] = array(
+                                                                                'firstname' => (string) $teacher['firstname'],
+                                                                                'lastname' => (string) $teacher['lastname'],
+                                                                                'email' => $teacher_email
+                                                                            );
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } else {
+                                                    // Setting the parent level for the course groups and courses start
+                                                    if( in_array('faculty',$disable_types) && in_array('level',$disable_types) && in_array('study',$disable_types) && in_array('program',$disable_types) && in_array('stage',$disable_types) ){
+                                                        $xml_cg_parent_id = null;
+                                                    } elseif( in_array('level',$disable_types) && in_array('study',$disable_types) && in_array('program',$disable_types) && in_array('stage',$disable_types) ) {
+                                                        $xml_cg_parent_id = $xml_faculty_id;
+                                                    } elseif( in_array('study',$disable_types) && in_array('program',$disable_types) && in_array('stage',$disable_types) ) {
+                                                        $xml_cg_parent_id = $xml_level_id;
+                                                    } elseif(  in_array('program',$disable_types) && in_array('stage',$disable_types) ) {
+                                                        $xml_cg_parent_id = $xml_study_id;
+                                                    } elseif( in_array('stage',$disable_types) ) {
+                                                        $xml_cg_parent_id = $xml_program_id;
+                                                    } else {
+                                                        $xml_cg_parent_id = $xml_stage_id;
+                                                    }
+
+                                                    foreach( $programXml->xpath("data/programma/modulegroep[@niveau='1']") as $course_group ) {
+                                                        if( $respect_no_show == 0 || ($respect_no_show == 1 && $course_group->tonen_in_programmagids != 'False') ) {
+                                                            $this->parseCourseGroup($container,$output,$debug,$course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers,$structure_xml,$structure_xml_literaturelist,$xml_cg_parent_id,$xml_cur_level_id,$disable_types,0);
+                                                        }
                                                     }
                                                 }
                                             }
