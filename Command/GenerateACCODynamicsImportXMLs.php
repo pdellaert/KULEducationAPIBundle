@@ -21,18 +21,16 @@ class GenerateACCODynamicsImportXMLs extends Command
                 'Which school do you want to generate the XMLs for?'
             )
             ->addOption(
-                'fids',
+                'fid',
                 null,
-                InputOption::VALUE_REQUIRED,
-                'Which faculty or faculties do you want to generate the XMLs for? (comma seperated, no spaces)',
-                -1
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Which faculty or faculties do you want to generate the XMLs for? Can be added multiple times for multiple values.'
             )
             ->addOption(
-                'lids',
+                'lid',
                 null,
-                InputOption::VALUE_REQUIRED,
-                'Which level or levels do you want to generate the XMLs for? (comma seperated, no spaces)',
-                -1
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Which level or levels do you want to generate the XMLs for? Can be added multiple times for multiple values.'
             )
             ->addOption(
                 'listid',
@@ -60,7 +58,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 0
             )
             ->addOption(
-                'disable-types',
+                'disable-type',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'What levels need to be skipped? Possible values: faculty, level, study, program, phase, sublevel. Can be added multiple times for multiple values.'
@@ -82,8 +80,9 @@ class GenerateACCODynamicsImportXMLs extends Command
     protected function execute(InputInterface $input, OutputInterface $output) {
         // Handling options
         $scid = $input->getOption('scid');
-        $fids = explode(',',$input->getOption('fids'));
-        $lids = explode(',',$input->getOption('lids'));
+        $fids = $input->getOption('fids');
+        $lids = $input->getOption('lids');
+        $disable_types = $input->getOption('disable-types');
         $listid = $input->getOption('listid');
         $locale = $input->getOption('locale');
         $path = $input->getOption('path');
@@ -91,7 +90,6 @@ class GenerateACCODynamicsImportXMLs extends Command
         $showhidden = $input->getOption('showhidden');
         $debug = $input->getOption('debug');
         $respect_no_show = !$showhidden;
-        $disable_types = $input->getOption('disable-types');
 
         // Base variables
         $teachers = array();
