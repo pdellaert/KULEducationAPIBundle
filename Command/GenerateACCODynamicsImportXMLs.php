@@ -80,9 +80,9 @@ class GenerateACCODynamicsImportXMLs extends Command
     protected function execute(InputInterface $input, OutputInterface $output) {
         // Handling options
         $scid = $input->getOption('scid');
-        $fids = $input->getOption('fids');
-        $lids = $input->getOption('lids');
-        $disable_types = $input->getOption('disable-types');
+        $fids = $input->getOption('fid');
+        $lids = $input->getOption('lid');
+        $disable_types = $input->getOption('disable-type');
         $listid = $input->getOption('listid');
         $locale = $input->getOption('locale');
         $path = $input->getOption('path');
