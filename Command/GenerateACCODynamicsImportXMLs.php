@@ -673,7 +673,7 @@ class GenerateACCODynamicsImportXMLs extends Command
             $structure_xml_literaturelist->appendChild($structure_xml_level);
 
             // If the first sublevel is omitted, the parent id for the next level changes
-            if( ( is_array($courses_in_group) && count($courses_in_group) > 0 ) || $depth > 0 || !in_array('first-sublevel',$disable_types) ) ) {
+            if( ( is_array($courses_in_group) && count($courses_in_group) > 0 ) || $depth > 0 || !in_array('first-sublevel',$disable_types) ) {
                 $next_xml_parent_id = $xml_cg_id;
             } else {
                 $next_xml_parent_id = $xml_parent_id;
