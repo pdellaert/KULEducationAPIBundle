@@ -277,7 +277,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                                             // XML Level Title
                                             $structure_xml_level_title = $structure_xml->createElement('titel');
                                             {
-                                                $structure_xml_level_title_cdata = $structure_xml->createCDATASection($program_title.' ('.$program_studypoints.')');
+                                                $structure_xml_level_title_cdata = $structure_xml->createCDATASection($program_title.' ('.$program_studypoints.' sp.)');
                                                 $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
                                             }
                                             $structure_xml_level->appendChild($structure_xml_level_title);
