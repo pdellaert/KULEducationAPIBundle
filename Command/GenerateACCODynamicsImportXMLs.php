@@ -61,7 +61,7 @@ class GenerateACCODynamicsImportXMLs extends Command
                 'disable-type',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'What levels need to be skipped? Possible values: faculty, level, study, program, stage, sublevel. Can be added multiple times for multiple values.'
+                'What levels need to be skipped? Possible values: faculty, level, study, program, stage, first-sublevel, sublevel. Can be added multiple times for multiple values.'
             )
             ->addOption(
                 'showhidden',
@@ -367,7 +367,7 @@ class GenerateACCODynamicsImportXMLs extends Command
 
                                                 foreach( $programXml->xpath("data/programma/modulegroep[@niveau='1']") as $course_group ) {
                                                     if( $respect_no_show == 0 || ($respect_no_show == 1 && $course_group->tonen_in_programmagids != 'False') ) {
-                                                        $this->parseCourseGroup($container,$output,$debug,$course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers,$structure_xml,$structure_xml_literaturelist,$xml_cg_parent_id,$xml_cur_level_id);
+                                                        $this->parseCourseGroup($container,$output,$debug,$course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers,$structure_xml,$structure_xml_literaturelist,$xml_cg_parent_id,$xml_cur_level_id,$disable_types,0);
                                                     }
                                                 }
                                             }
@@ -561,37 +561,42 @@ class GenerateACCODynamicsImportXMLs extends Command
         }
     }
 
-    protected function parseCourseGroup($container, $output, $debug, $course_group, $stage_id, $scid, $respect_no_show, &$courses, &$teachers, $structure_xml, $structure_xml_literaturelist, $xml_parent_id, &$xml_cur_level_id) {
+    protected function parseCourseGroup($container, $output, $debug, $course_group, $stage_id, $scid, $respect_no_show, &$courses, &$teachers, $structure_xml, $structure_xml_literaturelist, $xml_parent_id, &$xml_cur_level_id, $disable_types, $depth = 0) {
         $course_group_title = (string) $course_group->titel;
         $course_group_stages = explode(',',$course_group['fases']);
         if( in_array($stage_id,$course_group_stages) )  {
             $xml_cg_id = ++$xml_cur_level_id;
 
             $this->debugOutput($output,$debug,'Parsing course group: '.$course_group_title);
+            $courses_in_group = $course_group->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]");
 
-            // Structure XML Course Group Adding
-            $structure_xml_level = $structure_xml->createElement('niveau');
-            {
-                // XML Level ID
-                $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_cg_id);
-                $structure_xml_level->appendChild($structure_xml_level_id);
-                // XML Level Parent ID
-                $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_parent_id);
-                $structure_xml_level->appendChild($structure_xml_parent_level_id);
-                // XML Level Title
-                $structure_xml_level_title = $structure_xml->createElement('titel');
+            // If this CG contains courses, is not the first sublevel or first-sublevel is not disabled, add this CG in the structure
+            // Result = If first-sublevel is disabled and it has no courses, it will be omitted
+            if( ( is_array($courses_in_group) && count($courses_in_group) > 0 ) || $depth > 0 || !in_array('first-sublevel',$disable_types) ) ) {
+                // Structure XML Course Group Adding
+                $structure_xml_level = $structure_xml->createElement('niveau');
                 {
-                    $structure_xml_level_title_cdata = $structure_xml->createCDATASection($course_group_title);
-                    $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                    // XML Level ID
+                    $structure_xml_level_id = $structure_xml->createElement('niveau-ID',$xml_cg_id);
+                    $structure_xml_level->appendChild($structure_xml_level_id);
+                    // XML Level Parent ID
+                    $structure_xml_parent_level_id = $structure_xml->createElement('niveauParent-ID',$xml_parent_id);
+                    $structure_xml_level->appendChild($structure_xml_parent_level_id);
+                    // XML Level Title
+                    $structure_xml_level_title = $structure_xml->createElement('titel');
+                    {
+                        $structure_xml_level_title_cdata = $structure_xml->createCDATASection($course_group_title);
+                        $structure_xml_level_title->appendChild($structure_xml_level_title_cdata);
+                    }
+                    $structure_xml_level->appendChild($structure_xml_level_title);
+                    // XML Level Mandatory
+                    $structure_xml_level_mandatory = $structure_xml->createElement('verplicht',(string) $course_group['verplicht']);
+                    $structure_xml_level->appendChild($structure_xml_level_mandatory);
                 }
-                $structure_xml_level->appendChild($structure_xml_level_title);
-                // XML Level Mandatory
-                $structure_xml_level_mandatory = $structure_xml->createElement('verplicht',(string) $course_group['verplicht']);
-                $structure_xml_level->appendChild($structure_xml_level_mandatory);
             }
 
             // COURSES IN THIS LEVEL HANDLING
-            foreach( $course_group->xpath("opleidingsonderdelen/opleidingsonderdeel[fases/fase[contains(.,$stage_id)]]") as $course ) {
+            foreach( $courses_in_group as $course ) {
                 $course_id = (string) $course['code'];
                 $this->debugOutput($output,$debug,'Checking course: '.$course_id);
 
@@ -667,11 +672,18 @@ class GenerateACCODynamicsImportXMLs extends Command
             // Structure XML Course Group Appending to list
             $structure_xml_literaturelist->appendChild($structure_xml_level);
 
+            // If the first sublevel is omitted, the parent id for the next level changes
+            if( ( is_array($courses_in_group) && count($courses_in_group) > 0 ) || $depth > 0 || !in_array('first-sublevel',$disable_types) ) ) {
+                $next_xml_parent_id = $xml_cg_id;
+            } else {
+                $next_xml_parent_id = $xml_parent_id;
+            }
+
             // HANDLING SUBLEVELS
             $next_level = ((int) $course_group['niveau'])+1;
             foreach( $course_group->xpath("modulegroep[@niveau='$next_level']") as $sub_course_group ) {
                 if( $respect_no_show == 0 || ($respect_no_show == 1 && $sub_course_group->tonen_in_programmagids != 'False') ) {
-                    $this->parseCourseGroup($container,$output,$debug,$sub_course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers,$structure_xml,$structure_xml_literaturelist,$xml_cg_id,$xml_cur_level_id);
+                    $this->parseCourseGroup($container,$output,$debug,$sub_course_group,$stage_id,$scid,$respect_no_show,$courses,$teachers,$structure_xml,$structure_xml_literaturelist,$next_xml_parent_id,$xml_cur_level_id,$disable_types,++$depth);
                 }
             }
         }
