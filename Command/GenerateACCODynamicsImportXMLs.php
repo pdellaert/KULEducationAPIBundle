@@ -60,6 +60,12 @@ class GenerateACCODynamicsImportXMLs extends Command
                 0
             )
             ->addOption(
+                'disable-types',
+                null,
+                InputOption::VALUE_IS_ARRAY,
+                'What levels need to be skipped? Possible values: faculty, level, study, program, phase, sublevel. Can be added multiple times for multiple values.'
+            )
+            ->addOption(
                 'showhidden',
                 null,
                 InputOption::VALUE_NONE,
@@ -85,6 +91,7 @@ class GenerateACCODynamicsImportXMLs extends Command
         $showhidden = $input->getOption('showhidden');
         $debug = $input->getOption('debug');
         $respect_no_show = !$showhidden;
+        $disable_types = $input->getOption('disable-types');
 
         // Base variables
         $teachers = array();
