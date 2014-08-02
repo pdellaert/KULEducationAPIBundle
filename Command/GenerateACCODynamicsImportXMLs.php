@@ -550,6 +550,9 @@ class GenerateACCODynamicsImportXMLs extends Command
                 $course_xml_course_studypoints = $course_xml->createElement('studiepunten',$course['studypoints']);
                 $course_xml_course->appendChild($course_xml_course_studypoints);
                 // Course Period element
+                if( empty($course['period']) || $course['period'] == '' ) {
+                    $course['period'] = 0;
+                }
                 $course_xml_course_period = $course_xml->createElement('periode','SEM '.$course['period']);
                 $course_xml_course->appendChild($course_xml_course_period);
                 // Course Students element
@@ -599,6 +602,9 @@ class GenerateACCODynamicsImportXMLs extends Command
                     $course_xml_ola_studypoints = $course_xml->createElement('studiepunten',$course_ola['studypoints']);
                     $course_xml_ola->appendChild($course_xml_ola_studypoints);
                     // Course Period element
+                    if( empty($course_ola['period']) || $course_ola['period'] == '' ) {
+                        $course_ola['period'] = 0;
+                    }
                     $course_xml_ola_period = $course_xml->createElement('periode','SEM '.$course_ola['period']);
                     $course_xml_ola->appendChild($course_xml_ola_period);
                     // Course Students element
