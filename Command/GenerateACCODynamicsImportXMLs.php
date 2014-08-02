@@ -62,7 +62,7 @@ class GenerateACCODynamicsImportXMLs extends Command
             ->addOption(
                 'disable-types',
                 null,
-                InputOption::VALUE_IS_ARRAY,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'What levels need to be skipped? Possible values: faculty, level, study, program, phase, sublevel. Can be added multiple times for multiple values.'
             )
             ->addOption(
