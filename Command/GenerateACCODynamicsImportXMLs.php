@@ -572,7 +572,7 @@ class GenerateACCODynamicsImportXMLs extends Command
 
             // If this CG contains courses, is not the first sublevel or first-sublevel is not disabled, add this CG in the structure
             // Result = If first-sublevel is disabled and it has no courses, it will be omitted
-            if( ( is_array($courses_in_group) && count($courses_in_group) > 0 ) || $depth > 0 || !in_array('first-sublevel',$disable_types) ) ) {
+            if( ( is_array($courses_in_group) && count($courses_in_group) > 0 ) || $depth > 0 || !in_array('first-sublevel',$disable_types) ) {
                 // Structure XML Course Group Adding
                 $structure_xml_level = $structure_xml->createElement('niveau');
                 {
