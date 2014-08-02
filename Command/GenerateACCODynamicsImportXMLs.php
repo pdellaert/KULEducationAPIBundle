@@ -593,60 +593,37 @@ class GenerateACCODynamicsImportXMLs extends Command
                     $structure_xml_level_mandatory = $structure_xml->createElement('verplicht',(string) $course_group['verplicht']);
                     $structure_xml_level->appendChild($structure_xml_level_mandatory);
                 }
-            }
 
-            // COURSES IN THIS LEVEL HANDLING
-            foreach( $courses_in_group as $course ) {
-                $course_id = (string) $course['code'];
-                $this->debugOutput($output,$debug,'Checking course: '.$course_id);
+                // COURSES IN THIS LEVEL HANDLING
+                foreach( $courses_in_group as $course ) {
+                    $course_id = (string) $course['code'];
+                    $this->debugOutput($output,$debug,'Checking course: '.$course_id);
 
-                // XML Level Course Adding
-                $structure_xml_course = $structure_xml->createElement('vak');
-                {
-                    // XML Course ID
-                    $structure_xml_course_id = $structure_xml->createElement('vak-ID',$course_id);
-                    $structure_xml_course->appendChild($structure_xml_course_id);
-                    // XML Courese Mandatory
-                    $structure_xml_course_mandatory = $structure_xml->createElement('verplicht',(string) $course['verplicht']);
-                    $structure_xml_course->appendChild($structure_xml_course_mandatory);
-                }
-                $structure_xml_level->appendChild($structure_xml_course);
+                    // XML Level Course Adding
+                    $structure_xml_course = $structure_xml->createElement('vak');
+                    {
+                        // XML Course ID
+                        $structure_xml_course_id = $structure_xml->createElement('vak-ID',$course_id);
+                        $structure_xml_course->appendChild($structure_xml_course_id);
+                        // XML Courese Mandatory
+                        $structure_xml_course_mandatory = $structure_xml->createElement('verplicht',(string) $course['verplicht']);
+                        $structure_xml_course->appendChild($structure_xml_course_mandatory);
+                    }
+                    $structure_xml_level->appendChild($structure_xml_course);
 
-                // IF COURSE DOES NOT EXIST, ADD IT
-                if( !array_key_exists($course_id, $courses) ) {
-                    // GETTING COURSE DETAILS
-                    $this->debugOutput($output,$debug,'Parsing course: '.$course_id);
-                    $course_details = APIUtility::getLiveCourseDetails($container,$course->taal->code,$scid,$course_id);
+                    // IF COURSE DOES NOT EXIST, ADD IT
+                    if( !array_key_exists($course_id, $courses) ) {
+                        // GETTING COURSE DETAILS
+                        $this->debugOutput($output,$debug,'Parsing course: '.$course_id);
+                        $course_details = APIUtility::getLiveCourseDetails($container,$course->taal->code,$scid,$course_id);
 
-                    if( !empty($course_details) ) {
-                        // COURSE HANDLING
-                        // TODO: VERPLICHT EN KOPPELEN IN BOOM
-                        $courses[$course_id] = $course_details;
+                        if( !empty($course_details) ) {
+                            // COURSE HANDLING
+                            // TODO: VERPLICHT EN KOPPELEN IN BOOM
+                            $courses[$course_id] = $course_details;
 
-                        // COURSE TEACHER HANDLING
-                        foreach( $course_details['teachers'] as $teacher ) {
-                            $teacher_id = (string) $teacher['personel_id'];
-                            $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
-
-                            // IF TEACHER DOES NOT EXIST, ADD IT
-                            if( !array_key_exists($teacher_id, $teachers) ) {
-                                $this->debugOutput($output,$debug,'Parsing teacher: '.$teacher_id);
-                                $teacher_email = '';
-                                if( $teacher['on_who-is-who'] == 'True' ) {
-                                    $teacher_email = $this->getTeacherEmail($container,$teacher_id);
-                                }
-
-                                $teachers[$teacher_id] = array(
-                                    'firstname' => (string) $teacher['firstname'],
-                                    'lastname' => (string) $teacher['lastname'],
-                                    'email' => $teacher_email
-                                );
-                            }
-                        }
-
-                        // COURSE MODULE TEACHER HANDLING
-                        foreach( $course_details['teaching_activities'] as $ola ) {
-                            foreach( $ola['teachers'] as $teacher ) {
+                            // COURSE TEACHER HANDLING
+                            foreach( $course_details['teachers'] as $teacher ) {
                                 $teacher_id = (string) $teacher['personel_id'];
                                 $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
 
@@ -665,12 +642,35 @@ class GenerateACCODynamicsImportXMLs extends Command
                                     );
                                 }
                             }
+
+                            // COURSE MODULE TEACHER HANDLING
+                            foreach( $course_details['teaching_activities'] as $ola ) {
+                                foreach( $ola['teachers'] as $teacher ) {
+                                    $teacher_id = (string) $teacher['personel_id'];
+                                    $this->debugOutput($output,$debug,'Checking teacher: '.$teacher_id);
+
+                                    // IF TEACHER DOES NOT EXIST, ADD IT
+                                    if( !array_key_exists($teacher_id, $teachers) ) {
+                                        $this->debugOutput($output,$debug,'Parsing teacher: '.$teacher_id);
+                                        $teacher_email = '';
+                                        if( $teacher['on_who-is-who'] == 'True' ) {
+                                            $teacher_email = $this->getTeacherEmail($container,$teacher_id);
+                                        }
+
+                                        $teachers[$teacher_id] = array(
+                                            'firstname' => (string) $teacher['firstname'],
+                                            'lastname' => (string) $teacher['lastname'],
+                                            'email' => $teacher_email
+                                        );
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+                // Structure XML Course Group Appending to list
+                $structure_xml_literaturelist->appendChild($structure_xml_level);
             }
-            // Structure XML Course Group Appending to list
-            $structure_xml_literaturelist->appendChild($structure_xml_level);
 
             // If the first sublevel is omitted, the parent id for the next level changes
             if( ( is_array($courses_in_group) && count($courses_in_group) > 0 ) || $depth > 0 || !in_array('first-sublevel',$disable_types) ) {
