@@ -167,8 +167,7 @@ class GenerateCourseMaterialsExcel extends Command
 
                                                         // Handling mandatory
                                                         switch($course['verplicht']) {
-                                                            case 'J':
-                                                            case 'Y':
+                                                            case 'True':
                                                                 $mandatory = 'verplicht';
                                                                 break;
                                                             default:
