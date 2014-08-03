@@ -81,7 +81,7 @@ class GenerateCourseMaterialsExcel extends Command
         $line = 1;
 
         // Headers
-        $phpExcelObject->setCellValue('A'.$line, 'Laatste aanpassing op')
+        $phpExcelObject->getActiveSheet()->setCellValue('A'.$line, 'Laatste aanpassing op')
             ->setCellValue('B'.$line,'Instelling')
             ->setCellValue('C'.$line,'Opleiding')
             ->setCellValue('D'.$line,'Jaar')
@@ -228,7 +228,7 @@ class GenerateCourseMaterialsExcel extends Command
                                                         }
 
                                                         // Excel line filling
-                                                        $phpExcelObject->setCellValue('A'.$line, date('d/m/Y'))
+                                                        $phpExcelObject->getActiveSheet()->setCellValue('A'.$line, date('d/m/Y'))
                                                             ->setCellValue('B'.$line,$scid)
                                                             ->setCellValue('C'.$line,preg_replace('/\s+/', ' ', trim($program_title.' ('.$program_studypoints.' sp.)')))
                                                             ->setCellValue('D'.$line,$stage_title)
