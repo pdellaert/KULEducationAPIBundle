@@ -67,7 +67,7 @@ class GenerateCourseMaterialsExcel extends Command
         $method = $container->getParameter('dellaert_kul_education_api.method');
 
         // Loading Excel library and creating an object
-        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+        $phpExcelObject = $container->get('phpexcel')->createPHPExcelObject();
         $phpExcelObject->getProperties()->setCreator('ACCO cvba')
             ->setLastModifiedBy('ACCO Course material exporter')
             ->setTitle('Export for '.$scid.' - '.$fid.' - '.$lid)
