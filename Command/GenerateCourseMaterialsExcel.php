@@ -166,7 +166,7 @@ class GenerateCourseMaterialsExcel extends Command
                                                         ++$line;
 
                                                         // Handling mandatory
-                                                        switch($course['mandatory']) {
+                                                        switch($course['verplicht']) {
                                                             case 'J':
                                                             case 'Y':
                                                                 $mandatory = 'verplicht';
@@ -177,7 +177,7 @@ class GenerateCourseMaterialsExcel extends Command
                                                         }
 
                                                         // Handling period
-                                                        switch($course['period']) {
+                                                        switch($course_details['period']) {
                                                             case '1':
                                                                 $period = '1';
                                                                 break;
@@ -200,17 +200,17 @@ class GenerateCourseMaterialsExcel extends Command
                                                         $courseMaterial = substr($courseMaterial, 0, -3);
 
                                                         // Handling teachers
-                                                        $teachers = $course['teachers'];
+                                                        $teachers = $course_details['teachers'];
                                                         $doc[0]['firstname'] = 'Niet';
                                                         $doc[0]['name'] = 'Toegewezen';
                                                         $doc[0]['e-mail'] = '';
                                                         $doc[0]['phone'] = '';
-                                                        $doc[1]['firstname'] = 'Niet';
-                                                        $doc[1]['name'] = 'Toegewezen';
+                                                        $doc[1]['firstname'] = '';
+                                                        $doc[1]['name'] = '';
                                                         $doc[1]['e-mail'] = '';
                                                         $doc[1]['phone'] = '';
-                                                        $doc[2]['firstname'] = 'Niet';
-                                                        $doc[2]['name'] = 'Toegewezen';
+                                                        $doc[2]['firstname'] = '';
+                                                        $doc[2]['name'] = '';
                                                         $doc[2]['e-mail'] = '';
                                                         $doc[2]['phone'] = '';
 
@@ -233,8 +233,8 @@ class GenerateCourseMaterialsExcel extends Command
                                                             ->setCellValue('C'.$line,preg_replace('/\s+/', ' ', trim($program_title.' ('.$program_studypoints.' sp.)')))
                                                             ->setCellValue('D'.$line,$stage_title)
                                                             ->setCellValue('E'.$line,$period)
-                                                            ->setCellValue('F'.$line,preg_replace('/\s+/',' ',$course['title']))
-                                                            ->setCellValue('G'.$line,$course['course_id'])
+                                                            ->setCellValue('F'.$line,preg_replace('/\s+/',' ',$course_details['title']))
+                                                            ->setCellValue('G'.$line,$course_id)
                                                             ->setCellValue('H'.$line,$mandatory)
                                                             ->setCellValue('I'.$line,$courseMaterial)
                                                             ->setCellValue('J'.$line,'')
