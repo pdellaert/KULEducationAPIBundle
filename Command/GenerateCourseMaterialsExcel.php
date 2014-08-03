@@ -73,8 +73,8 @@ class GenerateCourseMaterialsExcel extends Command
             ->setTitle('Export for '.$scid.' - '.$fid.' - '.$lid)
             ->setSubject('Export for '.$scid.' - '.$fid.' - '.$lid)
             ->setDescription('Export of course material information for a given school, faculty and grade/level')
-            ->setKeywords('course material export ACCO')
-            ->setActiveSheetIndex(0);
+            ->setKeywords('course material export ACCO');
+            $phpExcelObject->setActiveSheetIndex(0);
             $phpExcelObject->getActiveSheet()->setTitle('Course-material');
 
         // Line counter
