@@ -117,7 +117,7 @@ class GenerateCourseMaterialsExcel extends Command
                 // LEVEL HANDLING
                 foreach( $faculty->xpath("kwalificatie/classificatie/graad") as $level ) {
                     $level_id = $level['id'];
-                    if( $level_id != $fid ) {
+                    if( $level_id != $lid ) {
                         continue;
                     }
 
