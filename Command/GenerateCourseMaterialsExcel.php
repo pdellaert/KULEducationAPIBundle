@@ -264,7 +264,7 @@ class GenerateCourseMaterialsExcel extends Command
         }
 
         // Saving file
-        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
+        $writer = $container->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
         $writer->save($file);
     }
 }
