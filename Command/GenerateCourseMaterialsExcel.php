@@ -194,7 +194,7 @@ class GenerateCourseMaterialsExcel extends Command
 
                                                         // Handling course material
                                                         $courseMaterial = '';
-                                                        foreach( $courseDetails['teaching_activities'] as $teaching_activity ) {
+                                                        foreach( $course_details['teaching_activities'] as $teaching_activity ) {
                                                             $courseMaterial .= strip_tags($teaching_activity['course_material']).' - ';
                                                         }
                                                         $courseMaterial = substr($courseMaterial, 0, -3);
