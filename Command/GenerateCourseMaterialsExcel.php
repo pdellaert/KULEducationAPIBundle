@@ -263,6 +263,8 @@ class GenerateCourseMaterialsExcel extends Command
         }
 
         // Saving file
+        $phpExcelObject->getActiveSheet()->getStyle('A1:V1')->getFont()->setBold(true);
+        $phpExcelObject->getActiveSheet()->setAutoFilter($phpExcelObject->getActiveSheet()->calculateWorksheetDimension());
         $writer = $container->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
         $writer->save($file);
     }
