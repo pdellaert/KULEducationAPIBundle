@@ -12,7 +12,7 @@ class GenerateACCOLiteraturePDFs extends Command
 {
 	protected function configure() {
         $this
-            ->setName('kulapi:generate-acco-literatur-pdfs')
+            ->setName('kulapi:generate-acco-literature-pdfs')
             ->setDescription('Generate the necessary PDFs of either an entire school or a single faculty for one or more phases')
             ->addOption(
                 'scid',
