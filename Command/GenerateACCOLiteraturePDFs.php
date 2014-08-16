@@ -144,7 +144,7 @@ class GenerateACCOLiteraturePDFs extends Command
             $this->debugOutput($output,$debug,'Courses XML loaded');
             $content = str_replace('xmlns=', 'ns=', $content);
             $xml = new \SimpleXMLElement($content);
-            foreach( $xml->xpath('Response/Vakkenlijst/Vak') as $course ) {
+            foreach( $xml->xpath('Response/VakkenLijst/Vak') as $course ) {
                 $materials = array();
                 foreach( $course->EducatiefMateriaal as $material ) {
                     $materials[(string) $material->ItemNo] = $material->Verplicht;
