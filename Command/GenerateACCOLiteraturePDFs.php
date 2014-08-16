@@ -123,8 +123,8 @@ class GenerateACCOLiteraturePDFs extends Command
         $this->debugOutput($output,$debug,'Handling items');
         // Handling Items
         if( $content = file_get_contents($items_xml) ) {
+            $this->debugOutput($output,$debug,'Items XML loaded');
             $xml = new \SimpleXMLElement($content);
-            unset($content);
             foreach( $xml->xpath('///ItemData') as $item ) {
                 $items[(string) $item->ItemNo] = array(
                     'title' => (string) $item->ProductTitle,
@@ -133,14 +133,15 @@ class GenerateACCOLiteraturePDFs extends Command
                     );
             }
         }
+        unset($content);
         unset($xml);
         $this->debugOutput($output,$debug,'Handled '.count($items).' items');
 
         $this->debugOutput($output,$debug,'Handling courses');
         // Handling Courses
         if( $content = file_get_contents($courses_xml) ) {
+            $this->debugOutput($output,$debug,'Courses XML loaded');
             $xml = new \SimpleXMLElement($content);
-            unset($content);
             foreach( $xml->xpath('///Vak') as $course ) {
                 $materials = array();
                 foreach( $course->EducatiefMateriaal as $material ) {
@@ -149,6 +150,7 @@ class GenerateACCOLiteraturePDFs extends Command
                 $course_items[(string) $course->{'Vak-ID'}] = $materials;
             }
         }
+        unset($content);
         unset($xml);
         $this->debugOutput($output,$debug,'Handled '.count($course_items).' courses');
 
