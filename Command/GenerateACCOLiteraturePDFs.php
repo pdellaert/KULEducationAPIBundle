@@ -253,8 +253,10 @@ class GenerateACCOLiteraturePDFs extends Command
                                                         $this->debugOutput($output,$debug,'Found course: '.$course_id.' - '.$course_title.' - Mandatory:'.$course_mandatory);
 
                                                         // HANDLING ITEMS FOR COURSE
-                                                        foreach( $course_items[$course_id] as $item_id => $mandatory ) {
-                                                            $this->debugOutput($output,$debug,'Found courseitem: '.$item_id.' - '.$items[$item_id]['title'].' - '.$items[$item_id]['price'].' - '.$items[$item_id].' - Mandatory: '.$mandatory);
+                                                        if( array_key_exists($course_id, $course_items) ) {
+                                                            foreach( $course_items[$course_id] as $item_id => $mandatory ) {
+                                                                $this->debugOutput($output,$debug,'Found courseitem: '.$item_id.' - '.$items[$item_id]['title'].' - '.$items[$item_id]['price'].' - '.$items[$item_id]['accoprice'].' - Mandatory: '.$mandatory);
+                                                            }
                                                         }
                                                     }
                                                 } else {
