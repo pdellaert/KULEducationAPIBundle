@@ -125,7 +125,7 @@ class GenerateACCOLiteraturePDFs extends Command
         if( $content = file_get_contents($items_xml) ) {
             $this->debugOutput($output,$debug,'Items XML loaded');
             $xml = new \SimpleXMLElement($content);
-            foreach( $xml->xpath('Response/Item/ItemData') as $item ) {
+            foreach( $xml->xpath("Response/Item/ItemData") as $item ) {
                 $items[(string) $item->ItemNo] = array(
                     'title' => (string) $item->ProductTitle,
                     'price' => (string) $item->Price,
@@ -142,7 +142,7 @@ class GenerateACCOLiteraturePDFs extends Command
         if( $content = file_get_contents($courses_xml) ) {
             $this->debugOutput($output,$debug,'Courses XML loaded');
             $xml = new \SimpleXMLElement($content);
-            foreach( $xml->xpath('Response/Vakkenlijst/Vak') as $course ) {
+            foreach( $xml->xpath("Response/Vakkenlijst/Vak") as $course ) {
                 $materials = array();
                 foreach( $course->EducatiefMateriaal as $material ) {
                     $materials[(string) $material->ItemNo] = $material->Verplicht;
