@@ -123,7 +123,7 @@ class GenerateACCOLiteraturePDFs extends Command
         $this->debugOutput($output,$debug,'Handling items');
         // Handling Items
         if( $content = file_get_contents($items_xml) ) {
-            $xml = new SimpleXMLElement($content);
+            $xml = new \SimpleXMLElement($content);
             unset($content);
             foreach( $xml->xpath('//ItemData') as $item ) {
                 $items[(string) $item->ItemNo] = array(
@@ -139,7 +139,7 @@ class GenerateACCOLiteraturePDFs extends Command
         $this->debugOutput($output,$debug,'Handling courses');
         // Handling Courses
         if( $content = file_get_contents($courses_xml) ) {
-            $xml = new SimpleXMLElement($content);
+            $xml = new \SimpleXMLElement($content);
             unset($content);
             foreach( $xml->xpath('//Vak') as $course ) {
                 $materials = array();
