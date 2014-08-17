@@ -93,7 +93,7 @@
 				</tr>
 				{% if course.items|length > 0 %}
 					<tr>
-						<td style="padding-left: 20px" width="125"><b>ISBN</b></td>
+						<td style="padding-left: 20px"><b>ISBN</b></td>
 						<td><b>Titel</b></td>
 						<td width="125"><b>Verplicht boek?</b></td>
 						<td width="125" align="right"><b>Prijs</b></td>
@@ -101,7 +101,7 @@
 					</tr>
 					{% for item in course.items %}
 						<tr>
-							<td style="padding-left: 20 px" width="50">{{ item.id }}</td>
+							<td style="padding-left: 20px">{{ item.id }}</td>
 							<td>{{ item.title }}</td>
 							<td>
 								{% if item.mandatory == "true" %}
