@@ -73,7 +73,7 @@ class GenerateACCOLiteraturePDFs extends Command
                 'disable-type',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'What levels need to be skipped? Possible values: first-sublevel, sublevel, empty-courses. Can be added multiple times for multiple values.'
+                'What levels need to be skipped? Possible values: first-sublevel, sublevel, empty-course. Can be added multiple times for multiple values.'
             )
             ->addOption(
                 'showhidden',
@@ -107,7 +107,7 @@ class GenerateACCOLiteraturePDFs extends Command
         $respect_no_show = !$showhidden;
 
         $hide_empty_courses = false;
-        if( in_array('empty-courses',$disable_types) ) {
+        if( in_array('empty-course',$disable_types) ) {
             $hide_empty_courses = true;
         }
 
