@@ -271,7 +271,7 @@ class GenerateACCOLiteraturePDFs extends Command
                                                             }
                                                         }
 
-                                                        $output_structure = array(
+                                                        $output_structure[] = array(
                                                             'id' => $course_id,
                                                             'title' => $course_title,
                                                             'mandatory' => $course_mandatory,
@@ -285,7 +285,7 @@ class GenerateACCOLiteraturePDFs extends Command
                                             }
                                         }
                                         // END OF STAGE HANDLING
-                                        $this->debugOutput($output,$debug,'Writing program PDF: '.$program_id.' - '.$program_title.' ('.$program_studypoints.')');
+                                        $this->debugOutput($output,$debug,'Writing program PDF: '.$program_title.' ('.$program_studypoints.')');
                                         // OUTPUT GENERATION
                                         $container->get('knp_snappy.pdf')->generateFromHtml(
                                             $container->get('templating')->render(
