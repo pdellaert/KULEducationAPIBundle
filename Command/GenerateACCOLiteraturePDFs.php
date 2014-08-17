@@ -110,6 +110,7 @@ class GenerateACCOLiteraturePDFs extends Command
         $items = array();
         $course_items = array();
         $courses = array();
+        $stage_none = array('nl'=>'Geen','en'=>'No');
 
         // Container
         $container = $this->getApplication()->getKernel()->getContainer();
@@ -212,6 +213,8 @@ class GenerateACCOLiteraturePDFs extends Command
                                     $this->debugOutput($output,$debug,'Parsing program: '.$program_id.' - '.$program_title.' ('.$program_studypoints.')');
 
                                     if( !empty($program_title) ) {
+                                        $output_structure = array();
+
                                         // STAGE HANDLING
                                         $callUrl = $url.$year.'/opleidingen/'.$language.'/'.$method.'/SC_'.$program_id.'.xml';
                                         if( $programXml = @simplexml_load_file($callUrl, null, LIBXML_NOCDATA) ) {
@@ -249,28 +252,63 @@ class GenerateACCOLiteraturePDFs extends Command
                                                         $course_id = (string) $course['code'];
                                                         $course_title = (string) $course->titel;
                                                         $course_mandatory = (string) $course['verplicht'];
+                                                        $course_period = (string) $course->aanbodperiode;
+                                                        $current_course_items = array();
 
                                                         $this->debugOutput($output,$debug,'Found course: '.$course_id.' - '.$course_title.' - Mandatory:'.$course_mandatory);
 
                                                         // HANDLING ITEMS FOR COURSE
                                                         if( array_key_exists($course_id, $course_items) ) {
                                                             foreach( $course_items[$course_id] as $item_id => $mandatory ) {
+                                                                $current_course_items[] = array(
+                                                                    'id' => $item_id,
+                                                                    'mandatory' => $mandatory,
+                                                                    'title' => $items[$item_id]['title'],
+                                                                    'price' => $items[$item_id]['price'],
+                                                                    'accoprice' => $items[$item_id]['accoprice']
+                                                                    );
                                                                 $this->debugOutput($output,$debug,'Found courseitem: '.$item_id.' - '.$items[$item_id]['title'].' - '.$items[$item_id]['price'].' - '.$items[$item_id]['accoprice'].' - Mandatory: '.$mandatory);
                                                             }
                                                         }
+
+                                                        $output_structure = array(
+                                                            'id' => $course_id,
+                                                            'title' => $course_title,
+                                                            'mandatory' => $course_mandatory,
+                                                            'period' => $course_period,
+                                                            'items' => $current_course_items
+                                                            );
                                                     }
                                                 } else {
                                                     // TODO HANDLING WITH SUBLEVELS
                                                 }
                                             }
                                         }
+                                        // END OF STAGE HANDLING
+
+                                        // OUTPUT GENERATION
+                                        $container->get('knp_snappy.pdf')->generateFromHtml(
+                                            $container->renderView(
+                                                'KULEducationAPIBundle:literature-list-stage.html.twig',
+                                                array(
+                                                    'program_title'  => $program_title,
+                                                    'stage_title' => $stage_title,
+                                                    'output_structure' => $output_structure
+                                                )
+                                            ),
+                                            $path.'/'.$this->safe_filename(date('Ymd-Hi').'_'.$program_title.'_'.$stage_title).'.pdf'
+                                        );
                                     }
                                 }
                             }
+                            // END OF PROGRAM HANDLING
                         }
                     }
+                    // END OF STUDY HANDLING
                 }
+                // END OF LEVEL HANDLING
             }
+            // END OF FACULTY HANDLING
         }
     }
 
@@ -278,5 +316,17 @@ class GenerateACCOLiteraturePDFs extends Command
         if( $debug ) {
             $output->writeln(date('Y-m-d H:i:s').' - DEBUG: '.$msg);
         }
+    }
+
+    protected function safe_filename($filename) {
+            // Convert spaces to dashes
+            $filename = preg_replace('/ /', '-', $filename);
+            // Remove unsafe characters
+            $filename = preg_replace('/[^A-Z0-9-_]/i', '', $filename);
+            // Remove duplicate dashes
+            $filename = preg_replace('/-+/', '-', $filename);
+            // Make lowercase
+            $filename = mb_strtolower($filename);
+            return $filename;
     }
 }

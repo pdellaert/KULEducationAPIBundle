@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700" rel="stylesheet" type="text/css">
+		<style type="text/css">
+			body {
+				font-size: 16px;
+				font-weight: 300;
+				color: #334b56;
+			}
+
+			h1 {
+				font-size: 3.6rem;
+				font-family: "Source Sans Pro",sans-serif;
+				font-weight: 400;
+				line-height: 1.1;
+				color: inherit;
+			}
+
+			h2 {
+				font-size: 3rem;
+				font-family: "Source Sans Pro",sans-serif;
+				font-weight: 400;
+				line-height: 1.1;
+				color: inherit;
+			}
+
+			h3 {
+				font-size: 1.6rem;
+				font-family: "Source Sans Pro",sans-serif;
+				font-weight: 400;
+				line-height: 1.1;
+				color: inherit;
+			}
+
+			h4 {
+				font-size: 1rem;
+				font-family: "Source Sans Pro",sans-serif;
+				font-weight: 400;
+				line-height: 1.1;
+				color: inherit;
+			}
+
+			table {
+				border: 0;
+				margin: 0;
+				padding: 0;
+				width: 100%;
+			}
+
+			td {
+				vertical-align: middle;
+				text-align: left;
+			}
+		</style>
+		<title>Literatuurlijst {{ program_title }} - {{ stage_title }}</title>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<td>
+					<h1>{{ program_title }} - {{ stage_title }}</h1>
+				</td>
+				<td width="128">
+					<img src="https://www.acco.be/Acco/design/images/logo-acco.png" alt="ACCO"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<p><b>Onderstaande informatie kan ten alle tijde veranderen, let er dus goed op dat je zeker bent dat je bepaalde boeken nodig hebt op het moment dat je deze wenst te kopen.</b></p>
+				</td>
+			</tr>
+		</table>
+		{% for course in output_structure %}
+			<table>
+				<tr>
+					<td colspan="3"><h3>{{ course.id }} - {{ course.title }}</h3></td>
+					<td width="50">
+						{% if course.period == 1 %}
+							1ste semester
+						{% elseif course.period == 2 %}
+							2de semester
+						{% elseif course.period == 3 %}
+							Jaarvak
+						{% else %}
+							Onbekend semester
+						{% endif %}
+					</td>
+					<td width="50" align="right">
+						{% if course.mandatory == True %}
+							Verplicht vak
+						{% else %}
+							Keuzevak
+						{% endif %}
+					</td>
+				</tr>
+				<tr>
+					<td style="padding-left: 20px" width="50"><b>ISBN</b></td>
+					<td><b>Titel</b></td>
+					<td width="50"><b>Verplicht boek?</b></td>
+					<td width="50" align="right"><b>Prijs</b></td>
+					<td width="50" align="right"><b>ACCO ledenprijs</b></td>
+				</tr>
+				{% for item in course.items %}
+					<tr>
+						<td style="padding-left: 20 px" width="50">{{ item.id }}</td>
+						<td>{{ item.title }}</td>
+						<td>
+							{% if item.mandatory == true %}
+								Verplicht boek
+							{% else %}
+								Keuze boek
+							{% endif %}
+						</td>
+						<td>{{ item.price }}</td>
+						<td>{{ item.accoprice }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endfor %}
+		<table>
+			<tr>
+				<td>
+					<p><b>Waarschuwing:</b> De informatie in deze lijst is verzameld door ACCO bij de verschillende docenten. ACCO is niet verantwoordelijk voor verkeerde informatie in dit document.</p>
+				</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<p>ACCO cvba - Blijde inkomststraat 22 - 3000 Leuven | www.acco.be </p>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
