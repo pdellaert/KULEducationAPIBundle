@@ -285,7 +285,7 @@ class GenerateACCOLiteraturePDFs extends Command
                                             }
                                         }
                                         // END OF STAGE HANDLING
-
+                                        $this->debugOutput($output,$debug,'Writing program PDF: '.$program_id.' - '.$program_title.' ('.$program_studypoints.')');
                                         // OUTPUT GENERATION
                                         $container->get('knp_snappy.pdf')->generateFromHtml(
                                             $container->renderView(
