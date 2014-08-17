@@ -289,7 +289,7 @@ class GenerateACCOLiteraturePDFs extends Command
                                         // OUTPUT GENERATION
                                         $container->get('knp_snappy.pdf')->generateFromHtml(
                                             $container->get('templating')->render(
-                                                'KULEducationAPIBundle::literature-list-stage.html.twig',
+                                                'DellaertKULEducationAPIBundle::literature-list-stage.html.twig',
                                                 array(
                                                     'program_title'  => $program_title,
                                                     'stage_title' => $stage_title,
