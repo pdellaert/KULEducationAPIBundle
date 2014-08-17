@@ -4,7 +4,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700" rel="stylesheet" type="text/css">
 		<style type="text/css">
 			body {
-				font-size: 16px;
+				font-size: 10px;
 				font-family: "Source Sans Pro",sans-serif;
 				font-weight: 300;
 				color: #334b56;
@@ -63,7 +63,7 @@
 	<body>
 		<table>
 			<tr>
-				<td>
+				<td colspan="4">
 					<h1>{{ program_title }} - {{ stage_title }}</h1>
 				</td>
 				<td width="128">
@@ -71,9 +71,16 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2">
+				<td colspan="5">
 					<p><b>Onderstaande informatie kan op elk moment veranderen, let er dus goed op dat je zeker bent dat je bepaalde boeken nodig hebt op het moment dat je deze wenst te kopen.</b></p>
 				</td>
+			</tr>
+			<tr>
+				<td style="padding-left: 20px; padding-right: 10px" width="100"><b>- ISBN</b></td>
+				<td><b>Titel</b></td>
+				<td width="125"><b>Verplicht boek?</b></td>
+				<td width="125"><b>Prijs</b></td>
+				<td width="128"><b>ACCO ledenprijs</b></td>
 			</tr>
 		</table>
 		{% for course in output_structure %}
@@ -101,26 +108,19 @@
 						</td>
 					</tr>
 					{% if course.items|length > 0 %}
-						<tr>
-							<td style="padding-left: 20px; padding-right: 10px" width="100"><b>ISBN</b></td>
-							<td><b>Titel</b></td>
-							<td width="125"><b>Verplicht boek?</b></td>
-							<td width="125"><b>Prijs</b></td>
-							<td width="125"><b>ACCO ledenprijs</b></td>
-						</tr>
 						{% for item in course.items %}
 							<tr>
-								<td style="padding-left: 20px; padding-right: 10px">{{ item.id }}</td>
+								<td style="padding-left: 20px; padding-right: 10px">- {{ item.id }}</td>
 								<td>{{ item.title }}</td>
-								<td>
+								<td width="125">
 									{% if item.mandatory == "true" %}
 										Verplicht boek
 									{% else %}
 										Keuze boek
 									{% endif %}
 								</td>
-								<td>{{ item.price }}</td>
-								<td>{{ item.accoprice }}</td>
+								<td width="125">{{ item.price }}</td>
+								<td width="128">{{ item.accoprice }}</td>
 							</tr>
 						{% endfor %}
 					{% endif %}
