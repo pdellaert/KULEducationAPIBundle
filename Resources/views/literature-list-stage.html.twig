@@ -87,7 +87,7 @@
 						{% endif %}
 					</td>
 					<td width="50" align="right">
-						{% if course.mandatory == True %}
+						{% if course.mandatory == "True" %}
 							Verplicht vak
 						{% else %}
 							Keuzevak
@@ -106,7 +106,7 @@
 						<td style="padding-left: 20 px" width="50">{{ item.id }}</td>
 						<td>{{ item.title }}</td>
 						<td>
-							{% if item.mandatory == true %}
+							{% if item.mandatory == "true" %}
 								Verplicht boek
 							{% else %}
 								Keuze boek
