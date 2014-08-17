@@ -276,13 +276,18 @@ class GenerateACCOLiteraturePDFs extends Command
                                                             }
                                                         }
 
-                                                        $output_structure[] = array(
-                                                            'id' => $course_id,
-                                                            'title' => $course_title,
-                                                            'mandatory' => $course_mandatory,
-                                                            'period' => $course_period,
-                                                            'items' => $current_course_items
-                                                            );
+                                                        // If the course is mandatory in one part, and not in the other, make it not mandatory in general, as a safety rule
+                                                        if( array_key_exists($course_id, $output_structure) && $output_structure[$course_id]['mandatory'] != $course_mandatory ) {
+                                                            $output_structure[$course_id]['mandatory'] = 'False';
+                                                        } elseif( !array_key_exists($course_id, $output_structure) ) {
+                                                            $output_structure[$course_id] = array(
+                                                                'id' => $course_id,
+                                                                'title' => $course_title,
+                                                                'mandatory' => $course_mandatory,
+                                                                'period' => $course_period,
+                                                                'items' => $current_course_items
+                                                                );
+                                                        }
                                                     }
                                                 } else {
                                                     // TODO HANDLING WITH SUBLEVELS
