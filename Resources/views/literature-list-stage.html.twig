@@ -77,53 +77,55 @@
 			</tr>
 		</table>
 		{% for course in output_structure %}
-			<table>
-				<tr>
-					<td colspan="3"><h4>{{ course.id }} - {{ course.title }}</h4></td>
-					<td width="125">
-						{% if course.period == 1 %}
-							1ste semester
-						{% elseif course.period == 2 %}
-							2de semester
-						{% elseif course.period == 3 %}
-							Jaarvak
-						{% else %}
-							Onbekend semester
-						{% endif %}
-					</td>
-					<td width="125" align="right">
-						{% if course.mandatory == "True" %}
-							Verplicht vak
-						{% else %}
-							Keuzevak
-						{% endif %}
-					</td>
-				</tr>
-				{% if course.items|length > 0 %}
+			{% if (not hide_empty_courses) or (course.items|length > 0) %}
+				<table>
 					<tr>
-						<td style="padding-left: 20px; padding-right: 10px" width="100"><b>ISBN</b></td>
-						<td><b>Titel</b></td>
-						<td width="125"><b>Verplicht boek?</b></td>
-						<td width="125"><b>Prijs</b></td>
-						<td width="125"><b>ACCO ledenprijs</b></td>
+						<td colspan="3"><h4>{{ course.id }} - {{ course.title }}</h4></td>
+						<td width="125">
+							{% if course.period == 1 %}
+								1ste semester
+							{% elseif course.period == 2 %}
+								2de semester
+							{% elseif course.period == 3 %}
+								Jaarvak
+							{% else %}
+								Onbekend semester
+							{% endif %}
+						</td>
+						<td width="125" align="right">
+							{% if course.mandatory == "True" %}
+								Verplicht vak
+							{% else %}
+								Keuzevak
+							{% endif %}
+						</td>
 					</tr>
-					{% for item in course.items %}
+					{% if course.items|length > 0 %}
 						<tr>
-							<td style="padding-left: 20px; padding-right: 10px">{{ item.id }}</td>
-							<td>{{ item.title }}</td>
-							<td>
-								{% if item.mandatory == "true" %}
-									Verplicht boek
-								{% else %}
-									Keuze boek
-								{% endif %}
-							</td>
-							<td>{{ item.price }}</td>
-							<td>{{ item.accoprice }}</td>
+							<td style="padding-left: 20px; padding-right: 10px" width="100"><b>ISBN</b></td>
+							<td><b>Titel</b></td>
+							<td width="125"><b>Verplicht boek?</b></td>
+							<td width="125"><b>Prijs</b></td>
+							<td width="125"><b>ACCO ledenprijs</b></td>
 						</tr>
-					{% endfor %}
-				{% endif %}
-			</table>
+						{% for item in course.items %}
+							<tr>
+								<td style="padding-left: 20px; padding-right: 10px">{{ item.id }}</td>
+								<td>{{ item.title }}</td>
+								<td>
+									{% if item.mandatory == "true" %}
+										Verplicht boek
+									{% else %}
+										Keuze boek
+									{% endif %}
+								</td>
+								<td>{{ item.price }}</td>
+								<td>{{ item.accoprice }}</td>
+							</tr>
+						{% endfor %}
+					{% endif %}
+				</table>
+			{% endif %}
 		{% endfor %}
 		<table>
 			<tr>
