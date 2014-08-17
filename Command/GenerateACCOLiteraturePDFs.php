@@ -287,23 +287,24 @@ class GenerateACCOLiteraturePDFs extends Command
                                                 } else {
                                                     // TODO HANDLING WITH SUBLEVELS
                                                 }
+
+                                                $this->debugOutput($output,$debug,'Writing stage PDF: '.$program_title.' - '.$stage_title);
+                                                // OUTPUT GENERATION
+                                                $container->get('knp_snappy.pdf')->generateFromHtml(
+                                                    $container->get('templating')->render(
+                                                        'DellaertKULEducationAPIBundle::literature-list-stage.html.twig',
+                                                        array(
+                                                            'program_title'  => $program_title,
+                                                            'stage_title' => $stage_title,
+                                                            'output_structure' => $output_structure,
+                                                            'hide_empty_courses' => $hide_empty_courses
+                                                        )
+                                                    ),
+                                                    $path.'/'.$this->safe_filename(date('Ymd-Hi').'_'.$program_title.'_'.$stage_title).'.pdf'
+                                                );
                                             }
                                         }
                                         // END OF STAGE HANDLING
-                                        $this->debugOutput($output,$debug,'Writing program PDF: '.$program_title.' ('.$program_studypoints.')');
-                                        // OUTPUT GENERATION
-                                        $container->get('knp_snappy.pdf')->generateFromHtml(
-                                            $container->get('templating')->render(
-                                                'DellaertKULEducationAPIBundle::literature-list-stage.html.twig',
-                                                array(
-                                                    'program_title'  => $program_title,
-                                                    'stage_title' => $stage_title,
-                                                    'output_structure' => $output_structure,
-                                                    'hide_empty_courses' => $hide_empty_courses
-                                                )
-                                            ),
-                                            $path.'/'.$this->safe_filename(date('Ymd-Hi').'_'.$program_title.'_'.$stage_title).'.pdf'
-                                        );
                                     }
                                 }
                             }
