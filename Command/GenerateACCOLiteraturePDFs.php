@@ -288,8 +288,8 @@ class GenerateACCOLiteraturePDFs extends Command
                                         $this->debugOutput($output,$debug,'Writing program PDF: '.$program_id.' - '.$program_title.' ('.$program_studypoints.')');
                                         // OUTPUT GENERATION
                                         $container->get('knp_snappy.pdf')->generateFromHtml(
-                                            $container->get('templating')->renderView(
-                                                'KULEducationAPIBundle:literature-list-stage.html.twig',
+                                            $container->get('templating')->render(
+                                                'KULEducationAPIBundle::literature-list-stage.html.twig',
                                                 array(
                                                     'program_title'  => $program_title,
                                                     'stage_title' => $stage_title,
