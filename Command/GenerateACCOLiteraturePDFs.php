@@ -265,14 +265,16 @@ class GenerateACCOLiteraturePDFs extends Command
                                                         // HANDLING ITEMS FOR COURSE
                                                         if( array_key_exists($course_id, $course_items) ) {
                                                             foreach( $course_items[$course_id] as $item_id => $mandatory ) {
-                                                                $current_course_items[] = array(
-                                                                    'id' => $item_id,
-                                                                    'mandatory' => $mandatory,
-                                                                    'title' => $items[$item_id]['title'],
-                                                                    'price' => $items[$item_id]['price'],
-                                                                    'accoprice' => $items[$item_id]['accoprice']
-                                                                    );
-                                                                $this->debugOutput($output,$debug,'Found courseitem: '.$item_id.' - '.$items[$item_id]['title'].' - '.$items[$item_id]['price'].' - '.$items[$item_id]['accoprice'].' - Mandatory: '.$mandatory);
+                                                                if( array_key_exists($item_id, $items) ) {
+                                                                    $current_course_items[] = array(
+                                                                        'id' => $item_id,
+                                                                        'mandatory' => $mandatory,
+                                                                        'title' => $items[$item_id]['title'],
+                                                                        'price' => $items[$item_id]['price'],
+                                                                        'accoprice' => $items[$item_id]['accoprice']
+                                                                        );
+                                                                    $this->debugOutput($output,$debug,'Found courseitem: '.$item_id.' - '.$items[$item_id]['title'].' - '.$items[$item_id]['price'].' - '.$items[$item_id]['accoprice'].' - Mandatory: '.$mandatory);
+                                                                }
                                                             }
                                                         }
 
