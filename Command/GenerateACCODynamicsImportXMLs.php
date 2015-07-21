@@ -176,6 +176,8 @@ class GenerateACCODynamicsImportXMLs extends Command
                         continue;
                     }
 
+                    $this->debugOutput($output,$debug,'Waiting '.round($wait_seconds/2).' seconds before next level');
+                    sleep(round($wait_seconds/2);
                     $this->debugOutput($output,$debug,'Parsing level: '.$level_id.' - '.$level_title);
 
                     if( !in_array('level',$disable_types) ) {
