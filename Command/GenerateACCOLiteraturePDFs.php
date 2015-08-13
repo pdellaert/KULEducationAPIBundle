@@ -146,6 +146,7 @@ class GenerateACCOLiteraturePDFs extends Command
 
         $this->debugOutput($output,$debug,'Handling courses');
         // Handling Courses
+        $materialCount = 0;
         if( $content = file_get_contents($courses_xml) ) {
             $this->debugOutput($output,$debug,'Courses XML loaded');
             $content = str_replace('xmlns=', 'ns=', $content);
@@ -154,6 +155,7 @@ class GenerateACCOLiteraturePDFs extends Command
                 if( empty($course->{'Module-ID'}) ) {
                     $materials = array();
                     foreach( $course->EducatiefMateriaal as $material ) {
+                        $materialCount++;
                         $materials[(string) $material->ItemNo] = $material->Verplicht;
                     }
                     $course_items[(string) $course->{'Vak-ID'}] = $materials;
@@ -162,7 +164,7 @@ class GenerateACCOLiteraturePDFs extends Command
         }
         unset($content);
         unset($xml);
-        $this->debugOutput($output,$debug,'Loaded '.count($course_items).' course items');
+        $this->debugOutput($output,$debug,'Loaded '.count($course_items).' course items with '.$materialCount.' items');
 
         // Main index XML
         $callUrl = $url.$year.'/opleidingen/n/'.$method.'/index.xml';
