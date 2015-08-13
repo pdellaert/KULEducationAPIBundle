@@ -151,11 +151,13 @@ class GenerateACCOLiteraturePDFs extends Command
             $content = str_replace('xmlns=', 'ns=', $content);
             $xml = new \SimpleXMLElement($content);
             foreach( $xml->xpath('Response/VakkenLijst/Vak') as $course ) {
-                $materials = array();
-                foreach( $course->EducatiefMateriaal as $material ) {
-                    $materials[(string) $material->ItemNo] = $material->Verplicht;
+                if( empty($course->{'Module-ID'}) ) {
+                    $materials = array();
+                    foreach( $course->EducatiefMateriaal as $material ) {
+                        $materials[(string) $material->ItemNo] = $material->Verplicht;
+                    }
+                    $course_items[(string) $course->{'Vak-ID'}] = $materials;
                 }
-                $course_items[(string) $course->{'Vak-ID'}] = $materials;
             }
         }
         unset($content);
